@@ -15,7 +15,15 @@
     "skipDefaultLibCheck": true,
     "baseUrl": "./crm-bookstore",
     "paths": {
-
+      "@crm/shared/*": [
+        "libs/shared/src/*"
+      ],
+      "@crm/web/*": [
+        "apps/web/src/app/*"
+      ],
+      "@crm/api/*": [
+        "apps/api/src/app/*"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]
