@@ -1,6 +1,14 @@
+/** Роли пользователей */
 export enum RoleEnum {
-  GENERAL_MANAGER = 'GENERAL_MANAGER', // Управляющий сетью
-  STORE_DIRECTOR = 'STORE_DIRECTOR', // Директор магазина
-  MANAGER = 'MANAGER', // Менеджер магазина
-  SELLER = 'SELLER' // Продавец
+  /** Управляющий сетью */
+  GENERAL_MANAGER = 'GENERAL_MANAGER',
+
+  /** Директор магазина */
+  STORE_DIRECTOR = 'STORE_DIRECTOR',
+
+  /** Менеджер магазина */
+  MANAGER = 'MANAGER',
+
+  /** Продавец */
+  SELLER = 'SELLER'
 }
