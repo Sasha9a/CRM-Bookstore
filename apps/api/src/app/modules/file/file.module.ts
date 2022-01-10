@@ -6,7 +6,7 @@ import { MongooseModule } from "@nestjs/mongoose";
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{name: File.name, schema: FileSchema}])
+    MongooseModule.forFeature([{ name: "File", schema: FileSchema }])
   ],
   controllers: [FileController],
   providers: [FileService],
