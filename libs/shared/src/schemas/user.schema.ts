@@ -1,4 +1,5 @@
 import { RoleEnum } from "@crm/shared/enums/role.enum";
+import { File } from "@crm/shared/schemas/file.schema";
 import { Shop } from "@crm/shared/schemas/shop.schema";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import * as mongoose from "mongoose";
@@ -35,6 +36,9 @@ export class User extends Document {
 
   @Prop()
   public salary: number; // Зарплата
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: File.name })
+  public avatar: File; // Фото пользователя
 
   @Prop()
   public token: string;

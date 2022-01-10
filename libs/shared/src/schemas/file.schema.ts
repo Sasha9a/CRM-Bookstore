@@ -4,16 +4,16 @@ import { Document } from "mongoose";
 @Schema({ versionKey: false })
 export class File extends Document {
   @Prop({ required: true })
-  public path: string;
+  public path: string; // Зашифрованное название
 
   @Prop()
-  public name: string;
+  public name: string; // Незашифрованное название
 
   @Prop()
-  public mime: string;
+  public mime: string; // Тип файла
 
   @Prop()
-  public size: number;
+  public size: number; // Размер файла
 
 }
 
