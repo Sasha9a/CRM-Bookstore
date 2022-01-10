@@ -10,8 +10,10 @@ import * as fs from 'fs';
 import * as e from 'express/ts4.0';
 import { extname } from 'path';
 
+/** Контроллер принимающие запросы по файлу */
 @Controller('file')
 export class FileController {
+
   public constructor(private readonly fileService: FileService) {
   }
 

@@ -4,8 +4,10 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 
+/** Сервис выполняющие операции с БД файла */
 @Injectable()
 export class FileService {
+
   public constructor(@InjectModel(File.name) private readonly fileModel: Model<File>) {
   }
 
@@ -13,7 +15,7 @@ export class FileService {
    * @param file данные о файле
    * @return Возвращает объект файла */
   public async upload(file: FileDto): Promise<File> {
-    const uploadFile = await new this.fileModel(file);
+    const uploadFile = new this.fileModel(file);
     return uploadFile.save();
   }
 
