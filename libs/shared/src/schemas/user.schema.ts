@@ -5,41 +5,55 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import * as mongoose from "mongoose";
 import { Document } from "mongoose";
 
+/** Схема БД пользователя */
 @Schema({ versionKey: false })
 export class User extends Document {
-  @Prop({ required: true })
-  public login: string; // Логин
 
+  /** Логин */
   @Prop({ required: true })
-  public password: string; // Пароль
+  public login: string;
 
+  /** Пароль */
   @Prop({ required: true })
-  public name: string; // ФИО
+  public password: string;
 
+  /** ФИО */
   @Prop({ required: true })
-  public dateOfBirth: Date; // Дата рождения
+  public name: string;
 
+  /** Дата рождения */
+  @Prop({ required: true })
+  public dateOfBirth: Date;
+
+  /** Точка, где работает */
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Shop.name })
-  public shop: Shop; // Точка, где работает
+  public shop: Shop;
 
+  /** Телефон */
   @Prop()
-  public telephone: string; // Телефон
+  public telephone: string;
 
+  /** Адрес жительства */
   @Prop()
-  public address: string; // Адрес жительства
+  public address: string;
 
+  /** Должность */
   @Prop()
-  public position: string; // Должность
+  public position: string;
 
+  /** Роли пользователя */
   @Prop({ required: true })
-  public roles: RoleEnum[]; // Роли пользователя
+  public roles: RoleEnum[];
 
+  /** Зарплата */
   @Prop()
-  public salary: number; // Зарплата
+  public salary: number;
 
+  /** Фото пользователя */
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: File.name })
-  public avatar: File; // Фото пользователя
+  public avatar: File;
 
+  /** Токен, нужен для авторизации */
   @Prop()
   public token: string;
 

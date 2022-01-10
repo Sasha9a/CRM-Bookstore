@@ -7,6 +7,7 @@ import * as moment from "moment-timezone";
 
 moment.locale('ru');
 
+/** Первый модуль и основной модуль проекта */
 @Module({
   imports: [
     MongooseModule.forRoot(environment.db),
@@ -16,6 +17,7 @@ moment.locale('ru');
   providers: []
 })
 export class AppModule implements NestModule {
+  /** Конфигурируем проект, добавляем логирование всех запросов */
   public configure(consumer: MiddlewareConsumer): any {
     consumer.apply(LoggerMiddleware).forRoutes({
       path: '*',
