@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
 import * as mongoose from 'mongoose';
 
+/** Пайп, который проверяет валидность ID */
 @Injectable()
 export class ValidateObjectId implements PipeTransform<string> {
   public async transform(value: string) {
