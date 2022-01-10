@@ -15,11 +15,21 @@ export class FileController {
   public constructor(private readonly fileService: FileService) {
   }
 
+  /** Get-запрос на получение/скачку файла
+   * @param res переменная отвечает за возврат данных клиенту
+   * @param path зашифрованное название файла которое нужно вернуть
+   * @return Возвращает объект файла
+   * */
   @Get(':path')
   public async getFile(@Res() res: Response, @Param('path') path: string) {
     return res.sendFile(path, { root: './public' });
   }
 
+  /** Post-запрос на добавление файла
+   * @param res переменная отвечает за возврат данных клиенту
+   * @param file файл
+   * @return Возвращает объект файла
+   * */
   @UseGuards(JwtAuthGuard)
   @Post()
   @UseInterceptors(FileInterceptor('file', {
@@ -41,6 +51,10 @@ export class FileController {
     return res.status(HttpStatus.CREATED).json(createdFile).end();
   }
 
+  /** Delete-запрос на удаление файла
+   * @param res переменная отвечает за возврат данных клиенту
+   * @param path зашифрованное название файла
+   * */
   @UseGuards(JwtAuthGuard)
   @Delete(':path')
   public async deleteFile(@Res() res: Response, @Param('path') path: string) {

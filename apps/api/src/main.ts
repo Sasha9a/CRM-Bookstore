@@ -6,7 +6,8 @@
 import { AppModule } from "./app/app.module";
 import { NestFactory } from '@nestjs/core';
 
-async function bootstrap() { // Функция инициализации серверной части проекта
+/** Функция инициализации серверной части проекта */
+async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);

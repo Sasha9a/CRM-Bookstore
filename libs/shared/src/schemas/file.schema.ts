@@ -1,20 +1,27 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 
+/** Схема БД файла */
 @Schema({ versionKey: false })
 export class File extends Document {
+
+  /** Зашифрованное название */
   @Prop({ required: true })
-  public path: string; // Зашифрованное название
+  public path: string;
 
+  /** Незашифрованное название */
   @Prop()
-  public name: string; // Незашифрованное название
+  public name: string;
 
+  /** Тип файла */
   @Prop()
-  public mime: string; // Тип файла
+  public mime: string;
 
+  /** Размер файла */
   @Prop()
-  public size: number; // Размер файла
+  public size: number;
 
 }
 
+/** Схема БД файла */
 export const FileSchema = SchemaFactory.createForClass(File);

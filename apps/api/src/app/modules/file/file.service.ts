@@ -9,11 +9,16 @@ export class FileService {
   public constructor(@InjectModel(File.name) private readonly fileModel: Model<File>) {
   }
 
+  /** Функция загружает файл в базу данных
+   * @param file данные о файле
+   * @return Возвращает объект файла */
   public async upload(file: FileDto): Promise<File> {
     const uploadFile = await new this.fileModel(file);
     return uploadFile.save();
   }
 
+  /** Функция удаляет файл из базы данных и возвращает удаленный объект
+   * @param path зашифрованное название файла */
   public async deleteFile(path: string): Promise<any> {
     return await this.fileModel.findOneAndDelete({ path: path }).exec();
   }
