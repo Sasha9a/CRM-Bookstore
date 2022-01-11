@@ -22,6 +22,7 @@ export class FileController {
    * @param path зашифрованное название файла которое нужно вернуть
    * @return Возвращает объект файла
    * */
+  @UseGuards(JwtAuthGuard)
   @Get(':path')
   public async getFile(@Res() res: Response, @Param('path') path: string) {
     return res.sendFile(path, { root: './public' });

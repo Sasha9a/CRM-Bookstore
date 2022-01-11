@@ -12,7 +12,7 @@ export class AuthService {
    * @param user объект пользователя
    * @return Возвращает токен */
   public async login(user: User) {
-    const payload = { user: { _id: user._id, login: user.login, roles: user.roles } };
+    const payload = { user: { _id: user._id, login: user.login, roles: user.roles, shop: user.shop } };
     return {
       accessToken: this.jwtService.sign(payload)
     };

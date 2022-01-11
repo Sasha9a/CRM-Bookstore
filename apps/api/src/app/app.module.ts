@@ -1,5 +1,6 @@
 import { LoggerMiddleware } from "@crm/api/core/middlewares/logger.middleware";
 import { FileModule } from "@crm/api/modules/file/file.module";
+import { UserModule } from "@crm/api/modules/user/user.module";
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { MongooseModule } from "@nestjs/mongoose";
 import { environment } from "../environments/environment";
@@ -11,7 +12,8 @@ moment.locale('ru');
 @Module({
   imports: [
     MongooseModule.forRoot(environment.db),
-    FileModule
+    FileModule,
+    UserModule
   ],
   controllers: [],
   providers: []
