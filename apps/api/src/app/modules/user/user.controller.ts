@@ -51,18 +51,9 @@ export class UserController {
     if (body.password === user.password) {
       const token = await this.authService.login(user);
       const login: UserSessionDto = {
-        _id: user._id,
-        login: user.login,
-        roles: user.roles,
-        address: "",
-        avatar: undefined,
-        dateOfBirth: undefined,
-        name: "",
-        position: "",
-        salary: 0,
-        shop: undefined,
-        telephone: ""
-      }
+        ...user,
+        token: token.accessToken
+      };
       await this.userService.setToken(user._id, token.accessToken);
       return res.status(HttpStatus.OK).json(login).end();
     } else {

@@ -48,4 +48,8 @@ export class UserSessionDto extends BaseDto {
   @Expose()
   public avatar: FileDto;
 
+  /** Токен, нужен для авторизации */
+  @Expose()
+  public token: string;
+
 }
