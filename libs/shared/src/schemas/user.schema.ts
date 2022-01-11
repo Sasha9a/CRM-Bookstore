@@ -25,7 +25,7 @@ export class User extends Document {
   @Prop({ required: true })
   public dateOfBirth: Date;
 
-  /** Точка, где работает */
+  /** Магазин, где работает */
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Shop.name })
   public shop: Shop;
 
