@@ -72,12 +72,17 @@
       "projectType": "application",
       "root": "apps/web",
       "sourceRoot": "apps/web/src",
-      "prefix": "crm-bookstore",
+      "prefix": "crm",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "outputs": ["{options.outputPath}"],
           "options": {
+            "allowedCommonJsDependencies": [
+              "moment-timezone",
+              "class-validator",
+              "validator"
+            ],
             "outputPath": "dist/apps/web",
             "index": "apps/web/src/index.html",
             "main": "apps/web/src/main.ts",
@@ -94,15 +99,15 @@
               "node_modules/primeng/resources/themes/saga-blue/theme.css",
               "node_modules/primeng/resources/primeng.min.css"
             ],
-            "scripts": []
+            "scripts": ["node_modules/chart.js/dist/chart.js"]
           },
           "configurations": {
             "production": {
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
                 },
                 {
                   "type": "anyComponentStyle",
