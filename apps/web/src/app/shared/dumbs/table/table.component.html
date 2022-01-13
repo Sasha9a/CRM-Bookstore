@@ -1,0 +1,67 @@
+<p-table
+  #table
+  styleClass="responsive-table basic-table {{styleClass}}"
+  [scrollable]="!!scrollHeight"
+  [scrollHeight]="scrollHeight"
+  [(selection)]="selectedItems"
+  (selectionChange)="selectedItemsChange.emit($event)"
+  [autoLayout]="autoLayout"
+  [value]="loading ? skeletonItems : (inplaceSort ? (values | orderBy:sort) : values)">
+  <ng-template pTemplate="header">
+    <ng-template *ngIf="headerTemplate" [ngTemplateOutlet]="headerTemplate"></ng-template>
+    <tr *ngIf="!headerTemplate">
+      <th *ngIf="selectable" style="width: 50px"></th>
+      <th *ngFor="let column of columns" [ngStyle]="column.style" [ngClass]="column.class">
+        <div *ngIf="column.sort" (click)="setSort(column.sort)" class="pointer white-space-nowrap">
+          {{ column.label }}
+          <i *ngIf="column.sort" [ngClass]="getSortIconClass(column.sort)"></i>
+        </div>
+        <div *ngIf="!column.sort">
+          {{ column.label }}
+        </div>
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+    <ng-container *ngIf="!loading">
+      <ng-template
+        *ngIf="!selectable"
+        [ngTemplateOutlet]="rowTemplate"
+        [ngTemplateOutletContext]="{item: item, rowIndex: rowIndex}">
+      </ng-template>
+      <tr *ngIf="selectable">
+        <td>
+          <p-tableCheckbox #tableCheckbox [value]="item" [disabled]="selectionDisabled && !tableCheckbox.checked"></p-tableCheckbox>
+        </td>
+        <ng-template [ngTemplateOutlet]="rowTemplate" [ngTemplateOutletContext]="{item: item, rowIndex: rowIndex}"></ng-template>
+      </tr>
+    </ng-container>
+
+    <tr *ngIf="loading">
+      <td *ngIf="selectable">
+        <p-tableCheckbox [disabled]="true"></p-tableCheckbox>
+      </td>
+      <td *ngFor="let col of columns">
+        <p-skeleton [shape]="col.skeleton?.shape" [height]="col.skeleton?.height || '1rem'"></p-skeleton>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <tr *ngIf="paginationLoading">
+      <td [colSpan]="selectable ? columns.length + 1 : columns.length" class="text-center">
+        <p-progressSpinner [style]="{width: '50px', height: '50px'}"></p-progressSpinner>
+      </td>
+    </tr>
+    <ng-template [ngTemplateOutlet]="footerTemplate"></ng-template>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td [colSpan]="selectable ? columns.length + 1 : columns.length">
+        <div class="no-results">
+          <i class="pi pi-search"></i>
+          <h2>По вашему запросу ничего не найдено</h2>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

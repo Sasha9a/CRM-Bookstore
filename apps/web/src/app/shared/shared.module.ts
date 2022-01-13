@@ -91,11 +91,34 @@ import { TreeSelectModule } from "primeng/treeselect";
 import { TreeTableModule } from "primeng/treetable";
 import { TriStateCheckboxModule } from "primeng/tristatecheckbox";
 import { VirtualScrollerModule } from "primeng/virtualscroller";
+import { SpinnerComponent } from './dumbs/spinner/spinner.component';
+import { GoBackButtonComponent } from './dumbs/go-back-button/go-back-button.component';
+import { FileComponent } from './dumbs/file/file.component';
+import { ApiUrlPipe } from './pipes/api-url.pipe';
+import { FileTypePipe } from './pipes/file-type.pipe';
+import { SingleSelectComponent } from './dumbs/dropdowns/single-select/single-select.component';
+import { OrderByPipe } from './pipes/order-by.pipe';
+import { NestedPropertyPipe } from './pipes/nested-property.pipe';
+import { MultiSelectComponent } from './dumbs/dropdowns/multi-select/multi-select.component';
+import { JoinPipe } from './pipes/join.pipe';
+import { TableComponent } from './dumbs/table/table.component';
 
 
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    SpinnerComponent,
+    GoBackButtonComponent,
+    FileComponent,
+    ApiUrlPipe,
+    FileTypePipe,
+    SingleSelectComponent,
+    OrderByPipe,
+    NestedPropertyPipe,
+    MultiSelectComponent,
+    JoinPipe,
+    TableComponent
+  ],
   imports: [
     CommonModule,
     AutoCompleteModule,
@@ -281,7 +304,9 @@ import { VirtualScrollerModule } from "primeng/virtualscroller";
     DeferModule,
     FocusTrapModule,
     StyleClassModule,
-    RippleModule
+    RippleModule,
+    SpinnerComponent,
+    GoBackButtonComponent
   ]
 })
 export class SharedModule { }

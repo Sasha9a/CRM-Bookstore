@@ -1,0 +1,54 @@
+<span class="p-float-label" *ngIf="label; else dropdown">
+    <ng-container *ngTemplateOutlet="dropdown"></ng-container>
+    <label [for]="inputId">{{ label }}</label>
+</span>
+
+<ng-template #dropdown>
+  <p-dropdown #select
+              [options]="options | orderBy: sort"
+              [editable]="editable"
+              [(ngModel)]="selectedItem"
+              (onChange)="onChangeValue($event)"
+              [placeholder]="placeholder"
+              [inputId]="inputId"
+              [filter]="filter"
+              [filterBy]="filterBy"
+              [dataKey]="dataKey"
+              [disabled]="disabled"
+              [styleClass]="'w-full ' + styleClass"
+              [class]="class"
+              [emptyFilterMessage]="emptyFilterMessage"
+              [emptyMessage]="emptyMessage"
+              [optionLabel]="optionLabel"
+              [showClear]="showClear"
+              [virtualScroll]="virtualScroll"
+              [itemSize]="itemSize"
+              scrollHeight="400px">
+    <ng-template pTemplate="selectedItem">
+      <ng-template *ngIf="selectedItemTemplate || isTemplateCombined; else baseTemplate"
+                   [ngTemplateOutlet]="isTemplateCombined ? (selectedItemTemplate || itemTemplate) : selectedItemTemplate"
+                   [ngTemplateOutletContext]="{item: selectedItem}">
+      </ng-template>
+      <ng-template #baseTemplate>
+        <div class="color-black" *ngIf="selectedItem">
+          {{ selectedItem | nestedProperty: optionLabel }}
+        </div>
+      </ng-template>
+    </ng-template>
+    <ng-template let-item pTemplate="item">
+      <ng-template *ngIf="itemTemplate || isTemplateCombined; else baseTemplate"
+                   [ngTemplateOutlet]="isTemplateCombined ? (selectedItemTemplate || itemTemplate) : itemTemplate"
+                   [ngTemplateOutletContext]="{ item: item }">
+      </ng-template>
+      <ng-template #baseTemplate>
+        <div>
+          <div>{{ item | nestedProperty: optionLabel }}</div>
+          <div class="color-green" *ngIf="itemDescriptionField">{{ item | nestedProperty: itemDescriptionField }}</div>
+          <div class="greytext" *ngIf="itemSubDescriptionField">{{ item | nestedProperty: itemSubDescriptionField }}</div>
+        </div>
+      </ng-template>
+
+    </ng-template>
+  </p-dropdown>
+  <small class="error p-error" *ngIf="errorMessage">{{ errorMessage }}</small>
+</ng-template>

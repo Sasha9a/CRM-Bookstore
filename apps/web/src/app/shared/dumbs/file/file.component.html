@@ -1,0 +1,13 @@
+<span class="relative">
+  <a target="_blank" *ngIf="!['image/png','image/jpeg', 'image/gif'].includes(file.mime); else imageFile" [href]="('file/' + file.path) | apiUrl">
+    <i class="pi {{ file.mime | fileType }} mr-1"></i>{{ file.name }}
+  </a>
+  <ng-template #imageFile>
+    <p-image [src]="('file/' + file.path) | apiUrl" width="80px" height="auto" [preview]="true"></p-image>
+  </ng-template>
+  <i *ngIf="canDelete"
+     class="pi pi-times color-red cursor-pointer absolute"
+     style="top: -12px; right: -10px"
+     (click)="delete.emit()">
+  </i>
+</span>

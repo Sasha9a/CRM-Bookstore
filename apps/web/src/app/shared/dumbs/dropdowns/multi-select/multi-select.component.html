@@ -1,0 +1,70 @@
+<span class="p-float-label" *ngIf="label; else dropdown">
+    <ng-container *ngTemplateOutlet="dropdown"></ng-container>
+    <label [for]="inputId">{{ label }}</label>
+</span>
+
+<ng-template #dropdown>
+  <p-multiSelect [options]="options | orderBy: sort"
+                 [(ngModel)]="selectedItems"
+                 (onChange)="selectedItemsOptions.updateOn === 'default' ? onChangeValue($event) : undefined"
+                 (onPanelHide)="selectedItemsOptions.updateOn === 'hide' ? onHideChangeValue() : panelHide.emit($event)"
+                 [maxSelectedLabels]="maxSelectedLabels"
+                 [placeholder]="label ? '' : placeholder"
+                 [inputId]="inputId"
+                 [showHeader]="showHeader"
+                 [filterBy]="filterBy"
+                 [dropdownIcon]="dropdownIcon"
+                 [showToggleAll]="false"
+                 styleClass="w-full"
+                 [panelStyleClass]="panelStyleClass"
+                 [emptyFilterMessage]="emptyFilterMessage"
+                 [optionLabel]="optionLabel"
+                 [dataKey]="dataKey"
+                 [disabled]="disabled"
+                 [class]="class"
+                 [group]="group"
+                 [virtualScroll]="virtualScroll"
+                 [itemSize]="itemSize"
+                 [emptyMessage]="emptyMessage"
+                 scrollHeight="400px"
+                 [optionDisabled]="optionDisabled"
+                 [selectedItemsLabel]="selectedItemsLabel">
+    <ng-template pTemplate="selectedItems">
+      <div>
+        <ng-container *ngIf="!selectedItems || selectedItems.length === 0">
+          {{ placeholder }}
+        </ng-container>
+
+        <ng-container *ngIf="selectedItems?.length > maxSelectedLabels; else fullPreview">
+          {{ selectedItemsLabel.replace(replaceRegExp, selectedItems.length.toString()) }}
+        </ng-container>
+
+        <ng-template #fullPreview>
+          <ng-template *ngIf="(selectedItemsTemplate || isTemplateCombined); else baseTemplate"
+                       [ngTemplateOutlet]="isTemplateCombined ? (selectedItemsTemplate || itemTemplate) : selectedItemsTemplate"
+                       [ngTemplateOutletContext]="{ items: selectedItems }">
+          </ng-template>
+          <ng-template #baseTemplate>
+            <ng-container *ngFor="let item of selectedItems | orderBy: optionLabel; last as isLast" [class.pr-2]="!isLast">
+              {{ optionPrefix ? optionPrefix : '' }} {{ item | nestedProperty: optionLabel }}{{ !isLast ? ',' : '' }}
+            </ng-container>
+          </ng-template>
+        </ng-template>
+      </div>
+    </ng-template>
+
+    <ng-template let-item pTemplate="item">
+      <ng-template [ngIf]="itemTemplate"
+                   [ngIfElse]="baseTemplate"
+                   [ngTemplateOutlet]="itemTemplate"
+                   [ngTemplateOutletContext]="{ item: item }"></ng-template>
+      <ng-template #baseTemplate>
+        <div>
+          <div>{{ optionPrefix ? optionPrefix : '' }} {{ item | nestedProperty: optionLabel }}</div>
+          <div class="text-green-400" *ngIf="itemDescriptionField">{{ item | nestedProperty: itemDescriptionField }}</div>
+          <div class="greytext" *ngIf="itemSubDescriptionField">{{ item | nestedProperty: itemSubDescriptionField }}</div>
+        </div>
+      </ng-template>
+    </ng-template>
+  </p-multiSelect>
+</ng-template>
