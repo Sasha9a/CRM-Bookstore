@@ -102,6 +102,7 @@ import { NestedPropertyPipe } from './pipes/nested-property.pipe';
 import { MultiSelectComponent } from './dumbs/dropdowns/multi-select/multi-select.component';
 import { JoinPipe } from './pipes/join.pipe';
 import { TableComponent } from './dumbs/table/table.component';
+import { PhonePipe } from './pipes/phone.pipe';
 
 
 
@@ -117,7 +118,8 @@ import { TableComponent } from './dumbs/table/table.component';
     NestedPropertyPipe,
     MultiSelectComponent,
     JoinPipe,
-    TableComponent
+    TableComponent,
+    PhonePipe
   ],
   imports: [
     CommonModule,
