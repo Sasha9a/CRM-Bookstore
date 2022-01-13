@@ -103,6 +103,7 @@ import { MultiSelectComponent } from './dumbs/dropdowns/multi-select/multi-selec
 import { JoinPipe } from './pipes/join.pipe';
 import { TableComponent } from './dumbs/table/table.component';
 import { PhonePipe } from './pipes/phone.pipe';
+import { UserAvatarComponent } from './dumbs/user-avatar/user-avatar.component';
 
 
 
@@ -119,7 +120,8 @@ import { PhonePipe } from './pipes/phone.pipe';
     MultiSelectComponent,
     JoinPipe,
     TableComponent,
-    PhonePipe
+    PhonePipe,
+    UserAvatarComponent
   ],
   imports: [
     CommonModule,
