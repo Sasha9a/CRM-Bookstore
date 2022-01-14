@@ -22,14 +22,14 @@ export class UserService {
   /** Функция ищет всех пользователей в БД
    * @return Возвращает массив пользователей */
   public async findAll(): Promise<User[]> {
-    return await this.userModel.find().exec();
+    return await this.userModel.find({}, { password: 0, login: 0, token: 0 }).exec();
   }
 
   /** Функция ищет пользователя в БД по ID
    * @param id ID пользователя
    * @return Возвращает объект пользователя */
   public async findById(id: string): Promise<User> {
-    return await this.userModel.findById(id).exec();
+    return await this.userModel.findById(id, { password: 0, login: 0, token: 0 }).exec();
   }
 
   /** Функция ищет пользователя в БД по логину

@@ -7,7 +7,7 @@ import { UserFormDto } from "@crm/shared/dtos/user/user.form.dto";
 import { UserLoginFormDto } from "@crm/shared/dtos/user/user.login.form.dto";
 import { UserSessionDto } from "@crm/shared/dtos/user/user.session.dto";
 import { RoleEnum } from "@crm/shared/enums/role.enum";
-import { Body, Controller, Get, HttpStatus, Post, Res, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Param, Post, Res, UseGuards } from "@nestjs/common";
 import { Response } from 'express';
 
 /** Контроллер принимающие запросы по пользователю */
@@ -25,9 +25,19 @@ export class UserController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Get()
   public async getAll(@Res() res: Response) {
-    console.log()
     const users = await this.userService.findAll();
     return res.status(HttpStatus.OK).json(users).end();
+  }
+
+  /** Get-запрос на получение пользователя по ID
+   * @param res переменная отвечает за возврат данных клиенту
+   * @param id ID пользователя
+   * @return Возвращает пользователя */
+  @UseGuards(JwtAuthGuard)
+  @Get(':id')
+  public async getUser(@Res() res: Response, @Param('id') id: string) {
+    const user = await this.userService.findById(id);
+    return res.status(HttpStatus.OK).json(user).end();
   }
 
   /** Get-запрос на проверку авторизации пользователя
