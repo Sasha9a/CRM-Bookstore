@@ -1,11 +1,11 @@
-<p-avatar *ngIf="user.file?.path; else defaultImage"
-          [image]="('file/' + user.file.path) | apiUrl"
+<p-avatar *ngIf="user.avatar?.path; else defaultImage"
+          [image]="('file/' + user.avatar.path) | apiUrl"
           [shape]="shape"
           [size]="size">
 </p-avatar>
 
 <ng-template #defaultImage>
-  <p-avatar *ngIf="!user.file?.path"
+  <p-avatar *ngIf="!user.avatar?.path"
             [size]="size"
             [shape]="shape"
             [label]="userLabel"
