@@ -105,6 +105,7 @@ import { TableComponent } from './dumbs/table/table.component';
 import { PhonePipe } from './pipes/phone.pipe';
 import { UserAvatarComponent } from './dumbs/user-avatar/user-avatar.component';
 import { FooterComponent } from './dumbs/footer/footer.component';
+import { CommonLayoutComponent } from './layouts/common-layout/common-layout.component';
 
 
 
@@ -123,7 +124,8 @@ import { FooterComponent } from './dumbs/footer/footer.component';
     TableComponent,
     PhonePipe,
     UserAvatarComponent,
-    FooterComponent
+    FooterComponent,
+    CommonLayoutComponent
   ],
   imports: [
     CommonModule,

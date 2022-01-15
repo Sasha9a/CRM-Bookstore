@@ -1,4 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
+html {
+  font-size: 14px;
+}
+
 body {
   padding: 0;
   margin: 0;
@@ -8,6 +12,21 @@ body {
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+p {
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2 {
+  font-weight: 700;
+  font-family: Lato, "Helvetica Neue", sans-serif;
+}
+
+h3, h4, h5, h6 {
+  font-weight: 500;
+  font-family: Lato, "Helvetica Neue", sans-serif;
 }
 
 .fw-bold {
@@ -21,6 +40,47 @@ body {
     margin-left: 5px;
     color: red;
   }
+}
+
+.icon-column {
+  width: 40px !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  text-align: center !important;
+}
+
+.columns-filter {
+  .p-multiselect {
+    background: transparent;
+    border: none;
+
+    .p-multiselect-trigger-icon.pi {
+      font-size: 1.2rem !important;
+    }
+  }
+
+  .p-multiselect-label-container {
+    width: 0 !important;
+  }
+}
+
+.square-icon {
+  padding: 2px;
+  border: 1px solid grey;
+}
+
+button {
+  min-width: min-content !important;
+}
+
+.p-filter-field {
+  margin-bottom: 2.5rem !important;
+}
+
+.spinning {
+  -webkit-animation: spin 1.5s linear infinite;
+  -moz-animation: spin 1.5s linear infinite;
+  animation: spin 1.5s linear infinite;
 }
 
 .dropdown-overlay-panel.p-overlaypanel {
@@ -295,5 +355,75 @@ a:hover {
   i.pi {
     font-size: 70px;
     color: #afafaf;
+  }
+}
+
+.p-menubar.tabs-bar {
+  padding: 0;
+  border: none;
+
+  p-menubarsub {
+    width: 100%;
+    z-index: 999;
+  }
+
+  .p-menuitem {
+    width: 100%;
+
+    &:not(:last-child) .p-menuitem-link {
+      border-bottom-right-radius: 0;
+      border-top-right-radius: 0;
+    }
+
+    &:not(:first-child) .p-menuitem-link {
+      border-bottom-left-radius: 0;
+      border-top-left-radius: 0;
+    }
+  }
+
+  .p-menuitem-link {
+    background: #83a8ce !important;
+    padding: 1rem !important;
+
+    &:hover {
+      background: #8baed2 !important;
+    }
+  }
+
+  .p-menuitem-link.p-menuitem-link-active, .p-menuitem-link-active > a.p-menuitem-link {
+    background: #7596b9 !important;
+  }
+
+  .p-menuitem-text {
+    margin: 0 auto;
+    font-weight: 700;
+    font-family: Lato, "Helvetica Neue", sans-serif !important;
+    font-size: 15px !important;
+    color: #fff !important;
+    white-space: nowrap;
+  }
+
+  .p-submenu-icon {
+    color: #fff !important;
+  }
+
+  .p-submenu-list {
+    min-width: 100%;
+  }
+
+  @media screen and (max-width: 960px) {
+    background: none;
+    .p-menubar-button {
+      i {
+        font-size: 1.5rem;
+      }
+
+      &:hover {
+        background: none;
+      }
+    }
+    .p-submenu-icon {
+      margin-left: 0 !important;
+    }
   }
 }

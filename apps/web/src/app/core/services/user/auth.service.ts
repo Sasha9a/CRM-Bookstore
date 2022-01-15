@@ -34,14 +34,17 @@ export class AuthService {
     }));
   }
 
-  /** Функция выполняет выход из системы пользователя */
-  public logout() {
+  /** Функция выполняет выход из системы пользователя
+   * @param url нынешний URL адрес */
+  public logout(url?: string) {
     localStorage.removeItem('JWT_TOKEN');
     localStorage.removeItem('JWT_USER');
 
     this.userStateService.logout(this.user).subscribe();
 
     this.user = undefined;
+
+    this.router.navigate(['/login'], { queryParams: { url } }).catch(console.error);
   }
 
   /** Авторизованный пользователь

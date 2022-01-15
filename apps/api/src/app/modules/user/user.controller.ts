@@ -29,6 +29,14 @@ export class UserController {
     return res.status(HttpStatus.OK).json(users).end();
   }
 
+  /** Get-запрос на проверку авторизации пользователя
+   * @param res переменная отвечает за возврат данных клиенту */
+  @UseGuards(JwtAuthGuard)
+  @Get('/check')
+  public async check(@Res() res: Response) {
+    return res.status(HttpStatus.NO_CONTENT).end();
+  }
+
   /** Get-запрос на получение пользователя по ID
    * @param res переменная отвечает за возврат данных клиенту
    * @param id ID пользователя
@@ -38,14 +46,6 @@ export class UserController {
   public async getUser(@Res() res: Response, @Param('id') id: string) {
     const user = await this.userService.findById(id);
     return res.status(HttpStatus.OK).json(user).end();
-  }
-
-  /** Get-запрос на проверку авторизации пользователя
-   * @param res переменная отвечает за возврат данных клиенту */
-  @UseGuards(JwtAuthGuard)
-  @Get('/check')
-  public async check(@Res() res: Response) {
-    return res.status(HttpStatus.NO_CONTENT).end();
   }
 
   /** Post-запрос на создание пользователя

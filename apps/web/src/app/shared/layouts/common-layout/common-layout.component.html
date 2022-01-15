@@ -1,0 +1,26 @@
+<div class="grid grid-nogutter flex-nowrap">
+  <div class="left-menu-wrapper">
+    <div class="grid-nogutter left-menu" [class.minimized]="menuMinimized">
+      <div class="toggle-menu-icon px-3 py-5 text-right">
+        <i class="pi pi-align-right" (click)="menuMinimized = !menuMinimized; saveMenuState();"></i>
+      </div>
+      <div class="user-info">
+        <a routerLink="/user/settings"
+           class="text-center scalein animation-duration-200 {{ menuMinimized ? 'hidden' : 'block' }}">
+          <crm-user-avatar [user]="currentUser" shape="circle" size="xlarge"></crm-user-avatar>
+        </a>
+        <div class="left-menu-user fw-bold" *ngIf="!menuMinimized">
+          <p>{{ currentUser?.name }}</p>
+          <p>{{ currentUser?.position }}</p>
+        </div>
+        <p-menubar [model]="menubar"></p-menubar>
+      </div>
+      <p-panelMenu [model]="items"></p-panelMenu>
+    </div>
+  </div>
+  <div class="left-menu-offset" [class.minimized]="menuMinimized"></div>
+  <div class="main-content w-full pt-3 pb-8 px-3 sm:px-6 sm:block" [class.minimized]="!menuMinimized">
+    <router-outlet></router-outlet>
+    <crm-footer></crm-footer>
+  </div>
+</div>
