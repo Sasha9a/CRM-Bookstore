@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { UserFormDto } from "@crm/shared/dtos/user/user.form.dto";
+import { UserLoginFormDto } from "@crm/shared/dtos/user/user.login.form.dto";
 import { UserSessionDto } from "@crm/shared/dtos/user/user.session.dto";
 import { BaseService } from "@crm/web/core/services/base.service";
 import { Observable } from "rxjs";
@@ -16,7 +16,7 @@ export class UserService extends BaseService {
   /** Post-запрос на авторизацию пользователя
    * @param body данные пользователя
    * @return Возвращает объект пользователя или ошибку авторизации */
-  public login(body: UserFormDto): Observable<UserSessionDto> {
+  public login(body: UserLoginFormDto): Observable<UserSessionDto> {
     return this.http.post<UserSessionDto>(`${this.baseUrl}/login`, body);
   }
 

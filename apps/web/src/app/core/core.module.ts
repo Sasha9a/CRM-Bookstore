@@ -10,7 +10,10 @@ import { ConfirmationService, MessageService } from "primeng/api";
 const routes: Routes = [
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
+    data: {
+      title: 'Логин - CRM'
+    }
   }
 ];
 

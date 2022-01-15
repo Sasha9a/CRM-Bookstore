@@ -104,6 +104,7 @@ import { JoinPipe } from './pipes/join.pipe';
 import { TableComponent } from './dumbs/table/table.component';
 import { PhonePipe } from './pipes/phone.pipe';
 import { UserAvatarComponent } from './dumbs/user-avatar/user-avatar.component';
+import { FooterComponent } from './dumbs/footer/footer.component';
 
 
 
@@ -121,7 +122,8 @@ import { UserAvatarComponent } from './dumbs/user-avatar/user-avatar.component';
     JoinPipe,
     TableComponent,
     PhonePipe,
-    UserAvatarComponent
+    UserAvatarComponent,
+    FooterComponent
   ],
   imports: [
     CommonModule,
@@ -310,7 +312,9 @@ import { UserAvatarComponent } from './dumbs/user-avatar/user-avatar.component';
     StyleClassModule,
     RippleModule,
     SpinnerComponent,
-    GoBackButtonComponent
+    GoBackButtonComponent,
+    JoinPipe,
+    FooterComponent
   ]
 })
 export class SharedModule { }

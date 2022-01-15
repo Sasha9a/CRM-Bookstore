@@ -65,15 +65,10 @@ export class UserController {
    * @param body данные пользователя
    * @return Возвращает объект пользователя или ошибку авторизации */
   @Post('/login')
-  public async login(@Res() res: Response, @Body() body: UserFormDto) {
+  public async login(@Res() res: Response, @Body() body: UserLoginFormDto) {
     const user = await this.userService.findByLogin(body.login);
-    const errors: Record<keyof UserLoginFormDto, any[]> = {
-      login: null,
-      password: null
-    };
     if (!user) {
-      errors.login = ['Нет такого аккаунта'];
-      return res.status(HttpStatus.NOT_FOUND).json(errors).end();
+      return res.status(HttpStatus.NOT_FOUND).json({ error: { login: ['Нет такого аккаунта'] } }).end();
     }
     if (body.password === user.password) {
       const token = await this.authService.login(user);
@@ -94,8 +89,7 @@ export class UserController {
       await this.userService.setToken(user._id, token.accessToken);
       return res.status(HttpStatus.OK).json(login).end();
     } else {
-      errors.password = ['Неверный пароль'];
-      return res.status(HttpStatus.NOT_FOUND).json(errors).end();
+      return res.status(HttpStatus.NOT_FOUND).json({ error: { password: ['Неверный пароль'] } }).end();
     }
   }
 

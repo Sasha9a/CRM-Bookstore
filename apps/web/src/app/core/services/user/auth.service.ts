@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserFormDto } from "@crm/shared/dtos/user/user.form.dto";
+import { UserLoginFormDto } from "@crm/shared/dtos/user/user.login.form.dto";
 import { UserSessionDto } from "@crm/shared/dtos/user/user.session.dto";
 import { UserStateService } from "@crm/web/core/services/user/user-state.service";
 import { Observable, tap } from "rxjs";
@@ -25,7 +25,7 @@ export class AuthService {
   /** Функция авторизовывает пользователя в системе
    * @param user данные пользователя
    * @return Возвращает объект пользователя или ошибку авторизации */
-  public login(user: UserFormDto): Observable<UserSessionDto> {
+  public login(user: UserLoginFormDto): Observable<UserSessionDto> {
     return this.userStateService.login(user).pipe(tap((response) => {
       this.user = response;
 

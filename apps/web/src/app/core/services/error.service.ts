@@ -25,10 +25,21 @@ export class ErrorService {
       return this.messageService.add({ severity: 'error', summary: title, detail: 'Отказано в доступе', life: 10000 });
     }
 
-    const description = error.error?.message || error.message || error.detail || '';
+    const description = error.error?.message || error.error || error.message || error.detail || '';
 
     if (typeof description === 'string') {
       return this.messageService.add({ severity: 'error', summary: title, detail: description, life: 10000 });
+    } else if (typeof description === 'object') {
+      Object.keys(description).forEach((key) => {
+        if (description[key]) {
+          this.messageService.add({
+            severity: 'error',
+            summary: title,
+            detail: description[key].map((value) => value).join(', '),
+            life: 10000
+          });
+        }
+      });
     } else if (Array.isArray(description)) {
       description.forEach((item) => {
         if (typeof item === 'string') {

@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { CoreModule } from "@crm/web/core/core.module";
 import { ErrorInterceptor } from "@crm/web/core/interceptors/error.interceptor";
 import { TokenInterceptor } from "@crm/web/core/interceptors/token.interceptor";
+import { UserModule } from "@crm/web/modules/user/user.module";
 import { SharedModule } from "@crm/web/shared/shared.module";
 
 import { AppComponent } from './core/app.component';
@@ -24,7 +25,8 @@ moment.locale('ru');
     FormsModule,
     ReactiveFormsModule,
     CoreModule,
-    SharedModule
+    SharedModule,
+    UserModule
   ],
   providers: [
     [

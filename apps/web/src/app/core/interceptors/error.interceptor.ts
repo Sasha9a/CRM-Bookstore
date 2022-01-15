@@ -23,7 +23,7 @@ export class ErrorInterceptor implements HttpInterceptor {
         this.authService.logout();
       }
 
-      const error = err.error.errors || { message: err.statusText };
+      const error = err.error.errors || err.error || { message: err.statusText };
 
       if (err.status === 0 && !navigator.onLine) {
         error.message = 'Не удалось установить связь с сервером. Проверьте Ваше интернет соединение.';
