@@ -427,3 +427,41 @@ a:hover {
     }
   }
 }
+
+.p-tabmenu {
+  overflow-x: initial !important;
+
+  .p-tabmenu-nav {
+    flex-wrap: wrap;
+    @media screen and (max-width: 768px) {
+      border: none;
+    }
+  }
+
+  .p-tabmenuitem {
+    .p-menuitem-link {
+      background: none !important;
+
+      .p-menuitem-text {
+        font-weight: 500 !important;
+        font-family: Lato, "Helvetica Neue", sans-serif !important;
+      }
+    }
+
+    @media screen and (max-width: 768px) {
+      flex-grow: 1;
+      flex-basis: 0;
+      margin: 2px !important;
+
+      .p-menuitem-link {
+        justify-content: center;
+        height: 100%;
+
+        .p-menuitem-text {
+          white-space: nowrap;
+        }
+      }
+    }
+  }
+
+}
