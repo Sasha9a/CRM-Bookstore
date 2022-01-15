@@ -21,6 +21,10 @@ const routes: Routes = [
     data: {
       title: 'Логин - CRM'
     }
+  },
+  {
+    path: '**',
+    redirectTo: ''
   }
 ];
 
