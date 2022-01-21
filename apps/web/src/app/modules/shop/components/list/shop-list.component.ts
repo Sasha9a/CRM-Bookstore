@@ -3,6 +3,7 @@ import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
 import { CrmTableColumn } from "@crm/web/core/models/crm-table-column";
 import { ShopStateService } from "@crm/web/core/services/shop/shop-state.service";
 
+/** Компонент показывает список магазинов */
 @Component({
   selector: 'crm-list',
   templateUrl: './shop-list.component.html',
@@ -10,9 +11,13 @@ import { ShopStateService } from "@crm/web/core/services/shop/shop-state.service
 })
 export class ShopListComponent implements OnInit {
 
+  /** Магазины */
   public shops: ShopDto[];
+
+  /** Грузится ли или нет */
   public loading = false;
 
+  /** Столбцы таблицы */
   public itemColumns: CrmTableColumn[] = [
     { label: 'Адрес', name: 'address', sort: 'address:string' },
     { label: 'Метро', name: 'metro', sort: 'metro:string' },
@@ -25,6 +30,7 @@ export class ShopListComponent implements OnInit {
     this.loadShops();
   }
 
+  /** Функция загружает данные */
   public loadShops() {
     this.loading = true;
 
@@ -34,6 +40,9 @@ export class ShopListComponent implements OnInit {
     }, () => this.loading = false);
   }
 
+  /** Функция типизирует переменную
+   * @param shop магазин
+   * @return возвращает магазин */
   public toShop(shop: any): ShopDto {
     return shop as ShopDto;
   }

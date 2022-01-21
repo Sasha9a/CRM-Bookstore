@@ -5,6 +5,7 @@ import { ShopFormDto } from "@crm/shared/dtos/shop/shop.form.dto";
 import { ErrorService } from "@crm/web/core/services/error.service";
 import { ShopStateService } from "@crm/web/core/services/shop/shop-state.service";
 
+/** Компонент добавления магазина */
 @Component({
   selector: 'crm-add',
   templateUrl: './shop-add.component.html',
@@ -12,12 +13,15 @@ import { ShopStateService } from "@crm/web/core/services/shop/shop-state.service
 })
 export class ShopAddComponent {
 
+  /** Сохраняется ли или нет */
   public saving = false;
 
   public constructor(private readonly shopStateService: ShopStateService,
                      private readonly errorService: ErrorService,
                      private readonly router: Router) { }
 
+  /** Функция создает магазин
+   * @param body данные магазина */
   public create(body: ShopFormDto) {
     this.saving = true;
 
