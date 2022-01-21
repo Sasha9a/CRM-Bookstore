@@ -1,0 +1,9 @@
+<crm-shop-form *ngIf="!saving && shop"
+               [shop]="shop"
+               [canDelete]="true"
+               (save)="edit($event)"
+               (delete)="delete()"
+               [route]="'/shop'">
+</crm-shop-form>
+
+<crm-spinner *ngIf="saving || !shop"></crm-spinner>

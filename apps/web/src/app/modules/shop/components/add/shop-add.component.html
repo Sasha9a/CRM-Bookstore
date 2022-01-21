@@ -1,0 +1,6 @@
+<crm-shop-form *ngIf="!saving"
+               (save)="create($event)"
+               [route]="'/shop'">
+</crm-shop-form>
+
+<crm-spinner *ngIf="saving"></crm-spinner>

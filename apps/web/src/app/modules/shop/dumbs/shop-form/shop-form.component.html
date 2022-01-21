@@ -1,0 +1,35 @@
+<h3 class="dividing-header">Магазин</h3>
+
+<div class="grid">
+  <div class="col-12 md:col-6 xl:col-4">
+    <div class="p-fluid">
+      <div class="field">
+        <label class="fw-bold required-field">Адрес</label>
+        <input type="text" pInputText [ngClass]="{ 'ng-invalid ng-dirty': errors?.address }" [(ngModel)]="shop.address">
+        <small *ngIf="errors?.address" class="p-error">{{ errors.address | join }}</small>
+      </div>
+
+      <div class="field">
+        <label class="fw-bold">Метро</label>
+        <input type="text" pInputText [ngClass]="{ 'ng-invalid ng-dirty': errors?.metro }" [(ngModel)]="shop.metro">
+        <small *ngIf="errors?.metro" class="p-error">{{ errors.metro | join }}</small>
+      </div>
+
+      <div class="field">
+        <label class="fw-bold required-field">Режим работы</label>
+        <p-inputMask mask="99:99 - 99:99"
+                     [(ngModel)]="shop.openingHours"
+                     placeholder="08:00 - 23:00"
+                     [ngClass]="{ 'ng-invalid ng-dirty': errors?.openingHours }">
+        </p-inputMask>
+        <small *ngIf="errors?.openingHours" class="p-error">{{ errors.openingHours | join }}</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 mt-4">
+    <button pButton [label]="saveButtonLabel" icon="pi pi-check" class="p-button-success mr-2" (click)="onSave(shop)"></button>
+    <button *ngIf="canDelete" pButton [label]="'Удалить'" class="p-button-danger mr-2" (click)="delete.emit(shop)"></button>
+    <crm-go-back-button [route]="route"></crm-go-back-button>
+  </div>
+</div>

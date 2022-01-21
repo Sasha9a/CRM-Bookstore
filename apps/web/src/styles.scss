@@ -14,6 +14,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+*:focus,
+.p-focus {
+  box-shadow: none !important;
+}
+
 p {
   margin: 0;
   padding: 0;

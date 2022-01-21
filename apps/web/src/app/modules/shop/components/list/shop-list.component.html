@@ -1,0 +1,22 @@
+<div class="flex justify-content-between align-items-center">
+  <h1>Магазины</h1>
+  <div>
+    <button pButton [label]="'Добавить'"
+            class="p-button-success"
+            routerLink="/shop/add">
+    </button>
+  </div>
+</div>
+
+<crm-table name="shops"
+           [loading]="loading"
+           [values]="shops"
+           [columns]="itemColumns">
+  <ng-template #rowTemplate let-shop="item">
+    <tr *ngIf="toShop(shop) as shop">
+      <td><a routerLink="/shop/edit/{{ shop._id }}">{{ shop.address }}</a></td>
+      <td>{{ shop.metro }}</td>
+      <td>{{ shop.openingHours }}</td>
+    </tr>
+  </ng-template>
+</crm-table>

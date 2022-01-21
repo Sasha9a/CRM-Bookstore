@@ -49,8 +49,8 @@ export class BaseStateService {
    * @param model объект, на который нужно изменить
    * @return Обновленный объект
    */
-  public update<T>(id, model: T): Observable<T> {
-    return this.baseService.update<T>(id, model);
+  public update<T, K>(id, model: T): Observable<K> {
+    return this.baseService.update<K>(id, model);
   }
 
   /**

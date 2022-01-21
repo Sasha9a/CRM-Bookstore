@@ -1,10 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from "@angular/router";
-import { RoleEnum } from "@crm/shared/enums/role.enum";
 import { AppComponent } from "@crm/web/core/app.component";
 import { AuthGuard } from "@crm/web/core/guards/auth.guard";
-import { RoleGuard } from "@crm/web/core/guards/role.guard";
 import { LoginComponent } from "@crm/web/modules/user/components/login/login.component";
 import { CommonLayoutComponent } from "@crm/web/shared/layouts/common-layout/common-layout.component";
 import { SharedModule } from "@crm/web/shared/shared.module";
@@ -19,12 +17,7 @@ const routes: Routes = [
     children: [
       {
         path: 'shop',
-        loadChildren: () => import('../modules/shop/shop.module').then(m => m.ShopModule),
-        canActivate: [RoleGuard],
-        data: {
-          roles: [RoleEnum.GENERAL_MANAGER],
-          included: true
-        }
+        loadChildren: () => import('../modules/shop/shop.module').then(m => m.ShopModule)
       }
     ]
   },
