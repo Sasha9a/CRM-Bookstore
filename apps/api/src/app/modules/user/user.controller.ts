@@ -1,6 +1,7 @@
 import { Roles } from "@crm/api/core/decorators/role.decorator";
 import { JwtAuthGuard } from "@crm/api/core/guards/jwt-auth.guard";
 import { RoleGuard } from "@crm/api/core/guards/role.guard";
+import { ValidateObjectId } from "@crm/api/core/pipes/validate.object.id.pipes";
 import { AuthService } from "@crm/api/modules/user/auth.service";
 import { UserService } from "@crm/api/modules/user/user.service";
 import { UserFormDto } from "@crm/shared/dtos/user/user.form.dto";
@@ -43,7 +44,7 @@ export class UserController {
    * @return Возвращает пользователя */
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  public async getUser(@Res() res: Response, @Param('id') id: string) {
+  public async getUser(@Res() res: Response, @Param('id', new ValidateObjectId()) id: string) {
     const user = await this.userService.findById(id);
     return res.status(HttpStatus.OK).json(user).end();
   }

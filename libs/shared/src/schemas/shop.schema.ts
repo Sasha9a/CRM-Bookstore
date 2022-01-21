@@ -9,6 +9,14 @@ export class Shop extends Document {
   @Prop({ required: true })
   public address: string;
 
+  /** Широта */
+  @Prop({ required: true })
+  public lat: number;
+
+  /** Долгота */
+  @Prop({ required: true })
+  public lng: number;
+
   /** Метро */
   @Prop()
   public metro: string;

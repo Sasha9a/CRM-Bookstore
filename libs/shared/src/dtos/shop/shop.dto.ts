@@ -9,6 +9,14 @@ export class ShopDto extends BaseDto {
   @Expose()
   public address: string;
 
+  /** Широта */
+  @Expose()
+  public lat: number;
+
+  /** Долгота */
+  @Expose()
+  public lng: number;
+
   /** Метро */
   @Expose()
   public metro: string;
