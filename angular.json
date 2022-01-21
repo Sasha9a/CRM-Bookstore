@@ -89,10 +89,7 @@
             "polyfills": "apps/web/src/polyfills.ts",
             "tsConfig": "apps/web/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": [
-              "apps/web/src/favicon.ico",
-              "apps/web/src/assets"
-            ],
+            "assets": ["apps/web/src/favicon.ico", "apps/web/src/assets"],
             "styles": [
               "apps/web/src/styles.scss",
               "node_modules/primeicons/primeicons.css",

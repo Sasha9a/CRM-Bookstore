@@ -22,20 +22,11 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@crm/shared/*": [
-        "libs/shared/src/*"
-      ],
-      "@crm/web/*": [
-        "apps/web/src/app/*"
-      ],
-      "@crm/api/*": [
-        "apps/api/src/app/*"
-      ]
+      "@crm/api/*": ["apps/api/src/app/*"],
+      "@crm/shared/*": ["libs/shared/src/*"],
+      "@crm/web/*": ["apps/web/src/app/*"]
     }
   },
-  "include": [
-    "./libs/*/src/**/*",
-    "./apps/*/src/**/*"
-  ],
+  "include": ["./libs/*/src/**/*", "./apps/*/src/**/*"],
   "exclude": ["node_modules", "tmp"]
 }
