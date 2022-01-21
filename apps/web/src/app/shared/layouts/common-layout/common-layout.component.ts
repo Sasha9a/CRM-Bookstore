@@ -52,14 +52,9 @@ export class CommonLayoutComponent implements OnInit {
       routerLink: '/',
       routerLinkActiveOptions: { exact: true }
     }, {
-      label: 'Клиенты',
-      icon: PrimeIcons.ID_CARD,
-      routerLink: '/client',
-      routerLinkActiveOptions: { exact: false }
-    }, {
-      label: 'Помещения',
+      label: 'Магазины',
       icon: PrimeIcons.HOME,
-      routerLink: '/location',
+      routerLink: '/shop',
       routerLinkActiveOptions: { exact: false }
     }, {
       label: 'Пользователи',
