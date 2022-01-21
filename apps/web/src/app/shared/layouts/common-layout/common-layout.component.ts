@@ -1,5 +1,6 @@
 import { Component, HostListener, OnInit, ViewEncapsulation } from '@angular/core';
 import { UserSessionDto } from "@crm/shared/dtos/user/user.session.dto";
+import { RoleEnum } from "@crm/shared/enums/role.enum";
 import { AuthService } from "@crm/web/core/services/user/auth.service";
 import { MenuItem, PrimeIcons } from "primeng/api";
 
@@ -34,7 +35,7 @@ export class CommonLayoutComponent implements OnInit {
       {
         label: 'Настройки',
         icon: 'pi pi-cog',
-        routerLink: '/user/settings',
+        routerLink: '/settings',
         routerLinkActiveOptions: { exact: true }
       },
       {
@@ -55,12 +56,14 @@ export class CommonLayoutComponent implements OnInit {
       label: 'Магазины',
       icon: PrimeIcons.HOME,
       routerLink: '/shop',
-      routerLinkActiveOptions: { exact: false }
+      routerLinkActiveOptions: { exact: false },
+      visible: this.authService.checkRoles([RoleEnum.GENERAL_MANAGER])
     }, {
       label: 'Пользователи',
       icon: PrimeIcons.USERS,
       routerLink: '/user',
-      routerLinkActiveOptions: { exact: false }
+      routerLinkActiveOptions: { exact: false },
+      visible: this.authService.checkRoles([RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR])
     }];
   }
 

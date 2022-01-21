@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserLoginFormDto } from "@crm/shared/dtos/user/user.login.form.dto";
 import { UserSessionDto } from "@crm/shared/dtos/user/user.session.dto";
+import { RoleEnum } from "@crm/shared/enums/role.enum";
 import { UserStateService } from "@crm/web/core/services/user/user-state.service";
 import { Observable, tap } from "rxjs";
 
@@ -66,5 +67,12 @@ export class AuthService {
       return Promise.reject(false);
     }
     return this.userStateService.check().toPromise();
+  }
+
+  /** Функция проверяет, есть у прользователя роли или нет
+   * @param roles роли
+   * @return есть или нет */
+  public checkRoles(roles: RoleEnum[]): boolean {
+    return !!this.currentUser?.roles.some((role) => roles.includes(role));
   }
 }
