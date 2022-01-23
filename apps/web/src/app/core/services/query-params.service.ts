@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 
 /** Список для взаимосвязи параметров адресной строки с фильтрами */
 const paramsMap = {
-
+  'shop': 'shops:string'
 };
 
 /** Сервис для удобной работы с параметрами адресной строки */

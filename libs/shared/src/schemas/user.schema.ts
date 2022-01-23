@@ -46,7 +46,7 @@ export class User extends Document {
   public roles: RoleEnum[];
 
   /** Зарплата */
-  @Prop()
+  @Prop({ default: 0 })
   public salary: number;
 
   /** Фото пользователя */

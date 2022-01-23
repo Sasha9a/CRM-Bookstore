@@ -7,7 +7,7 @@ import { ShopStateService } from "@crm/web/core/services/shop/shop-state.service
 
 /** Компонент добавления магазина */
 @Component({
-  selector: 'crm-add',
+  selector: 'crm-shop-add',
   templateUrl: './shop-add.component.html',
   styleUrls: []
 })

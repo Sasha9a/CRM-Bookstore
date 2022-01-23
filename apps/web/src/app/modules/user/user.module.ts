@@ -1,17 +1,57 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule, Routes } from "@angular/router";
+import { RoleEnum } from "@crm/shared/enums/role.enum";
+import { RoleGuard } from "@crm/web/core/guards/role.guard";
 import { SharedModule } from "@crm/web/shared/shared.module";
 import { LoginComponent } from './components/login/login.component';
+import { UserListComponent } from './components/list/user-list.component';
+import { UserAddComponent } from './components/add/user-add.component';
+import { UserEditComponent } from './components/edit/user-edit.component';
 
-
+const routes: Routes = [
+  {
+    path: '',
+    component: UserListComponent,
+    canActivate: [RoleGuard],
+    data: {
+      title: 'Сотрудники - CRM',
+      roles: [RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR],
+      included: true
+    }
+  },
+  {
+    path: 'add',
+    component: UserAddComponent,
+    canActivate: [RoleGuard],
+    data: {
+      title: 'Добавить сотрудника - CRM',
+      roles: [RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR],
+      included: true
+    }
+  },
+  {
+    path: 'edit/:id',
+    component: UserEditComponent,
+    canActivate: [RoleGuard],
+    data: {
+      roles: [RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR],
+      included: true
+    }
+  }
+];
 
 @NgModule({
   declarations: [
-    LoginComponent
+    LoginComponent,
+    UserListComponent,
+    UserAddComponent,
+    UserEditComponent
   ],
   imports: [
     CommonModule,
-    SharedModule
+    SharedModule,
+    RouterModule.forChild(routes)
   ]
 })
 export class UserModule { }

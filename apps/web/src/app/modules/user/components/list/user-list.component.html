@@ -1,0 +1,55 @@
+<div class="flex justify-content-between align-items-center">
+  <h1>Сотрудники</h1>
+  <div>
+    <button pButton [label]="'Добавить'"
+            class="p-button-success"
+            routerLink="/user/add">
+    </button>
+  </div>
+</div>
+
+<div *ngIf="isGeneralRole" class="grid my-3">
+  <div class="col">
+    <div class="grid">
+      <div class="col-12 md:col-4 pb-0">
+        <crm-shop-multi-select [shops]="filters.shops"
+                               [(selectedShops)]="selectedFilters.shops"
+                               [labelInput]="true">
+        </crm-shop-multi-select>
+      </div>
+    </div>
+  </div>
+
+  <div class="p-2">
+    <p-button label="Найти" icon="pi pi-search" styleClass="h-full" [loading]="loading" (onClick)="loadUsers()"></p-button>
+  </div>
+
+</div>
+
+<crm-table name="users"
+           [loading]="loading"
+           [values]="users"
+           [columns]="itemColumns">
+  <ng-template #rowTemplate let-user="item">
+    <tr *ngIf="toUser(user) as user">
+      <td>
+        <crm-user-avatar [user]="user" size="xlarge"></crm-user-avatar>
+      </td>
+      <td><a routerLink="/user/card/{{ user._id }}">{{ user.name }}</a></td>
+      <td>{{ user.dateOfBirth | date: 'dd MMMM YYYY' }}</td>
+      <td>
+        <p>{{ user.shop?.address }}</p>
+        <p class="greytext">{{ user.shop?.metro }}</p>
+      </td>
+      <td>{{ user.telephone | phone }}</td>
+      <td>{{ user.address }}</td>
+      <td>{{ user.position }}</td>
+      <td>{{ user.salary | number }} руб.</td>
+      <td>
+        <p *ngFor="let role of toUser(user).roles; last as isLast" [class.mb-1]='!isLast'>
+          <small>{{ role | roleName }}</small>
+        </p>
+      </td>
+    </tr>
+  </ng-template>
+</crm-table>

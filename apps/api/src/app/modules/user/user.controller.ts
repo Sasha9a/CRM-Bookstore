@@ -4,12 +4,14 @@ import { RoleGuard } from "@crm/api/core/guards/role.guard";
 import { ValidateObjectId } from "@crm/api/core/pipes/validate.object.id.pipes";
 import { AuthService } from "@crm/api/modules/user/auth.service";
 import { UserService } from "@crm/api/modules/user/user.service";
+import { UserDto } from "@crm/shared/dtos/user/user.dto";
 import { UserFormDto } from "@crm/shared/dtos/user/user.form.dto";
 import { UserLoginFormDto } from "@crm/shared/dtos/user/user.login.form.dto";
 import { UserSessionDto } from "@crm/shared/dtos/user/user.session.dto";
 import { RoleEnum } from "@crm/shared/enums/role.enum";
-import { Body, Controller, Get, HttpStatus, Param, Post, Res, UseGuards } from "@nestjs/common";
-import { Response } from 'express';
+import { Body, Controller, Get, HttpStatus, Param, Post, Query, Req, Res, UseGuards } from "@nestjs/common";
+import { Request, Response } from 'express';
+import { queryParamParser } from "@crm/api/core/services/query-param-parser.service";
 
 /** Контроллер принимающие запросы по пользователю */
 @Controller('user')
@@ -21,12 +23,20 @@ export class UserController {
 
   /** Get-запрос на получение списка всех пользователей
    * @param res переменная отвечает за возврат данных клиенту
+   * @param req переменная отвечает за приход данных от клиента
+   * @param queryParams параметры от клиента
    * @return Возвращает массив пользователей */
-  @Roles(RoleEnum.GENERAL_MANAGER)
+  @Roles(RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR)
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Get()
-  public async getAll(@Res() res: Response) {
-    const users = await this.userService.findAll({}, { password: 0, login: 0, token: 0 });
+  public async getAll(@Res() res: Response, @Req() req: Request, @Query() queryParams: any) {
+    const user: UserDto = req.user as UserDto;
+    let users = [];
+    if (user?.roles?.includes(RoleEnum.GENERAL_MANAGER)) {
+      users = await this.userService.findAll(queryParamParser(queryParams).filter, { password: 0, login: 0, token: 0 });
+    } else if (user?.roles?.includes(RoleEnum.STORE_DIRECTOR)) {
+      users = await this.userService.findAll({ shop: user.shop._id }, { password: 0, login: 0, token: 0 });
+    }
     return res.status(HttpStatus.OK).json(users).end();
   }
 

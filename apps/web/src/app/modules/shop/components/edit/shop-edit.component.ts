@@ -9,7 +9,7 @@ import { ShopStateService } from "@crm/web/core/services/shop/shop-state.service
 
 /** Компонент изменяет магазин */
 @Component({
-  selector: 'crm-edit',
+  selector: 'crm-shop-edit',
   templateUrl: './shop-edit.component.html',
   styleUrls: []
 })

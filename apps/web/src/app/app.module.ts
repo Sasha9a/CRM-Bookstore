@@ -1,5 +1,6 @@
-import { CommonModule } from "@angular/common";
-import { NgModule } from '@angular/core';
+import { CommonModule, registerLocaleData } from "@angular/common";
+import localeRu from '@angular/common/locales/ru';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -14,6 +15,7 @@ import { AppComponent } from './core/app.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import * as moment from 'moment-timezone';
 
+registerLocaleData(localeRu, 'ru');
 moment.locale('ru');
 
 @NgModule({
@@ -31,6 +33,9 @@ moment.locale('ru');
     ShopModule
   ],
   providers: [
+    [
+      { provide: LOCALE_ID, useValue: 'ru-RU' }
+    ],
     [
       { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
     ],

@@ -1,0 +1,16 @@
+<crm-multi-select [options]="shops"
+                  [(selectedItems)]="selectedShops"
+                  (selectedItemsChange)="selectedShopsChange.emit($event)"
+                  [label]="labelInput ? 'Магазины' : ''"
+                  filterBy="address"
+                  sort="address:string">
+  <ng-template #selectedItemsTemplate let-shops="items">
+    <span *ngFor="let shop of shops; last as isLast" class="text-black">{{ toShop(shop).address }}{{ isLast ? '' : ', ' }}</span>
+  </ng-template>
+  <ng-template #itemTemplate let-shop="item">
+    <div *ngIf="toShop(shop) as shop">
+      <div>{{ shop.address }}</div>
+      <div class="text-green-400">{{ shop.metro }}</div>
+    </div>
+  </ng-template>
+</crm-multi-select>
