@@ -27,7 +27,7 @@
     <ng-template pTemplate="selectedItem">
       <ng-template *ngIf="selectedItemTemplate || isTemplateCombined; else baseTemplate"
                    [ngTemplateOutlet]="isTemplateCombined ? (selectedItemTemplate || itemTemplate) : selectedItemTemplate"
-                   [ngTemplateOutletContext]="{item: selectedItem}">
+                   [ngTemplateOutletContext]="{ item: selectedItem }">
       </ng-template>
       <ng-template #baseTemplate>
         <div class="color-black" *ngIf="selectedItem">

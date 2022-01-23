@@ -8,6 +8,7 @@ import { ErrorService } from "@crm/web/core/services/error.service";
 import { AuthService } from "@crm/web/core/services/user/auth.service";
 import { UserStateService } from "@crm/web/core/services/user/user-state.service";
 
+/** Компонент карточки пользователя */
 @Component({
   selector: 'crm-user-card',
   templateUrl: './user-card.component.html',

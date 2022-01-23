@@ -34,6 +34,10 @@ h3, h4, h5, h6 {
   font-family: Lato, "Helvetica Neue", sans-serif;
 }
 
+small {
+  font-size: 13px !important;
+}
+
 .fw-bold {
   font-weight: 700 !important;
   font-family: "Avenir Next Cyr", "Helvetica Neue", sans-serif !important;
@@ -42,6 +46,42 @@ h3, h4, h5, h6 {
 .fw-semibold {
   font-weight: 500 !important;
   font-family: "Avenir Next Cyr", "Helvetica Neue", sans-serif !important;
+}
+
+.p-component, .p-inputtext {
+  font-weight: normal;
+  font-family: "Avenir Next Cyr", "Helvetica Neue", sans-serif !important;
+}
+
+.p-calendar .p-datepicker {
+  min-width: 300px !important;
+}
+
+.p-calendar {
+
+  .p-datepicker {
+    min-width: 300px !important;
+
+    table td > span.p-highlight {
+      color: #000000;
+      background: #cfe9fd;
+    }
+  }
+}
+
+.p-datepicker table td {
+  padding: 0.1rem !important;
+}
+
+.p-calendar > input.text-datepicker-input {
+  width: 220px;
+  border: none;
+  text-align: center;
+  font-weight: 700;
+  font-family: Lato, "Helvetica Neue", sans-serif !important;
+  font-size: 24px;
+  color: #4a9aff;
+  cursor: pointer;
 }
 
 .required-field {
@@ -190,6 +230,21 @@ button {
 .p-multiselect-panel .p-multiselect-items > :last-child .p-multiselect-item,
 .p-dropdown-panel .p-dropdown-items > :last-child .p-dropdown-item {
   border-bottom: none !important;
+}
+
+.p-dropdown.icon-dropdown {
+  background: transparent;
+  border: none;
+
+  .p-dropdown-label {
+    display: none;
+  }
+
+  .p-dropdown-trigger {
+    color: #000;
+    width: auto;
+    padding: 0.15rem;
+  }
 }
 
 .p-card {

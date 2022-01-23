@@ -1,0 +1,95 @@
+<h3 class="dividing-header">Сотрудник</h3>
+
+<div class="grid">
+  <div class="col-12 md:col-6 xl:col-4">
+    <div class="p-fluid">
+      <div *ngIf="!isEdit" class="field">
+        <label class="fw-bold required-field">Логин</label>
+        <input type="text" pInputText [ngClass]="{ 'ng-invalid ng-dirty': errors?.login }" [(ngModel)]="user.login">
+        <small *ngIf="errors?.login" class="p-error">{{ errors.login | join }}</small>
+      </div>
+
+      <div *ngIf="!isEdit" class="field">
+        <label class="fw-bold required-field">Пароль</label>
+        <div class="p-inputgroup">
+          <button type="button" pButton [icon]="showPassword ? 'pi pi-eye' : 'pi pi-eye-slash'" (click)="showPassword = !showPassword"></button>
+          <input autocomplete="new-password" [type]="showPassword ? 'text' : 'password'" pInputText
+                 [ngClass]="{ 'ng-invalid ng-dirty': errors?.password }" [(ngModel)]="user.password">
+          <button type="button" pButton label="Сгенерировать" (click)="user.password = userPasswordService.generatePassword()"></button>
+        </div>
+        <small *ngIf="errors?.password" class="p-error">{{ errors.password | join }}</small>
+      </div>
+
+      <div class="field">
+        <label class="fw-bold required-field">ФИО</label>
+        <input type="text" pInputText [ngClass]="{ 'ng-invalid ng-dirty': errors?.name }" [(ngModel)]="user.name">
+        <small *ngIf="errors?.name" class="p-error">{{ errors.name | join }}</small>
+      </div>
+
+      <div class="field">
+        <label class="fw-bold required-field">Дата рождения</label>
+        <crm-datepicker [(value)]="user.dateOfBirth" [class]="errors?.dateOfBirth ? 'ng-invalid ng-dirty' : ''"></crm-datepicker>
+        <small *ngIf="errors?.dateOfBirth" class="p-error">{{ errors.dateOfBirth | join }}</small>
+      </div>
+
+      <div class="field">
+        <label class="fw-bold">Магазин</label>
+        <crm-shop-single-select [(selectedShop)]="user.shop"
+                                [shops]="shops"
+                                [class]="errors?.shop ? 'ng-invalid ng-dirty' : ''">
+        </crm-shop-single-select>
+        <small *ngIf="errors?.shop" class="p-error">{{ errors.shop | join }}</small>
+      </div>
+
+      <div class="field">
+        <label class="fw-bold">Телефон</label>
+        <p-inputMask mask="+7 (999) 999-9999"
+                     [ngClass]="{ 'ng-invalid ng-dirty': errors?.telephone }"
+                     [(ngModel)]="user.telephone"
+                     placeholder="+7 (999) 999-9999">
+        </p-inputMask>
+        <small *ngIf="errors?.telephone" class="p-error">{{ errors.telephone | join }}</small>
+      </div>
+
+      <div class="field">
+        <label class="fw-bold">Адрес жительства</label>
+        <input type="text" pInputText [ngClass]="{ 'ng-invalid ng-dirty': errors?.address }" [(ngModel)]="user.address">
+        <small *ngIf="errors?.address" class="p-error">{{ errors.address | join }}</small>
+      </div>
+
+      <div class="field">
+        <label class="fw-bold">Должность</label>
+        <input type="text" pInputText [ngClass]="{ 'ng-invalid ng-dirty': errors?.position }" [(ngModel)]="user.position">
+        <small *ngIf="errors?.position" class="p-error">{{ errors.position | join }}</small>
+      </div>
+
+      <div class="field">
+        <label class="fw-bold required-field">Роли</label>
+        <crm-multi-select [ngModel]="user.roles" ngDefaultControl
+                          (selectedItemsChange)="setRole($event)"
+                          [options]="roles"
+                          [class]="errors?.roles ? 'ng-invalid ng-dirty' : ''"
+                          dataKey="role">
+        </crm-multi-select>
+        <small *ngIf="errors?.roles" class="p-error">{{ errors.roles | join }}</small>
+      </div>
+
+      <div class="field">
+        <label class="fw-bold">Зарплата</label>
+        <div class="p-inputgroup">
+          <p-inputNumber [(ngModel)]="user.salary"
+                         [ngClass]="{ 'ng-invalid ng-dirty': errors?.salary }">
+          </p-inputNumber>
+          <span class="p-inputgroup-addon">руб.</span>
+        </div>
+        <small *ngIf="errors?.salary" class="p-error">{{ errors.salary | join }}</small>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="col-12 mt-4">
+    <button pButton [label]="saveButtonLabel" icon="pi pi-check" class="p-button-success mr-2" (click)="onSave(user)"></button>
+    <crm-go-back-button [route]="route"></crm-go-back-button>
+  </div>
+</div>

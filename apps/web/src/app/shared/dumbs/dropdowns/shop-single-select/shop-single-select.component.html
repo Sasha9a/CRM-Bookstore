@@ -1,0 +1,17 @@
+<crm-single-select [options]="shops"
+                   [(selectedItem)]="selectedShop"
+                   (selectedItemChange)="selectedShopChange.emit($event)"
+                   [label]="labelInput"
+                   [class]="class"
+                   [virtualScroll]="virtualScroll"
+                   [itemSize]="itemSize"
+                   [isTemplateCombined]="true"
+                   optionLabel="address"
+                   filterBy="address,metro">
+  <ng-template #itemTemplate let-shop="item">
+    <div *ngIf="toShop(shop) as shop">
+      <div>{{ shop.address }}</div>
+      <div class="text-green-400">{{ shop.metro }}</div>
+    </div>
+  </ng-template>
+</crm-single-select>

@@ -1,0 +1,23 @@
+<div class="p-inputgroup">
+  <span class="p-inputgroup-addon"><i [class]="timeOnly ? 'pi pi-clock' : 'pi pi-calendar'"></i></span>
+  <p-calendar
+    (ngModelChange)="valueChange.emit($event);"
+    [(ngModel)]="_value"
+    [class]="'w-full ' + class"
+    [dateFormat]="dateFormat"
+    [defaultDate]="defaultDate"
+    [firstDayOfWeek]="1"
+    [inputStyleClass]="inputStyleClass"
+    [maxDate]="_maxDate"
+    [minDate]="_minDate"
+    [monthNavigator]="monthNavigator"
+    [ngModelOptions]="modelOptions"
+    [placeholder]="placeholder"
+    [timeOnly]="timeOnly"
+    [showButtonBar]="showButtonBar"
+    [styleClass]="styleClass"
+    [showTime]="showTime"
+    [yearNavigator]="yearNavigator"
+    [yearRange]="yearRange">
+  </p-calendar>
+</div>

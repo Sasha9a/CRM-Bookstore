@@ -1,0 +1,28 @@
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
+
+/** Компонент выбора магазина */
+@Component({
+  selector: 'crm-shop-single-select',
+  templateUrl: './shop-single-select.component.html',
+  styleUrls: []
+})
+export class ShopSingleSelectComponent {
+
+  @Input() public shops: ShopDto[] = [];
+
+  @Input() public selectedShop: ShopDto;
+  @Output() public selectedShopChange = new EventEmitter<ShopDto>();
+
+  @Input() public virtualScroll = false;
+  @Input() public itemSize = 47;
+
+  @Input() public labelInput = '';
+
+  @Input() public class = '';
+
+  public toShop(shop: any): ShopDto {
+    return shop as ShopDto;
+  }
+
+}

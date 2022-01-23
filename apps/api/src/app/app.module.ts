@@ -12,7 +12,12 @@ moment.locale('ru');
 /** Первый модуль и основной модуль проекта */
 @Module({
   imports: [
-    MongooseModule.forRoot(environment.db),
+    MongooseModule.forRoot(environment.db, {
+      connectionFactory: (connection) => {
+        connection.plugin(require('mongoose-autopopulate'));
+        return connection;
+      }
+    }),
     FileModule,
     UserModule,
     ShopModule

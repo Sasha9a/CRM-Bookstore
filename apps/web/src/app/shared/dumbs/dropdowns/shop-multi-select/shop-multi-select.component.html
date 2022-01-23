@@ -2,7 +2,7 @@
                   [(selectedItems)]="selectedShops"
                   (selectedItemsChange)="selectedShopsChange.emit($event)"
                   [label]="labelInput ? 'Магазины' : ''"
-                  filterBy="address"
+                  filterBy="address,metro"
                   sort="address:string">
   <ng-template #selectedItemsTemplate let-shops="items">
     <span *ngFor="let shop of shops; last as isLast" class="text-black">{{ toShop(shop).address }}{{ isLast ? '' : ', ' }}</span>

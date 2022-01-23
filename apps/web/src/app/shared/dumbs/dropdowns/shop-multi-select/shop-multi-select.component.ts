@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
 
+/** Компонент множественного выбора магазинов */
 @Component({
   selector: 'crm-shop-multi-select',
   templateUrl: './shop-multi-select.component.html',
