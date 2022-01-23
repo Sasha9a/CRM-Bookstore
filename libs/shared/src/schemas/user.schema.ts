@@ -26,7 +26,7 @@ export class User extends Document {
   public dateOfBirth: Date;
 
   /** Магазин, где работает */
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Shop.name })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Shop.name, autopopulate: true })
   public shop: Shop;
 
   /** Телефон */
@@ -50,7 +50,7 @@ export class User extends Document {
   public salary: number;
 
   /** Фото пользователя */
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: File.name })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: File.name, autopopulate: true })
   public avatar: File;
 
   /** Токен, нужен для авторизации */

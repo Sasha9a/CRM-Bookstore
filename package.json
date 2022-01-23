@@ -30,6 +30,7 @@
     "class-validator": "^0.13.2",
     "class-transformer": "^0.5.1",
     "mongoose": "^6.1.4",
+    "mongoose-autopopulate": "^0.16.0",
     "mongoose-query-parser": "^1.2.1",
     "moment-timezone": "^0.5.34",
     "passport": "^0.5.2",

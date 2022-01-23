@@ -8,6 +8,7 @@ import { LoginComponent } from './components/login/login.component';
 import { UserListComponent } from './components/list/user-list.component';
 import { UserAddComponent } from './components/add/user-add.component';
 import { UserEditComponent } from './components/edit/user-edit.component';
+import { UserCardComponent } from './components/card/user-card.component';
 
 const routes: Routes = [
   {
@@ -38,6 +39,15 @@ const routes: Routes = [
       roles: [RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR],
       included: true
     }
+  },
+  {
+    path: 'card/:id',
+    component: UserCardComponent,
+    canActivate: [RoleGuard],
+    data: {
+      roles: [RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR],
+      included: true
+    }
   }
 ];
 
@@ -46,7 +56,8 @@ const routes: Routes = [
     LoginComponent,
     UserListComponent,
     UserAddComponent,
-    UserEditComponent
+    UserEditComponent,
+    UserCardComponent
   ],
   imports: [
     CommonModule,

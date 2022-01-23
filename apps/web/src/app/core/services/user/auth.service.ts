@@ -73,6 +73,6 @@ export class AuthService {
    * @param roles роли
    * @return есть или нет */
   public checkRoles(roles: RoleEnum[]): boolean {
-    return !!this.currentUser?.roles.some((role) => roles.includes(role));
+    return !!this.currentUser?.roles?.some((role) => roles.includes(role));
   }
 }

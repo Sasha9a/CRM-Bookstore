@@ -39,6 +39,11 @@ h3, h4, h5, h6 {
   font-family: "Avenir Next Cyr", "Helvetica Neue", sans-serif !important;
 }
 
+.fw-semibold {
+  font-weight: 500 !important;
+  font-family: "Avenir Next Cyr", "Helvetica Neue", sans-serif !important;
+}
+
 .required-field {
   &::after {
     content: '*';

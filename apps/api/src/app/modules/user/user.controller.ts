@@ -2,6 +2,7 @@ import { Roles } from "@crm/api/core/decorators/role.decorator";
 import { JwtAuthGuard } from "@crm/api/core/guards/jwt-auth.guard";
 import { RoleGuard } from "@crm/api/core/guards/role.guard";
 import { ValidateObjectId } from "@crm/api/core/pipes/validate.object.id.pipes";
+import { queryParamParser } from "@crm/api/core/services/query-param-parser.service";
 import { AuthService } from "@crm/api/modules/user/auth.service";
 import { UserService } from "@crm/api/modules/user/user.service";
 import { UserDto } from "@crm/shared/dtos/user/user.dto";
@@ -9,9 +10,8 @@ import { UserFormDto } from "@crm/shared/dtos/user/user.form.dto";
 import { UserLoginFormDto } from "@crm/shared/dtos/user/user.login.form.dto";
 import { UserSessionDto } from "@crm/shared/dtos/user/user.session.dto";
 import { RoleEnum } from "@crm/shared/enums/role.enum";
-import { Body, Controller, Get, HttpStatus, Param, Post, Query, Req, Res, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpStatus, NotFoundException, Param, Post, Query, Req, Res, UseGuards } from "@nestjs/common";
 import { Request, Response } from 'express';
-import { queryParamParser } from "@crm/api/core/services/query-param-parser.service";
 
 /** Контроллер принимающие запросы по пользователю */
 @Controller('user')
@@ -110,6 +110,27 @@ export class UserController {
   @Post('/logout')
   public async logout(@Res() res: Response, @Body() body: UserSessionDto) {
     await this.userService.logout(body._id);
+    return res.status(HttpStatus.OK).end();
+  }
+
+  /** Delete-запрос на удаление пользователя
+   * @param res переменная отвечает за возврат данных клиенту
+   * @param id ID пользователя
+   * @param req переменная отвечает за приход данных от клиента */
+  @Roles(RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Delete(':id')
+  public async delete(@Res() res: Response, @Param('id', new ValidateObjectId()) id: string, @Req() req: Request) {
+    const user: UserDto = req.user as UserDto;
+    const userDeleted = await this.userService.findById(id, { shop: 1 });
+    if (user?.roles?.includes(RoleEnum.GENERAL_MANAGER) || (
+      user?.roles?.includes(RoleEnum.STORE_DIRECTOR) && user.shop?._id === userDeleted.shop?._id
+    )) {
+      const entity = await this.userService.delete(id);
+      if (!entity) {
+        throw new NotFoundException("Нет такого объекта!");
+      }
+    }
     return res.status(HttpStatus.OK).end();
   }
 
