@@ -26,7 +26,7 @@ export class UserController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Get()
   public async getAll(@Res() res: Response) {
-    const users = await this.userService.findAll();
+    const users = await this.userService.findAll({}, { password: 0, login: 0, token: 0 });
     return res.status(HttpStatus.OK).json(users).end();
   }
 
@@ -45,7 +45,7 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Get(':id')
   public async getUser(@Res() res: Response, @Param('id', new ValidateObjectId()) id: string) {
-    const user = await this.userService.findById(id);
+    const user = await this.userService.findById(id, { password: 0, login: 0, token: 0 });
     return res.status(HttpStatus.OK).json(user).end();
   }
 

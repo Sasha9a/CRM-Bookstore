@@ -1,4 +1,4 @@
-import { UserFormDto } from "@crm/shared/dtos/user/user.form.dto";
+import { BaseService } from "@crm/api/core/services/base.service";
 import { User } from "@crm/shared/schemas/user.schema";
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
@@ -6,30 +6,10 @@ import { Model } from "mongoose";
 
 /** Сервис выполняющие операции с БД пользователя */
 @Injectable()
-export class UserService {
+export class UserService extends BaseService<User> {
 
   public constructor(@InjectModel(User.name) private readonly userModel: Model<User>) {
-  }
-
-  /** Функция создает пользователя в базу данных
-   * @param user данные о пользователе
-   * @return Возвращает объект пользователя */
-  public async create(user: UserFormDto): Promise<User> {
-    const createUser = await new this.userModel(user);
-    return createUser.save();
-  }
-
-  /** Функция ищет всех пользователей в БД
-   * @return Возвращает массив пользователей */
-  public async findAll(): Promise<User[]> {
-    return await this.userModel.find({}, { password: 0, login: 0, token: 0 }).exec();
-  }
-
-  /** Функция ищет пользователя в БД по ID
-   * @param id ID пользователя
-   * @return Возвращает объект пользователя */
-  public async findById(id: string): Promise<User> {
-    return await this.userModel.findById(id, { password: 0, login: 0, token: 0 }).exec();
+    super(userModel);
   }
 
   /** Функция ищет пользователя в БД по логину
