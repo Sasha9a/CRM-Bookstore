@@ -1,7 +1,7 @@
-<crm-user-form *ngIf="!loading"
+<crm-user-create-form *ngIf="!loading"
                [shops]="shops"
                (save)="create($event)"
                [route]="'/user'">
-</crm-user-form>
+</crm-user-create-form>
 
 <crm-spinner *ngIf="loading"></crm-spinner>

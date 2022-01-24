@@ -9,7 +9,7 @@ import { UserListComponent } from './components/list/user-list.component';
 import { UserAddComponent } from './components/add/user-add.component';
 import { UserEditComponent } from './components/edit/user-edit.component';
 import { UserCardComponent } from './components/card/user-card.component';
-import { UserFormComponent } from './dumbs/user-form/user-form.component';
+import { UserCreateFormComponent } from './dumbs/user-create-form/user-create-form.component';
 
 const routes: Routes = [
   {
@@ -59,7 +59,7 @@ const routes: Routes = [
     UserAddComponent,
     UserEditComponent,
     UserCardComponent,
-    UserFormComponent
+    UserCreateFormComponent
   ],
   imports: [
     CommonModule,

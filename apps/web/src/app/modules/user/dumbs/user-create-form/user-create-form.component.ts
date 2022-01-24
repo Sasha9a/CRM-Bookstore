@@ -9,11 +9,11 @@ import { RoleNamePipe } from "@crm/web/shared/pipes/role-name.pipe";
 
 /** Компонент ввода данных пользователя */
 @Component({
-  selector: 'crm-user-form',
-  templateUrl: './user-form.component.html',
+  selector: 'crm-user-create-form',
+  templateUrl: './user-create-form.component.html',
   styleUrls: []
 })
-export class UserFormComponent extends BaseFormComponent<UserCreateFormDto> {
+export class UserCreateFormComponent extends BaseFormComponent<UserCreateFormDto> {
 
   /** Данные пользователя */
   @Input() public user = new UserCreateFormDto();
