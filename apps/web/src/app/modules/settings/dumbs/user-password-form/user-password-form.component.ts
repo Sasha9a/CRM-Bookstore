@@ -16,12 +16,23 @@ export class UserPasswordFormComponent extends BaseFormComponent<UserPasswordFor
   @Input() public body = new UserPasswordFormDto();
   public dto = UserPasswordFormDto;
 
+  /** Грузится ли или нет */
+  @Input() public loading = false;
+
   /** Показывать ли пароль */
   public showPassword = false;
 
   public constructor(public override readonly errorService: ErrorService,
                      public readonly userPasswordService: UserPasswordService) {
     super(errorService);
+  }
+
+  /** Очищает компонент */
+  public reset() {
+    this.body.password = '';
+    this.body.repeatPassword = '';
+    this.errors.password = null;
+    this.errors.repeatPassword = null;
   }
 
 }

@@ -62,7 +62,7 @@
   </div>
 
   <div class="col-6 xl:col-3">
-    <crm-user-password-form></crm-user-password-form>
+    <crm-user-password-form (save)="changePassword($event)" [loading]="loading"></crm-user-password-form>
   </div>
 
 </div>
