@@ -1,8 +1,8 @@
-<crm-user-edit-form *ngIf="!loading"
+<crm-user-edit-form *ngIf="!loading && user"
                     [user]="user"
                     [shops]="shops"
                     (save)="update($event)"
                     route="/user/card/{{ userId }}">
 </crm-user-edit-form>
 
-<crm-spinner *ngIf="loading"></crm-spinner>
+<crm-spinner *ngIf="loading || !user"></crm-spinner>

@@ -4,10 +4,13 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
 import { UserDto } from "@crm/shared/dtos/user/user.dto";
 import { UserEditFormDto } from "@crm/shared/dtos/user/user.edit.form.dto";
+import { RoleEnum } from "@crm/shared/enums/role.enum";
 import { ErrorService } from "@crm/web/core/services/error.service";
 import { ShopStateService } from "@crm/web/core/services/shop/shop-state.service";
+import { AuthService } from "@crm/web/core/services/user/auth.service";
 import { UserStateService } from "@crm/web/core/services/user/user-state.service";
 
+/** Компонент редактирования пользователя */
 @Component({
   selector: 'crm-user-edit',
   templateUrl: './user-edit.component.html',
@@ -30,6 +33,7 @@ export class UserEditComponent implements OnInit {
   public constructor(private readonly shopStateService: ShopStateService,
                      private readonly userStateService: UserStateService,
                      private readonly errorService: ErrorService,
+                     private readonly authService: AuthService,
                      private readonly route: ActivatedRoute,
                      private readonly router: Router,
                      private readonly title: Title) { }
@@ -42,13 +46,19 @@ export class UserEditComponent implements OnInit {
     }
 
     this.userStateService.findById<UserDto>(this.userId).subscribe((data) => {
-      this.user = data;
-      this.title.setTitle(`${this.user.name} - CRM`);
+      if (this.authService.checkRoles([RoleEnum.GENERAL_MANAGER]) || (
+        this.authService.checkRoles([RoleEnum.STORE_DIRECTOR]) && this.authService.currentUser?.shop?._id === data?.shop?._id
+      )) {
+        this.user = data;
+        this.title.setTitle(`${this.user.name} - CRM`);
+      } else {
+        this.errorService.addCustomError('Ошибка', 'Произошла ошибка, вернитесь на главную и попробуйте снова.');
+      }
+      this.loading = false;
     });
 
     this.shopStateService.find<ShopDto>().subscribe((data) => {
       this.shops = data;
-      this.loading = false;
     });
   }
 
