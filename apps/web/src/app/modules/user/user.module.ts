@@ -10,6 +10,7 @@ import { UserAddComponent } from './components/add/user-add.component';
 import { UserEditComponent } from './components/edit/user-edit.component';
 import { UserCardComponent } from './components/card/user-card.component';
 import { UserCreateFormComponent } from './dumbs/user-create-form/user-create-form.component';
+import { UserEditFormComponent } from './dumbs/user-edit-form/user-edit-form.component';
 
 const routes: Routes = [
   {
@@ -59,7 +60,8 @@ const routes: Routes = [
     UserAddComponent,
     UserEditComponent,
     UserCardComponent,
-    UserCreateFormComponent
+    UserCreateFormComponent,
+    UserEditFormComponent
   ],
   imports: [
     CommonModule,

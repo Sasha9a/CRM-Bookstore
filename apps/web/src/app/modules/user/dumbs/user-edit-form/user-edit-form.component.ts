@@ -1,23 +1,22 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
-import { UserCreateFormDto } from "@crm/shared/dtos/user/user.create.form.dto";
+import { UserEditFormDto } from "@crm/shared/dtos/user/user.edit.form.dto";
 import { RoleEnum } from "@crm/shared/enums/role.enum";
 import { ErrorService } from "@crm/web/core/services/error.service";
-import { UserPasswordService } from "@crm/web/core/services/user/user-password.service";
 import { BaseFormComponent } from "@crm/web/shared/dumbs/base-form/base-form.component";
 import { RoleNamePipe } from "@crm/web/shared/pipes/role-name.pipe";
 
-/** Компонент ввода данных пользователя при создании */
+/** Компонент ввода данных пользователя при редактировании */
 @Component({
-  selector: 'crm-user-create-form',
-  templateUrl: './user-create-form.component.html',
+  selector: 'crm-user-edit-form',
+  templateUrl: './user-edit-form.component.html',
   styleUrls: []
 })
-export class UserCreateFormComponent extends BaseFormComponent<UserCreateFormDto> {
+export class UserEditFormComponent extends BaseFormComponent<UserEditFormDto> implements OnChanges {
 
   /** Данные пользователя */
-  @Input() public user = new UserCreateFormDto();
-  public dto = UserCreateFormDto;
+  @Input() public user = new UserEditFormDto();
+  public dto = UserEditFormDto;
 
   /** Список магазинов */
   @Input() public shops: ShopDto[] = [];
@@ -25,14 +24,13 @@ export class UserCreateFormComponent extends BaseFormComponent<UserCreateFormDto
   /** Список ролей */
   public roles: any[] = [];
 
+  /** Выбранные роли */
+  public selectedRoles: any[] = [];
+
   /** URL на который возвращать при отмене */
   @Input() public route: string;
 
-  /** Показывать ли пароль */
-  public showPassword = false;
-
   public constructor(public override readonly errorService: ErrorService,
-                     public readonly userPasswordService: UserPasswordService,
                      private readonly roleNamePipe: RoleNamePipe) {
     super(errorService);
 
@@ -42,6 +40,18 @@ export class UserCreateFormComponent extends BaseFormComponent<UserCreateFormDto
         role: RoleEnum[role]
       });
     });
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes['user']?.currentValue) {
+      this.selectedRoles = [];
+      changes['user']?.currentValue.roles.forEach((role) => {
+        this.selectedRoles.push({
+          name: this.roleNamePipe.transform(RoleEnum[role]),
+          role: RoleEnum[role]
+        });
+      });
+    }
   }
 
   /** Присваивает роль к пользователю
