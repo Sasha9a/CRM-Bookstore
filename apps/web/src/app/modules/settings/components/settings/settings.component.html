@@ -1,6 +1,6 @@
 <h1>Профиль</h1>
 
-<div class="grid">
+<div *ngIf="user" class="grid">
   <div class="col-12 sm:col-4 xl:col-2">
     <div>
       <img class="w-full" *ngIf="user?.avatar" [src]="('file/' + user.avatar.path) | apiUrl" (load)="showAvatar = true" alt="avatar" />
@@ -61,7 +61,7 @@
     </p-table>
   </div>
 
-  <div class="col-6 xl:col-3">
+  <div class="col-12 md:col-6 xl:col-4">
     <crm-user-password-form (save)="changePassword($event)" [loading]="loading"></crm-user-password-form>
   </div>
 

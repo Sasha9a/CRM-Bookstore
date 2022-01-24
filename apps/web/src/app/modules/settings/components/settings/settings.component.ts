@@ -67,8 +67,8 @@ export class SettingsComponent implements OnInit {
     this.loading = true;
     this.userStateService.update<{ password: string }, UserDto>(this.user._id, { password: body.password }).subscribe(() => {
       this.loading = false;
-      this.changePasswordComponent.reset();
       this.errorService.addSuccessMessage('Новый пароль установлен');
+      this.changePasswordComponent.reset();
     }, () => this.loading = false);
   }
 
