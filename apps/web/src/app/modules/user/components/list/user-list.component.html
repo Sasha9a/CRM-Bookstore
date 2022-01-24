@@ -29,7 +29,8 @@
 <crm-table name="users"
            [loading]="loading"
            [values]="users"
-           [columns]="itemColumns">
+           [columns]="itemColumns"
+           [autoLayout]="true">
   <ng-template #rowTemplate let-user="item">
     <tr *ngIf="toUser(user) as user">
       <td>
