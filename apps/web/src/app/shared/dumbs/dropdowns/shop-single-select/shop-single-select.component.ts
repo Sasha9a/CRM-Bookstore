@@ -21,6 +21,8 @@ export class ShopSingleSelectComponent {
 
   @Input() public class = '';
 
+  @Input() public disabled = false;
+
   public toShop(shop: any): ShopDto {
     return shop as ShopDto;
   }

@@ -25,7 +25,7 @@ export class ErrorService {
       return this.messageService.add({ severity: 'error', summary: title, detail: 'Отказано в доступе', life: 10000 });
     }
 
-    const description = error.error?.message || error.error || error.message || error.detail || '';
+    const description = error.error?.message || error.message || error.error || error.detail || '';
 
     if (typeof description === 'string') {
       return this.messageService.add({ severity: 'error', summary: title, detail: description, life: 10000 });

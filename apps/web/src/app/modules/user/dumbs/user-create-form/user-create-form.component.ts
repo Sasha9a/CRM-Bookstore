@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
 import { UserCreateFormDto } from "@crm/shared/dtos/user/user.create.form.dto";
 import { RoleEnum } from "@crm/shared/enums/role.enum";
@@ -13,7 +13,7 @@ import { RoleNamePipe } from "@crm/web/shared/pipes/role-name.pipe";
   templateUrl: './user-create-form.component.html',
   styleUrls: []
 })
-export class UserCreateFormComponent extends BaseFormComponent<UserCreateFormDto> {
+export class UserCreateFormComponent extends BaseFormComponent<UserCreateFormDto> implements OnChanges {
 
   /** Данные пользователя */
   @Input() public user = new UserCreateFormDto();
@@ -21,6 +21,12 @@ export class UserCreateFormComponent extends BaseFormComponent<UserCreateFormDto
 
   /** Список магазинов */
   @Input() public shops: ShopDto[] = [];
+
+  /** Директор магазина или нет, кто создает пользователя */
+  @Input() public isDirector = false;
+
+  /** Магазин директора */
+  @Input() public shopDirector: ShopDto;
 
   /** Список ролей */
   public roles: any[] = [];
@@ -42,6 +48,14 @@ export class UserCreateFormComponent extends BaseFormComponent<UserCreateFormDto
         role: RoleEnum[role]
       });
     });
+  }
+
+  public ngOnChanges(changes: SimpleChanges) {
+    if (changes['shopDirector']?.currentValue) {
+      if (this.isDirector) {
+        this.user.shop = this.shopDirector;
+      }
+    }
   }
 
   /** Присваивает роль к пользователю

@@ -30,6 +30,12 @@ export class UserEditComponent implements OnInit {
   /** Список магазинов */
   public shops: ShopDto[] = [];
 
+  /** Директор магазина или нет, кто редактирует пользователя */
+  public isDirector = false;
+
+  /** Магазин директора */
+  public shopDirector: ShopDto;
+
   public constructor(private readonly shopStateService: ShopStateService,
                      private readonly userStateService: UserStateService,
                      private readonly errorService: ErrorService,
@@ -46,6 +52,11 @@ export class UserEditComponent implements OnInit {
     }
 
     this.userStateService.findById<UserDto>(this.userId).subscribe((data) => {
+      if (!this.authService.checkRoles([RoleEnum.GENERAL_MANAGER])
+        && this.authService.checkRoles([RoleEnum.STORE_DIRECTOR])) {
+        this.isDirector = true;
+        this.shopDirector = this.authService.currentUser?.shop;
+      }
       if (this.authService.checkRoles([RoleEnum.GENERAL_MANAGER]) || (
         this.authService.checkRoles([RoleEnum.STORE_DIRECTOR]) && this.authService.currentUser?.shop?._id === data?.shop?._id
       )) {

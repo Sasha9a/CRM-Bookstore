@@ -1,6 +1,8 @@
 <crm-user-edit-form *ngIf="!loading && user"
                     [user]="user"
                     [shops]="shops"
+                    [isDirector]="isDirector"
+                    [shopDirector]="shopDirector"
                     (save)="update($event)"
                     route="/user/card/{{ userId }}">
 </crm-user-edit-form>

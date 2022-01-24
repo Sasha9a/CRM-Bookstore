@@ -21,6 +21,12 @@ export class UserEditFormComponent extends BaseFormComponent<UserEditFormDto> im
   /** Список магазинов */
   @Input() public shops: ShopDto[] = [];
 
+  /** Директор магазина или нет, кто редактирует пользователя */
+  @Input() public isDirector = false;
+
+  /** Магазин директора */
+  @Input() public shopDirector: ShopDto;
+
   /** Список ролей */
   public roles: any[] = [];
 
@@ -51,6 +57,11 @@ export class UserEditFormComponent extends BaseFormComponent<UserEditFormDto> im
           role: RoleEnum[role]
         });
       });
+    }
+    if (changes['shopDirector']?.currentValue) {
+      if (this.isDirector) {
+        this.user.shop = this.shopDirector;
+      }
     }
   }
 

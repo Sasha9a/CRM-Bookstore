@@ -76,7 +76,7 @@ export class AuthService {
     return this.userStateService.check().toPromise();
   }
 
-  /** Функция проверяет, есть у прользователя роли или нет
+  /** Функция проверяет, есть у пользователя любая роль или нет
    * @param roles роли
    * @return есть или нет */
   public checkRoles(roles: RoleEnum[]): boolean {

@@ -63,11 +63,18 @@ export class UserController {
   /** Post-запрос на создание пользователя
    * @param res переменная отвечает за возврат данных клиенту
    * @param body данные пользователя
+   * @param req переменная отвечает за приход данных от клиента
    * @return Возвращает объект пользователя */
   @Roles(RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR)
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Post()
-  public async addUser(@Res() res: Response, @Body() body: UserCreateFormDto) {
+  public async addUser(@Res() res: Response, @Body() body: UserCreateFormDto, @Req() req: Request) {
+    const user: UserDto = req.user as UserDto;
+    if (user?.roles?.includes(RoleEnum.STORE_DIRECTOR)
+      && !user?.roles?.includes(RoleEnum.GENERAL_MANAGER)
+      && body?.roles?.includes(RoleEnum.GENERAL_MANAGER)) {
+      throw new NotFoundException("Нет прав");
+    }
     const newUser = await this.userService.create(body);
     return res.status(HttpStatus.CREATED).json(newUser).end();
   }
@@ -120,7 +127,7 @@ export class UserController {
    * @param body данные пользователя
    * @param req переменная отвечает за приход данных от клиента
    * @return Возвращает объект пользователя */
-  @Roles(RoleEnum.GENERAL_MANAGER)
+  @Roles(RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR)
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Put(':id')
   public async update(@Res() res: Response, @Param('id', new ValidateObjectId()) id: string, @Body() body: UserEditFormDto, @Req() req: Request) {
@@ -128,12 +135,19 @@ export class UserController {
     const userEdited = await this.userService.findById(id, { shop: 1 });
     let entity = {};
     if (user?.roles?.includes(RoleEnum.GENERAL_MANAGER) || (
-      user?.roles?.includes(RoleEnum.STORE_DIRECTOR) && user.shop?._id === userEdited.shop?._id
+      user?.roles?.includes(RoleEnum.STORE_DIRECTOR) && user.shop?._id == userEdited.shop?._id
     )) {
+      if (user?.roles?.includes(RoleEnum.STORE_DIRECTOR)
+        && !user?.roles?.includes(RoleEnum.GENERAL_MANAGER)
+        && body?.roles?.includes(RoleEnum.GENERAL_MANAGER)) {
+        throw new NotFoundException("Нет прав");
+      }
       entity = await this.userService.update(id, body);
       if (!entity) {
         throw new NotFoundException("Нет такого объекта!");
       }
+    } else {
+      throw new NotFoundException("Нет прав");
     }
     return res.status(HttpStatus.OK).json(entity).end();
   }
@@ -149,7 +163,7 @@ export class UserController {
     const user: UserDto = req.user as UserDto;
     const userDeleted = await this.userService.findById(id, { shop: 1 });
     if (user?.roles?.includes(RoleEnum.GENERAL_MANAGER) || (
-      user?.roles?.includes(RoleEnum.STORE_DIRECTOR) && user.shop?._id === userDeleted.shop?._id
+      user?.roles?.includes(RoleEnum.STORE_DIRECTOR) && user.shop?._id == userDeleted.shop?._id
     )) {
       const entity = await this.userService.delete(id);
       if (!entity) {
