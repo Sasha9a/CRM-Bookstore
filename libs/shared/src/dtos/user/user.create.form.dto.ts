@@ -1,4 +1,3 @@
-import { FileDto } from "@crm/shared/dtos/file.dto";
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
 import { RoleEnum } from "@crm/shared/enums/role.enum";
 import { Expose, Transform, Type } from "class-transformer";
@@ -6,7 +5,7 @@ import { IsDate, IsDefined, IsOptional, IsString } from "class-validator";
 
 /** DTO создания пользователя */
 @Expose()
-export class UserFormDto {
+export class UserCreateFormDto {
 
   /** Логин */
   @Expose()
@@ -60,9 +59,4 @@ export class UserFormDto {
   @IsOptional()
   public salary?: number;
 
-  /** Фото пользователя */
-  @Expose()
-  @IsOptional()
-  @Type(() => FileDto)
-  public avatar?: FileDto;
 }

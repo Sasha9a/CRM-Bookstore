@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
 import { UserDto } from "@crm/shared/dtos/user/user.dto";
-import { UserFormDto } from "@crm/shared/dtos/user/user.form.dto";
+import { UserEditFormDto } from "@crm/shared/dtos/user/user.edit.form.dto";
 import { ErrorService } from "@crm/web/core/services/error.service";
 import { ShopStateService } from "@crm/web/core/services/shop/shop-state.service";
 import { UserStateService } from "@crm/web/core/services/user/user-state.service";
@@ -35,10 +35,10 @@ export class UserAddComponent implements OnInit {
 
   /** Функция создает пользователя
    * @param body данные пользователя */
-  public create(body: UserFormDto) {
+  public create(body: UserEditFormDto) {
     this.loading = true;
 
-    this.userStateService.create<UserFormDto, UserDto>(body).subscribe(() => {
+    this.userStateService.create<UserEditFormDto, UserDto>(body).subscribe(() => {
       this.loading = false;
       this.errorService.addSuccessMessage("Пользователь успешно создан");
       this.router.navigate(['/user']).catch(console.error);

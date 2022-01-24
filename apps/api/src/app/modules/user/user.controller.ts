@@ -5,12 +5,13 @@ import { ValidateObjectId } from "@crm/api/core/pipes/validate.object.id.pipes";
 import { queryParamParser } from "@crm/api/core/services/query-param-parser.service";
 import { AuthService } from "@crm/api/modules/user/auth.service";
 import { UserService } from "@crm/api/modules/user/user.service";
+import { UserCreateFormDto } from "@crm/shared/dtos/user/user.create.form.dto";
 import { UserDto } from "@crm/shared/dtos/user/user.dto";
-import { UserFormDto } from "@crm/shared/dtos/user/user.form.dto";
+import { UserEditFormDto } from "@crm/shared/dtos/user/user.edit.form.dto";
 import { UserLoginFormDto } from "@crm/shared/dtos/user/user.login.form.dto";
 import { UserSessionDto } from "@crm/shared/dtos/user/user.session.dto";
 import { RoleEnum } from "@crm/shared/enums/role.enum";
-import { Body, Controller, Delete, Get, HttpStatus, NotFoundException, Param, Post, Query, Req, Res, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpStatus, NotFoundException, Param, Post, Put, Query, Req, Res, UseGuards } from "@nestjs/common";
 import { Request, Response } from 'express';
 
 /** Контроллер принимающие запросы по пользователю */
@@ -66,7 +67,7 @@ export class UserController {
   @Roles(RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR)
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Post()
-  public async addUser(@Res() res: Response, @Body() body: UserFormDto) {
+  public async addUser(@Res() res: Response, @Body() body: UserCreateFormDto) {
     const newUser = await this.userService.create(body);
     return res.status(HttpStatus.CREATED).json(newUser).end();
   }
@@ -111,6 +112,30 @@ export class UserController {
   public async logout(@Res() res: Response, @Body() body: UserSessionDto) {
     await this.userService.logout(body._id);
     return res.status(HttpStatus.OK).end();
+  }
+
+  /** Put-запрос на изменение пользователя
+   * @param res переменная отвечает за возврат данных клиенту
+   * @param id ID пользователя
+   * @param body данные пользователя
+   * @param req переменная отвечает за приход данных от клиента
+   * @return Возвращает объект пользователя */
+  @Roles(RoleEnum.GENERAL_MANAGER)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Put(':id')
+  public async update(@Res() res: Response, @Param('id', new ValidateObjectId()) id: string, @Body() body: UserEditFormDto, @Req() req: Request) {
+    const user: UserDto = req.user as UserDto;
+    const userEdited = await this.userService.findById(id, { shop: 1 });
+    let entity = {};
+    if (user?.roles?.includes(RoleEnum.GENERAL_MANAGER) || (
+      user?.roles?.includes(RoleEnum.STORE_DIRECTOR) && user.shop?._id === userEdited.shop?._id
+    )) {
+      entity = await this.userService.update(id, body);
+      if (!entity) {
+        throw new NotFoundException("Нет такого объекта!");
+      }
+    }
+    return res.status(HttpStatus.OK).json(entity).end();
   }
 
   /** Delete-запрос на удаление пользователя

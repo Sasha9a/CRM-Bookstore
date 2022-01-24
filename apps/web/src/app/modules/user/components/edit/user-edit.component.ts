@@ -3,7 +3,7 @@ import { Title } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
 import { UserDto } from "@crm/shared/dtos/user/user.dto";
-import { UserFormDto } from "@crm/shared/dtos/user/user.form.dto";
+import { UserEditFormDto } from "@crm/shared/dtos/user/user.edit.form.dto";
 import { ErrorService } from "@crm/web/core/services/error.service";
 import { ShopStateService } from "@crm/web/core/services/shop/shop-state.service";
 import { UserStateService } from "@crm/web/core/services/user/user-state.service";
@@ -54,10 +54,10 @@ export class UserEditComponent implements OnInit {
 
   /** Функция Изменяет пользователя
    * @param body данные пользователя */
-  public update(body: UserFormDto) {
+  public update(body: UserEditFormDto) {
     this.loading = true;
 
-    this.userStateService.update<UserFormDto, UserDto>(this.userId, body).subscribe(() => {
+    this.userStateService.update<UserEditFormDto, UserDto>(this.userId, body).subscribe(() => {
       this.loading = false;
       this.errorService.addSuccessMessage("Пользователь изменен");
       this.router.navigate(['/user/card', this.userId]).catch(console.error);

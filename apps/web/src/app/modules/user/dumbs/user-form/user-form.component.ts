@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
-import { UserFormDto } from "@crm/shared/dtos/user/user.form.dto";
+import { UserCreateFormDto } from "@crm/shared/dtos/user/user.create.form.dto";
 import { RoleEnum } from "@crm/shared/enums/role.enum";
 import { ErrorService } from "@crm/web/core/services/error.service";
 import { UserPasswordService } from "@crm/web/core/services/user/user-password.service";
@@ -13,11 +13,11 @@ import { RoleNamePipe } from "@crm/web/shared/pipes/role-name.pipe";
   templateUrl: './user-form.component.html',
   styleUrls: []
 })
-export class UserFormComponent extends BaseFormComponent<UserFormDto> {
+export class UserFormComponent extends BaseFormComponent<UserCreateFormDto> {
 
   /** Данные пользователя */
-  @Input() public user = new UserFormDto();
-  public dto = UserFormDto;
+  @Input() public user = new UserCreateFormDto();
+  public dto = UserCreateFormDto;
 
   /** Список магазинов */
   @Input() public shops: ShopDto[] = [];
