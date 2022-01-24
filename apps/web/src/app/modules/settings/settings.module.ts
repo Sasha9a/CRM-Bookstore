@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from "@angular/router";
 import { SharedModule } from "@crm/web/shared/shared.module";
 import { SettingsComponent } from './components/settings/settings.component';
+import { UserPasswordFormComponent } from '../settings/dumbs/user-password-form/user-password-form.component';
 
 const routes: Routes = [
   {
@@ -16,7 +17,8 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    SettingsComponent
+    SettingsComponent,
+    UserPasswordFormComponent
   ],
   imports: [
     CommonModule,

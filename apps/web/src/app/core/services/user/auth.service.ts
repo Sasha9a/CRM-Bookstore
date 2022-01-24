@@ -35,6 +35,13 @@ export class AuthService {
     }));
   }
 
+  /** Функция изменяет данные пользователя в системе
+   * @param user данные пользователя */
+  public updateLoggedUser(user: Partial<UserSessionDto>) {
+    this.user = { ...this.user, ...user };
+    localStorage.setItem('JWT_USER', JSON.stringify(this.user));
+  }
+
   /** Функция выполняет выход из системы пользователя
    * @param url нынешний URL адрес */
   public logout(url?: string) {

@@ -1,1 +1,68 @@
-<p>settings works!</p>
+<h1>Профиль</h1>
+
+<div class="grid">
+  <div class="col-12 sm:col-4 xl:col-2">
+    <div>
+      <img class="w-full" *ngIf="user?.avatar" [src]="('file/' + user.avatar.path) | apiUrl" (load)="showAvatar = true" alt="avatar" />
+      <p-skeleton *ngIf="!showAvatar" width="100%" height="250px"></p-skeleton>
+    </div>
+    <p-fileUpload #fileUpload
+                  mode="basic"
+                  [customUpload]="true"
+                  (uploadHandler)="onAvatarFileSelect($event)"
+                  [auto]="true"
+                  styleClass="mt-4 white-space-nowrap"
+                  chooseIcon="pi-paperclip"
+                  chooseLabel="Сменить аватар">
+    </p-fileUpload>
+  </div>
+
+  <div class="col-12 sm:col-8 xl:col-5 pl-2 sm:pl-4">
+    <p-table [value]=[null]>
+      <ng-template pTemplate="body">
+        <tr>
+          <td class="fw-bold">Имя пользователя</td>
+          <td class="fw-semibold">{{ user.name }}</td>
+        </tr>
+        <tr>
+          <td class="fw-bold">Дата рождения</td>
+          <td class="fw-semibold">{{ user.dateOfBirth | date: 'dd MMMM YYYY' }}</td>
+        </tr>
+        <tr>
+          <td class="fw-bold">Магазин</td>
+          <td class="fw-semibold">{{ user.shop?.address }}</td>
+        </tr>
+        <tr>
+          <td class="fw-bold">Телефон</td>
+          <td class="fw-semibold">{{ user.telephone | phone }}</td>
+        </tr>
+        <tr>
+          <td class="fw-bold">Адрес жительства</td>
+          <td class="fw-semibold">{{ user.address }}</td>
+        </tr>
+        <tr>
+          <td class="fw-bold">Должность</td>
+          <td class="fw-semibold">{{ user.position }}</td>
+        </tr>
+        <tr>
+          <td class="fw-bold">Зарплата</td>
+          <td class="fw-semibold">{{ user.salary | number }} руб.</td>
+        </tr>
+        <tr>
+          <td class="fw-bold">Роль(и)</td>
+          <td class="fw-semibold">
+            <ng-container *ngFor="let role of user.roles; last as isLast">
+              {{ role | roleName }}
+              <ng-container *ngIf="!isLast">,&nbsp;</ng-container>
+            </ng-container>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <div class="col-6 xl:col-3">
+    <crm-user-password-form></crm-user-password-form>
+  </div>
+
+</div>
