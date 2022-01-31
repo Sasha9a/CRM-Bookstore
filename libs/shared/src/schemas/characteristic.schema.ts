@@ -1,6 +1,4 @@
-import { Category } from "@crm/shared/schemas/category.schema";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import * as mongoose from "mongoose";
 import { Document } from "mongoose";
 
 /** Схема БД характеристики */
@@ -15,9 +13,6 @@ export class Characteristic extends Document {
   @Prop({ required: true })
   public order: number;
 
-  /** Категория */
-  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: Category.name, autopopulate: true })
-  public category: Category;
 }
 
 export const CharacteristicSchema = SchemaFactory.createForClass(Characteristic);

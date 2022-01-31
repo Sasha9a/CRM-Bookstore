@@ -1,4 +1,5 @@
 import { LoggerMiddleware } from "@crm/api/core/middlewares/logger.middleware";
+import { CategoryModule } from "@crm/api/modules/category/category.module";
 import { FileModule } from "@crm/api/modules/file/file.module";
 import { ShopModule } from "@crm/api/modules/shop/shop.module";
 import { UserModule } from "@crm/api/modules/user/user.module";
@@ -20,7 +21,8 @@ moment.locale('ru');
     }),
     FileModule,
     UserModule,
-    ShopModule
+    ShopModule,
+    CategoryModule
   ],
   controllers: [],
   providers: []

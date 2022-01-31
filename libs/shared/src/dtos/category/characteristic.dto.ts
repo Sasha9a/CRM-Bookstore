@@ -1,6 +1,5 @@
 import { BaseDto } from "@crm/shared/dtos/base.dto";
-import { CategoryDto } from "@crm/shared/dtos/category/category.dto";
-import { Expose, Type } from "class-transformer";
+import { Expose } from "class-transformer";
 
 /** DTO характеристики */
 @Expose()
@@ -14,9 +13,4 @@ export class CharacteristicDto extends BaseDto {
   @Expose()
   public order: number;
 
-  /** Категория */
-  @Expose()
-  @Type(() => CategoryDto)
-  public category: CategoryDto;
-  
 }

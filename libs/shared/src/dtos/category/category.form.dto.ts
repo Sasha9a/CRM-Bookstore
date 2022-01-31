@@ -1,5 +1,5 @@
 import { CategoryDto } from "@crm/shared/dtos/category/category.dto";
-import { CharacteristicFormDto } from "@crm/shared/dtos/characteristic/characteristic.form.dto";
+import { CharacteristicFormDto } from "@crm/shared/dtos/category/characteristic.form.dto";
 import { Expose, Type } from "class-transformer";
 import { IsOptional, IsString, ValidateNested } from "class-validator";
 

@@ -1,5 +1,5 @@
 import { BaseDto } from "@crm/shared/dtos/base.dto";
-import { CharacteristicDto } from "@crm/shared/dtos/characteristic/characteristic.dto";
+import { CharacteristicDto } from "@crm/shared/dtos/category/characteristic.dto";
 import { Expose, Type } from "class-transformer";
 
 /** DTO категории */

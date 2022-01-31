@@ -1,5 +1,4 @@
-import { CategoryDto } from "@crm/shared/dtos/category/category.dto";
-import { Expose, Type } from "class-transformer";
+import { Expose } from "class-transformer";
 import { IsDefined, IsString } from "class-validator";
 
 /** DTO создания характеристики */
@@ -15,11 +14,5 @@ export class CharacteristicFormDto {
   @Expose()
   @IsDefined({ message: "Введите значение" })
   public order: number;
-
-  /** Категория */
-  @Expose()
-  @IsDefined({ message: "Не выбрана категория" })
-  @Type(() => CategoryDto)
-  public category: CategoryDto;
 
 }

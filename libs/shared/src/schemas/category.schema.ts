@@ -1,4 +1,4 @@
-import { Characteristic } from "@crm/shared/schemas/characteristic.schema";
+import { Characteristic, CharacteristicSchema } from "@crm/shared/schemas/characteristic.schema";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import * as mongoose from "mongoose";
 import { Document } from "mongoose";
@@ -20,7 +20,7 @@ export class Category extends Document {
   public children: Category[];
 
   /** Список характеристик */
-  @Prop({ type: [{ type: [mongoose.Schema.Types.ObjectId], ref: Characteristic.name }], autopopulate: true })
+  @Prop({ type: [CharacteristicSchema], autopopulate: true })
   public characteristics: Characteristic[];
 }
 
