@@ -1,1 +1,6 @@
-<p>category-add works!</p>
+<crm-category-form *ngIf="!saving"
+                   (save)="create($event)"
+                   [route]="'/category'">
+</crm-category-form>
+
+<crm-spinner *ngIf="saving"></crm-spinner>

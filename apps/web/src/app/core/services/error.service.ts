@@ -53,7 +53,15 @@ export class ErrorService {
    * @param form ошибки
    * @param life время показа уведомления (в миллисекундах) */
   public errorValues<T>(form: Record<keyof T, any[]>, life = 10000) {
-    const error = Object.values(form).map((er: any[]) => er?.map((er1) => `${er1}`).join(', ')).join(', ');
+    const error = Object.values(form).map((er: any[]) => {
+      return er?.map((er1) => {
+        if (typeof er1 === 'object') {
+          return Object.values(er1).map((e: any[]) => e?.map((e1) => `${e1}`)).join(', ');
+        } else {
+          return `${er1}`;
+        }
+      }).join(', ')
+    }).join(', ');
     this.messageService.add({ severity: 'error', summary: 'Заполните все поля', detail: error, life });
   }
 

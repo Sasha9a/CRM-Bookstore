@@ -1,1 +1,70 @@
-<p>category-form works!</p>
+<h3 class="dividing-header">Категория</h3>
+
+<div class="grid">
+  <div class="col-12 md:col-6 xl:col-5">
+    <div class="p-fluid">
+      <div class="field">
+        <label class="fw-bold required-field">Название</label>
+        <input type="text" pInputText [ngClass]="{ 'ng-invalid ng-dirty': errors?.name }" [(ngModel)]="category.name">
+        <small *ngIf="errors?.name" class="p-error">{{ errors.name | join }}</small>
+      </div>
+
+      <div class="field">
+        <label class="fw-bold">Характеристики</label>
+        <p-table [value]="category.characteristics | orderBy: 'order:number'"
+                 [reorderableColumns]="true"
+                 (onRowReorder)="rowReorder($event)"
+                 styleClass="basic-table">
+          <ng-template pTemplate="body" let-characteristic let-index="rowIndex">
+            <tr *ngIf="toCharacteristic(characteristic) as characteristic" [pReorderableRow]="index">
+              <td class="w-3rem">
+                <span class="pi pi-bars" [pReorderableRowHandle]=""></span>
+              </td>
+              <td>
+                <p *ngIf="characteristicEdit !== characteristic" class="fw-bold ml-2">
+                  <span class="hover:text-blue-400 cursor-pointer"
+                        (click)="characteristicEdit = characteristic">
+                    {{ characteristic.name ?? '...' }}
+                  </span>
+                </p>
+                <div *ngIf="characteristicEdit === characteristic" class="p-inputgroup">
+                  <button type="button" pButton pRipple
+                          icon="pi pi-check"
+                          class="p-button-success"
+                          (click)="updateCharacteristic(characteristic)">
+                  </button>
+                  <input type="text" pInputText [(ngModel)]="characteristicEdit.name">
+                  <button type="button" pButton pRipple
+                          icon="pi pi-times"
+                          class="p-button-danger"
+                          (click)="characteristicEdit = null">
+                  </button>
+                </div>
+              </td>
+              <td class="w-6rem">
+                <button pButton pRipple
+                        type="button"
+                        label="Удалить"
+                        class="p-button-outlined p-button-danger"
+                        (click)="deleteCharacteristic(characteristic)">
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+
+        <button pButton label="Добавить характеристику"
+                class="p-button-text w-16rem"
+                icon="pi pi-plus"
+                (click)="addCharacteristic()">
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 mt-4">
+    <button pButton [label]="saveButtonLabel" icon="pi pi-check" class="p-button-success mr-2" (click)="onSave(category)"></button>
+    <button *ngIf="canDelete" pButton [label]="'Удалить'" class="p-button-danger mr-2" (click)="delete.emit(category)"></button>
+    <crm-go-back-button [route]="route"></crm-go-back-button>
+  </div>
+</div>

@@ -1,1 +1,9 @@
-<p>category-edit works!</p>
+<crm-category-form *ngIf="!saving && category"
+                   [category]="category"
+                   [canDelete]="true"
+                   (save)="edit($event)"
+                   (delete)="delete()"
+                   [route]="'/category'">
+</crm-category-form>
+
+<crm-spinner *ngIf="saving || !category"></crm-spinner>

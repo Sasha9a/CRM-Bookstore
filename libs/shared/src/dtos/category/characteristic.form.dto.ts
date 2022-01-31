@@ -7,12 +7,12 @@ export class CharacteristicFormDto {
 
   /** Название */
   @Expose()
-  @IsString({ message: "Введите значение" })
+  @IsString({ message: "Введите название характеристики" })
   public name: string;
 
   /** Местоположение по очередности */
   @Expose()
-  @IsDefined({ message: "Введите значение" })
+  @IsDefined({ message: "Введите очередность характеристики" })
   public order: number;
 
 }

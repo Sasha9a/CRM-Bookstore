@@ -1,1 +1,57 @@
-<p>category-list works!</p>
+<div class="flex justify-content-between align-items-center">
+  <h1>Категории</h1>
+  <div>
+    <button pButton [label]="'Добавить'"
+            class="p-button-success"
+            routerLink="/category/add">
+    </button>
+  </div>
+</div>
+
+<div *ngIf="!loading">
+  <p-table [loading]="loading"
+           [value]="categories">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Название</th>
+        <th>Характеристики</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-category>
+      <ng-template [ngTemplateOutlet]="categoryRow"
+                   [ngTemplateOutletContext]="{ category: category, level: 0 }"></ng-template>
+    </ng-template>
+
+  </p-table>
+</div>
+
+<crm-spinner *ngIf="loading"></crm-spinner>
+
+<ng-template #categoryRow let-category="category" let-level="level">
+  <ng-container *ngIf="toCategory(category) as category">
+    <tr>
+      <td [ngStyle]="{ 'padding-left.px': 14 + level * 14 }">
+        <div class="{{ level === 0 ? 'font-bold' : '' }}">
+          <i *ngIf="category.children?.length"
+             class="pi{{ openedDirectionIds.includes(category._id) ? ' pi-minus' : ' pi-plus' }} pointer mr-3"
+             (click)="updateDirection(category._id)"></i>
+          {{ category.name }}
+        </div>
+      </td>
+      <td>
+        <p *ngFor="let characteristic of category.characteristics | orderBy: 'order:number'; last as isLast"
+           [class.mb-1]='!isLast'>
+          <small>{{ characteristic.name }}</small>
+        </p>
+      </td>
+    </tr>
+
+    <ng-container *ngIf="category.children?.length && openedDirectionIds.includes(category._id)">
+      <ng-template *ngFor="let childCategory of category.children"
+                   [ngTemplateOutlet]="categoryRow"
+                   [ngTemplateOutletContext]="{ category: childCategory, level: level + 1 }">
+      </ng-template>
+    </ng-container>
+
+  </ng-container>
+</ng-template>
