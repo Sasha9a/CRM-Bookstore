@@ -7,7 +7,7 @@ import { BaseService } from "@crm/web/core/services/base.service";
 })
 export class ShopService extends BaseService {
 
-  /** URL пользователя в API */
+  /** URL магазина в API */
   protected override baseUrl = '/shop';
 
 }

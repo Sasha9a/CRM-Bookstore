@@ -64,6 +64,12 @@ export class CommonLayoutComponent implements OnInit {
       routerLink: '/user',
       routerLinkActiveOptions: { exact: false },
       visible: this.authService.checkRoles([RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR])
+    }, {
+      label: 'Категории',
+      icon: PrimeIcons.SITEMAP,
+      routerLink: '/category',
+      routerLinkActiveOptions: { exact: false },
+      visible: this.authService.checkRoles([RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR, RoleEnum.MANAGER])
     }];
   }
 
