@@ -18,12 +18,6 @@ export class CategoryFormDto {
   @Type(() => CategoryDto)
   public parent?: CategoryDto;
 
-  /** Подкатегории */
-  @Expose()
-  @IsOptional()
-  @Type(() => CategoryDto)
-  public children?: CategoryDto[];
-
   /** Список характеристик */
   @Expose()
   @IsOptional()
