@@ -21,7 +21,8 @@ export class CategoryController {
   @UseGuards(JwtAuthGuard)
   @Get()
   public async getAll(@Res() res: Response) {
-    const entities = await this.categoryService.findAll();
+    let entities = await this.categoryService.findAll();
+    entities = entities.filter((entity) => !entity.parent);
     return res.status(HttpStatus.OK).json(entities).end();
   }
 
@@ -45,6 +46,11 @@ export class CategoryController {
   @Post()
   public async create(@Res() res: Response, @Body() body: CategoryFormDto) {
     const entity = await this.categoryService.create(body);
+    if (entity.parent) {
+      const parent = await this.categoryService.findById(entity.parent._id);
+      parent.children.push(entity);
+      await parent.save();
+    }
     return res.status(HttpStatus.CREATED).json(entity).end();
   }
 
@@ -74,6 +80,10 @@ export class CategoryController {
     const entity = await this.categoryService.delete(id);
     if (!entity) {
       throw new NotFoundException("Нет такого объекта!");
+    }
+    if (entity.parent) {
+      const parent = await this.categoryService.findById(entity.parent._id);
+      await this.categoryService.update(parent._id, { children: parent.children });
     }
     return res.status(HttpStatus.OK).end();
   }

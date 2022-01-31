@@ -15,11 +15,13 @@
       <tr>
         <th>Название</th>
         <th>Характеристики</th>
+        <th class="w-15rem">Действия</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-category>
       <ng-template [ngTemplateOutlet]="categoryRow"
-                   [ngTemplateOutletContext]="{ category: category, level: 0 }"></ng-template>
+                   [ngTemplateOutletContext]="{ category: category, level: 0 }">
+      </ng-template>
     </ng-template>
 
   </p-table>
@@ -30,12 +32,12 @@
 <ng-template #categoryRow let-category="category" let-level="level">
   <ng-container *ngIf="toCategory(category) as category">
     <tr>
-      <td [ngStyle]="{ 'padding-left.px': 14 + level * 14 }">
+      <td [ngStyle]="{ 'padding-left.px': 14 + level * 25 }">
         <div class="{{ level === 0 ? 'font-bold' : '' }}">
           <i *ngIf="category.children?.length"
              class="pi{{ openedDirectionIds.includes(category._id) ? ' pi-minus' : ' pi-plus' }} pointer mr-3"
              (click)="updateDirection(category._id)"></i>
-          {{ category.name }}
+          <a routerLink="/category/edit/{{ category._id }}">{{ category.name }}</a>
         </div>
       </td>
       <td>
@@ -43,6 +45,15 @@
            [class.mb-1]='!isLast'>
           <small>{{ characteristic.name }}</small>
         </p>
+      </td>
+      <td>
+        <button pButton pRipple
+                type="button"
+                label="Создать подкатегорию"
+                routerLink="/category/add"
+                [queryParams]="{ parentId: category._id }"
+                class="p-button-outlined p-button-info">
+        </button>
       </td>
     </tr>
 
