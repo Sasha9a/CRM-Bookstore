@@ -3,6 +3,7 @@ import { JwtAuthGuard } from "@crm/api/core/guards/jwt-auth.guard";
 import { RoleGuard } from "@crm/api/core/guards/role.guard";
 import { ValidateObjectId } from "@crm/api/core/pipes/validate.object.id.pipes";
 import { ShopService } from "@crm/api/modules/shop/shop.service";
+import { UserService } from "@crm/api/modules/user/user.service";
 import { ShopFormDto } from "@crm/shared/dtos/shop/shop.form.dto";
 import { RoleEnum } from "@crm/shared/enums/role.enum";
 import { Body, Controller, Delete, Get, HttpStatus, NotFoundException, Param, Post, Put, Res, UseGuards } from "@nestjs/common";
@@ -12,7 +13,8 @@ import { Response } from "express";
 @Controller('shop')
 export class ShopController {
 
-  public constructor(private readonly shopService: ShopService) {
+  public constructor(private readonly shopService: ShopService,
+                     private readonly userService: UserService) {
   }
 
   /** Get-запрос на получение списка всех магазинов
@@ -76,6 +78,10 @@ export class ShopController {
     const entity = await this.shopService.delete(id);
     if (!entity) {
       throw new NotFoundException("Нет такого объекта!");
+    }
+    const userList = await this.userService.findAll({ shop: entity._id });
+    for (const user of userList) {
+      await this.userService.update(user._id, { shop: null });
     }
     return res.status(HttpStatus.OK).end();
   }
