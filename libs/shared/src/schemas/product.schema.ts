@@ -36,6 +36,10 @@ export class Product extends Document {
   @Prop({ type: mongoose.Schema.Types.Mixed, default: {} })
   public characteristics: Record<string, string>;
 
+  /** Удален ли товар */
+  @Prop({ default: false })
+  public deleted: boolean;
+
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

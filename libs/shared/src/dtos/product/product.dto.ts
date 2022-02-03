@@ -37,4 +37,8 @@ export class ProductDto extends BaseDto {
   @Expose()
   public characteristics: Record<string, string>;
 
+  /** Удален ли товар */
+  @Expose()
+  public deleted: boolean;
+
 }

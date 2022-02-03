@@ -14,8 +14,8 @@ export class ProductFormDto {
 
   /** Артикул */
   @Expose()
-  @IsString({ message: "Введите артикул" })
-  public code: string;
+  @IsOptional()
+  public code?: string;
 
   /** Фото товара */
   @Expose()
