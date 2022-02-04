@@ -47,30 +47,41 @@ export class CommonLayoutComponent implements OnInit {
       }
     ];
 
-    this.items = [{
-      label: 'Рабочий стол',
-      icon: PrimeIcons.DESKTOP,
-      routerLink: '/',
-      routerLinkActiveOptions: { exact: true }
-    }, {
-      label: 'Магазины',
-      icon: PrimeIcons.HOME,
-      routerLink: '/shop',
-      routerLinkActiveOptions: { exact: false },
-      visible: this.authService.checkRoles([RoleEnum.GENERAL_MANAGER])
-    }, {
-      label: 'Пользователи',
-      icon: PrimeIcons.USERS,
-      routerLink: '/user',
-      routerLinkActiveOptions: { exact: false },
-      visible: this.authService.checkRoles([RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR])
-    }, {
-      label: 'Категории',
-      icon: PrimeIcons.SITEMAP,
-      routerLink: '/category',
-      routerLinkActiveOptions: { exact: false },
-      visible: this.authService.checkRoles([RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR, RoleEnum.MANAGER])
-    }];
+    this.items = [
+      {
+        label: 'Рабочий стол',
+        icon: PrimeIcons.DESKTOP,
+        routerLink: '/',
+        routerLinkActiveOptions: { exact: true }
+      },
+      {
+        label: 'Магазины',
+        icon: PrimeIcons.HOME,
+        routerLink: '/shop',
+        routerLinkActiveOptions: { exact: false },
+        visible: this.authService.checkRoles([RoleEnum.GENERAL_MANAGER])
+      },
+      {
+        label: 'Пользователи',
+        icon: PrimeIcons.USERS,
+        routerLink: '/user',
+        routerLinkActiveOptions: { exact: false },
+        visible: this.authService.checkRoles([RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR])
+      },
+      {
+        label: 'Категории',
+        icon: PrimeIcons.SITEMAP,
+        routerLink: '/category',
+        routerLinkActiveOptions: { exact: false },
+        visible: this.authService.checkRoles([RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR, RoleEnum.MANAGER])
+      },
+      {
+        label: 'Товары',
+        icon: PrimeIcons.TAGS,
+        routerLink: '/product',
+        routerLinkActiveOptions: { exact: false }
+      }
+    ];
   }
 
   @HostListener('window:resize')
