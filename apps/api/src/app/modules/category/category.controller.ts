@@ -3,6 +3,7 @@ import { JwtAuthGuard } from "@crm/api/core/guards/jwt-auth.guard";
 import { RoleGuard } from "@crm/api/core/guards/role.guard";
 import { ValidateObjectId } from "@crm/api/core/pipes/validate.object.id.pipes";
 import { CategoryService } from "@crm/api/modules/category/category.service";
+import { ProductService } from "@crm/api/modules/product/product.service";
 import { CategoryFormDto } from "@crm/shared/dtos/category/category.form.dto";
 import { RoleEnum } from "@crm/shared/enums/role.enum";
 import { Body, Controller, Delete, Get, HttpStatus, NotFoundException, Param, Post, Put, Res, UseGuards } from "@nestjs/common";
@@ -12,7 +13,8 @@ import { Response } from "express";
 @Controller('category')
 export class CategoryController {
 
-  public constructor(private readonly categoryService: CategoryService) {
+  public constructor(private readonly categoryService: CategoryService,
+                     private readonly productService: ProductService) {
   }
 
   /** Get-запрос на получение списка всех категорий и подкатегорий
@@ -81,9 +83,14 @@ export class CategoryController {
     if (!entity) {
       throw new NotFoundException("Нет такого объекта!");
     }
-    if (entity.parent) {
+    const isParent = !!entity.parent;
+    if (isParent) {
       const parent = await this.categoryService.findById(entity.parent._id);
       await this.categoryService.update(parent._id, { children: parent.children });
+    }
+    const products = await this.productService.findAll({ category: entity._id });
+    for (const product of products) {
+      await this.productService.update(product._id, { category: isParent ? entity.parent._id : null });
     }
     return res.status(HttpStatus.OK).end();
   }
