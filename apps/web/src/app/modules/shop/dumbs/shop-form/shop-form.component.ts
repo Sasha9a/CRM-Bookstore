@@ -15,9 +15,6 @@ export class ShopFormComponent extends BaseFormComponent<ShopFormDto> {
   @Input() public shop = new ShopFormDto();
   public dto = ShopFormDto;
 
-  /** Показывать кнопку удаления */
-  @Input() public override canDelete = false;
-
   /** URL на который возвращать при отмене */
   @Input() public route: string;
 

@@ -32,8 +32,7 @@ export class ShopController {
    * @param res переменная отвечает за возврат данных клиенту
    * @param id ID магазина
    * @return Возвращает магазин */
-  @Roles(RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR)
-  @UseGuards(JwtAuthGuard, RoleGuard)
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   public async getById(@Res() res: Response, @Param('id', new ValidateObjectId()) id: string) {
     const entity = await this.shopService.findById(id);

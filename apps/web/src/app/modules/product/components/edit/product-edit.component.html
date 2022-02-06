@@ -1,1 +1,9 @@
-<p>product-edit works!</p>
+<crm-product-form *ngIf="!saving && product && categories && shops"
+                  [product]="product"
+                  [categories]="categories"
+                  [shops]="shops"
+                  (save)="edit($event)"
+                  [route]="'/product'">
+</crm-product-form>
+
+<crm-spinner *ngIf="saving || !product || !categories || !shops"></crm-spinner>

@@ -1,1 +1,98 @@
-<p>product-form works!</p>
+<h3 class="dividing-header">Товар</h3>
+
+<div class="grid">
+  <div class="col-12 md:col-6 xl:col-4">
+    <div class="p-fluid">
+      <div class="field">
+        <label class="fw-bold">Фотография</label>
+        <img *ngIf="product.image" class="w-full mb-2" [src]="('file/' + product.image.path) | apiUrl" [alt]="product.name" />
+        <p-fileUpload #fileUpload
+                      mode="basic"
+                      [customUpload]="true"
+                      (uploadHandler)="imageSave($event)"
+                      [auto]="true"
+                      styleClass="white-space-nowrap"
+                      chooseIcon="pi-paperclip"
+                      [chooseLabel]="product.image ? 'Сменить фото' : 'Загрузить фото'">
+        </p-fileUpload>
+      </div>
+
+      <div class="field">
+        <label class="fw-bold required-field">Название</label>
+        <input type="text" pInputText [ngClass]="{ 'ng-invalid ng-dirty': errors?.name }" [(ngModel)]="product.name">
+        <small *ngIf="errors?.name" class="p-error">{{ errors.name | join }}</small>
+      </div>
+
+      <div *ngIf="product.code" class="field">
+        <label class="fw-bold required-field">Артикул</label>
+        <input type="text" pInputText
+               [ngClass]="{ 'ng-invalid ng-dirty': errors?.code }"
+               [disabled]="true"
+               [ngModel]="product.code">
+        <small *ngIf="errors?.code" class="p-error">{{ errors.code | join }}</small>
+      </div>
+
+      <div class="field">
+        <label class="fw-bold">Категория</label>
+        <crm-category-single-select [categories]="categories"
+                                    [(selectedCategory)]="product.category"
+                                    [class]="errors?.category ? 'ng-invalid ng-dirty' : ''">
+        </crm-category-single-select>
+        <small *ngIf="errors?.category" class="p-error">{{ errors.category | join }}</small>
+      </div>
+
+      <div class="field">
+        <label class="fw-bold required-field">Цена</label>
+        <div class="p-inputgroup">
+          <p-inputNumber [(ngModel)]="product.price"
+                         [ngClass]="{ 'ng-invalid ng-dirty': errors?.price }">
+          </p-inputNumber>
+          <span class="p-inputgroup-addon">руб.</span>
+        </div>
+        <small *ngIf="errors?.price" class="p-error">{{ errors.price | join }}</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 md:col-6 xl:col-3">
+    <p-card>
+      <ng-template pTemplate="header">
+        <p class="fw-bold ml-2 mt-2 text-xl">Кол-во в магазинах</p>
+      </ng-template>
+      <div class="p-fluid">
+        <div *ngFor="let shop of shops" class="field">
+          <label class="fw-bold">{{ shop.address }}</label>
+          <div class="p-inputgroup">
+            <p-inputNumber [(ngModel)]="product.count[shop._id]"
+                           [ngClass]="{ 'ng-invalid ng-dirty': errors?.count[shop._id] }">
+            </p-inputNumber>
+            <span class="p-inputgroup-addon">шт.</span>
+          </div>
+          <small *ngIf="errors?.count[shop._id]" class="p-error">{{ errors.count[shop._id] | join }}</small>
+        </div>
+      </div>
+    </p-card>
+  </div>
+
+  <div class="col-12 xl:col-5">
+    <p-card>
+      <ng-template pTemplate="header">
+        <p class="fw-bold ml-2 mt-2 text-xl">Характеристики</p>
+      </ng-template>
+      <div *ngIf="product.category; else notCategory" class="p-fluid">
+        <div *ngFor="let characteristic of product.category.characteristics | orderBy: 'order:number'" class="field">
+          <label class="fw-bold">{{ characteristic.name }}</label>
+          <textarea pInputTextarea [(ngModel)]="product.characteristics[characteristic._id]" [autoResize]="true"></textarea>
+        </div>
+      </div>
+      <ng-template #notCategory>
+        <p>Выберите категорию для заполнения характеристик</p>
+      </ng-template>
+    </p-card>
+  </div>
+
+  <div class="col-12 mt-4">
+    <button pButton [label]="saveButtonLabel" icon="pi pi-check" class="p-button-success mr-2" (click)="onSave(product)"></button>
+    <crm-go-back-button [route]="route"></crm-go-back-button>
+  </div>
+</div>

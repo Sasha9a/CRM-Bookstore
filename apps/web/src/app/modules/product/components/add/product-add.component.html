@@ -1,1 +1,8 @@
-<p>product-add works!</p>
+<crm-product-form *ngIf="!saving && categories && shops"
+                  [categories]="categories"
+                  [shops]="shops"
+                  (save)="create($event)"
+                  [route]="'/product'">
+</crm-product-form>
+
+<crm-spinner *ngIf="saving || !categories || !shops"></crm-spinner>

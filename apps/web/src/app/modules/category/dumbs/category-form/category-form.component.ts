@@ -18,9 +18,6 @@ export class CategoryFormComponent extends BaseFormComponent<CategoryFormDto> {
   @Input() public category = new CategoryFormDto();
   public dto = CategoryFormDto;
 
-  /** Показывать кнопку удаления */
-  @Input() public override canDelete = false;
-
   /** URL на который возвращать при отмене */
   @Input() public route: string;
 
