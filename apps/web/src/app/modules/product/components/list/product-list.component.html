@@ -12,9 +12,21 @@
   <div class="col">
     <div class="grid">
       <div class="col-12 md:col-4 pb-0">
-        <crm-category-multi-select [categories]="categories"
+        <crm-category-multi-select [categories]="filters.categories"
+                                   [(selectedCategories)]="selectedFilters.categories"
                                    placeholder="Категории">
         </crm-category-multi-select>
+      </div>
+
+      <div class="col-12 md:col-4 pb-0">
+        <input type="text" pInputText class="w-full" [(ngModel)]="queryParams['code'].value" placeholder="Артикул">
+      </div>
+
+      <div class="col-12 md:col-4 py-0 mt-3">
+        <div class="field-checkbox py-0 my-0">
+          <p-checkbox [(ngModel)]="queryParams['isArchive'].value" [binary]="true" inputId="deleted"></p-checkbox>
+          <label [for]="'deleted'">С архивными товарами</label>
+        </div>
       </div>
     </div>
   </div>
@@ -27,7 +39,7 @@
 
 <crm-table name="products"
            [loading]="loading"
-           [values]="products"
+           [values]="showTableProducts"
            [columns]="itemColumns">
   <ng-template #rowTemplate let-product="item">
     <tr *ngIf="toProduct(product) as product">

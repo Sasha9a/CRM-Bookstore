@@ -35,6 +35,7 @@ export class UserListComponent implements OnInit {
     { label: 'Роли' }
   ];
 
+  /** Параметры адресной строки */
   public queryParams: Record<string, { value: any, toApi: boolean }> = {
     shop: {
       value: [],
