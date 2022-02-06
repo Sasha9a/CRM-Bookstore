@@ -21,7 +21,7 @@ export class Product extends Document {
   public image: File;
 
   /** Кол-во товара в точках */
-  @Prop({ type: mongoose.Schema.Types.Mixed, default: {} })
+  @Prop({ type: mongoose.Schema.Types.Mixed })
   public count: Record<string, number>;
 
   /** Категория */
@@ -33,7 +33,7 @@ export class Product extends Document {
   public price: number;
 
   /** Характеристики */
-  @Prop({ type: mongoose.Schema.Types.Mixed, default: {} })
+  @Prop({ type: mongoose.Schema.Types.Mixed })
   public characteristics: Record<string, string>;
 
   /** Удален ли товар */

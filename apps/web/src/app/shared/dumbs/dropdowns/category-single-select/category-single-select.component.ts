@@ -26,14 +26,15 @@ export class CategorySingleSelectComponent implements OnChanges {
       this.dataCategories = this.parseCategories(changes['categories'].currentValue);
     }
     if (changes['selectedCategory']?.currentValue) {
-      this.dataSelectCategory = this.dataCategories.flat().find((category) => {
+      this.dataSelectCategory = this.dataCategories.find((category) => {
         return category.key === changes['selectedCategory'].currentValue._id;
       });
     }
   }
 
   public changeValue(item: { label: string, key: string, children: any[] }) {
-    const selectCategory = this.categories.flat().find((category) => category._id === item.key);
+    const selectCategory = this.getCategory(item.key, this.categories);
+    console.log(selectCategory);
     this.selectedCategoryChange.emit(selectCategory);
   }
 
@@ -48,6 +49,18 @@ export class CategorySingleSelectComponent implements OnChanges {
         children: this.parseCategories(category.children)
       };
     });
+  }
+
+  public getCategory(id: string, categories: CategoryDto[]): CategoryDto {
+    for (const category of categories) {
+      if (category._id === id) {
+        return category;
+      }
+      if (category.children) {
+        return this.getCategory(id, category.children);
+      }
+    }
+    return null;
   }
 
 }

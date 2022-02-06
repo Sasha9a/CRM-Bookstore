@@ -44,9 +44,10 @@
   <ng-template #rowTemplate let-product="item">
     <tr *ngIf="toProduct(product) as product">
       <td>
-        <p-image [src]="('file/' + product.image.path) | apiUrl"
+        <p-image *ngIf="product.image" [src]="('file/' + product.image.path) | apiUrl"
                  alt="{{ product.name }}" width="80" [preview]="true">
         </p-image>
+        <p-skeleton *ngIf="!product.image" size="5rem"></p-skeleton>
       </td>
       <td><a routerLink="/product/card/{{ product._id }}">{{ product.name }}</a></td>
       <td>{{ product.code }}</td>

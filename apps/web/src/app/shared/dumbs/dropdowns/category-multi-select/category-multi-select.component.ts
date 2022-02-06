@@ -26,14 +26,14 @@ export class CategoryMultiSelectComponent implements OnChanges {
       this.dataCategories = this.parseCategories(changes['categories'].currentValue);
     }
     if (changes['selectedCategories']?.currentValue) {
-      this.dataSelectCategories = this.dataCategories.flat().filter((category) => {
+      this.dataSelectCategories = this.dataCategories.filter((category) => {
         return changes['selectedCategories'].currentValue.some((c) => c._id === category.key);
       });
     }
   }
 
   public changeValue(items: { label: string, key: string, children: any[] }[]) {
-    const selectCategories = this.categories.flat().filter((category) => {
+    const selectCategories = this.categories.filter((category) => {
       return items.some((c) => c.key === category._id);
     });
     this.selectedCategoriesChange.emit(selectCategories);

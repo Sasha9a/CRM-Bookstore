@@ -49,6 +49,12 @@ export class ProductCardComponent implements OnInit {
     this.productStateService.findById<ProductDto>(productId).subscribe((product) => {
       this.product = product;
       this.title.setTitle(`${this.product.name} - CRM`);
+      if (!this.product.characteristics) {
+        this.product.characteristics = {};
+      }
+      if (!this.product.count) {
+        this.product.count = {};
+      }
       this.loading = false;
     }, () => this.loading = false);
 
