@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { CategoryDto } from "@crm/shared/dtos/category/category.dto";
 import { ProductDto } from "@crm/shared/dtos/product/product.dto";
 import { CrmTableColumn } from "@crm/web/core/models/crm-table-column";
+import { CategoryStateService } from "@crm/web/core/services/category/category-state.service";
 import { ProductStateService } from "@crm/web/core/services/product/product-state.service";
 
 /** Компонент показывает список товаров */
@@ -13,6 +15,9 @@ export class ProductListComponent implements OnInit {
 
   /** Товары */
   public products: ProductDto[];
+
+  /** Список категорий */
+  public categories: CategoryDto[];
 
   /** Грузится ли или нет */
   public loading = false;
@@ -27,10 +32,12 @@ export class ProductListComponent implements OnInit {
     { label: 'Статус', name: 'deleted', sort: 'deleted:boolean' }
   ];
 
-  public constructor(private readonly productStateService: ProductStateService) {
+  public constructor(private readonly productStateService: ProductStateService,
+                     private readonly categoryStateService: CategoryStateService) {
   }
 
   public ngOnInit(): void {
+    this.categoryStateService.find<CategoryDto>().subscribe((categories) => this.categories = categories);
     this.loadProducts();
   }
 

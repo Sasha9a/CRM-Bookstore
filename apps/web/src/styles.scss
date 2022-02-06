@@ -240,6 +240,10 @@ button {
   }
 }
 
+.p-treeselect {
+  width: 100% !important;
+}
+
 .p-multiselect-panel .p-multiselect-items > :last-child .p-multiselect-item,
 .p-dropdown-panel .p-dropdown-items > :last-child .p-dropdown-item {
   border-bottom: none !important;
