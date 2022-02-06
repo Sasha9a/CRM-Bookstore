@@ -14,7 +14,7 @@ import { AuthService } from "@crm/web/core/services/user/auth.service";
 @Component({
   selector: 'crm-product-card',
   templateUrl: './product-card.component.html',
-  styleUrls: ['./product-card.component.scss']
+  styleUrls: []
 })
 export class ProductCardComponent implements OnInit {
 
