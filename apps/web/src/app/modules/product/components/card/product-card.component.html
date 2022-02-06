@@ -1,1 +1,73 @@
-<p>product-card works!</p>
+<div *ngIf="!loading">
+  <h1 class="mb-3">{{ product?.name }}</h1>
+  <div *ngIf="product" class="flex flex-wrap lg:justify-content-end mb-3">
+    <button *ngIf="!product.deleted" pButton [label]="'Редактировать'"
+            icon="pi pi-pencil" class="p-button-success mr-2"
+            routerLink="/product/edit/{{ product._id }}">
+    </button>
+    <button *ngIf="!product.deleted" pButton [label]="'В Архив'"
+            icon="pi pi-lock" class="p-button-secondary mr-2"
+            (click)="toArchiveProduct()">
+    </button>
+    <button *ngIf="product.deleted" pButton [label]="'Из Архива'"
+            icon="pi pi-lock-open" class="p-button-info"
+            (click)="toActiveProduct()">
+    </button>
+  </div>
+
+  <div *ngIf="product" class="grid">
+    <div class="col-12 xl:col-4">
+      <img class="w-full" *ngIf="product.image" [src]="('file/' + product.image.path) | apiUrl" (load)="showImage = true" alt="image" />
+      <p-skeleton *ngIf="!showImage" width="100%" height="250px"></p-skeleton>
+    </div>
+    <div class="col-12 xl:col-5">
+      <p-table [value]=[null]>
+        <ng-template pTemplate="body">
+          <tr>
+            <td class="fw-bold">Артикул</td>
+            <td class="fw-semibold">{{ product.code }}</td>
+          </tr>
+          <tr>
+            <td class="fw-bold">Цена</td>
+            <td class="fw-semibold">{{ product.price | number }} руб.</td>
+          </tr>
+          <tr>
+            <td class="fw-bold">Категория</td>
+            <td class="fw-semibold">{{ product.category?.name ?? 'Отсутствует' }}</td>
+          </tr>
+          <tr>
+            <td class="fw-bold">Статус</td>
+            <td class="fw-semibold">
+              <p-tag *ngIf="!product.deleted" styleClass="text-sm" severity="success" value="Активен"></p-tag>
+              <p-tag *ngIf="product.deleted" styleClass="text-sm" severity="danger" value="В архиве"></p-tag>
+            </td>
+          </tr>
+          <tr>
+            <td class="fw-bold">Кол-во в магазинах</td>
+            <td class="fw-semibold">
+              <ng-container *ngFor="let shop of shops">
+                <p *ngIf="product.count[shop._id]" class="greytext">{{ shop.address }}:
+                  <span class="text-black">{{ product.count[shop._id] }} шт.</span>
+                </p>
+              </ng-container>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <div class="col-12 xl:col-6">
+      <p class="text-2xl fw-bold my-3">Характеристики</p>
+      <p-table [value]=[null]>
+        <ng-template pTemplate="body">
+          <tr *ngFor="let characteristic of product.category?.characteristics | orderBy: 'order:number'">
+            <td class="fw-bold">{{ characteristic.name }}</td>
+            <td class="fw-semibold">{{ product.characteristics[characteristic._id] }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>
+
+<crm-spinner *ngIf="loading"></crm-spinner>

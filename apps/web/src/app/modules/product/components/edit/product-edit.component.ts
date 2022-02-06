@@ -57,6 +57,10 @@ export class ProductEditComponent implements OnInit {
     this.productStateService.findById<ProductDto>(this.productId).subscribe((product) => {
       this.product = product;
       this.title.setTitle(`${this.product.name} - CRM`);
+      if (this.product.deleted) {
+        this.product = null;
+        return this.errorService.addCustomError('Ошибка', 'Товар находится в архиве.');
+      }
     });
 
     if (!this.authService.currentUser.roles.includes(RoleEnum.GENERAL_MANAGER)) {

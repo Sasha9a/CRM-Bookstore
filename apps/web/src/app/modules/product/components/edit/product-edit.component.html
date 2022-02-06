@@ -3,7 +3,7 @@
                   [categories]="categories"
                   [shops]="shops"
                   (save)="edit($event)"
-                  [route]="'/product'">
+                  [route]="'/product/card/' + productId">
 </crm-product-form>
 
 <crm-spinner *ngIf="saving || !product || !categories || !shops"></crm-spinner>
