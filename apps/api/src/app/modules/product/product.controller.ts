@@ -1,8 +1,9 @@
 import { JwtAuthGuard } from "@crm/api/core/guards/jwt-auth.guard";
 import { ValidateObjectId } from "@crm/api/core/pipes/validate.object.id.pipes";
+import { queryParamParser } from "@crm/api/core/services/query-param-parser.service";
 import { ProductService } from "@crm/api/modules/product/product.service";
 import { ProductFormDto } from "@crm/shared/dtos/product/product.form.dto";
-import { Body, Controller, Delete, Get, HttpStatus, NotFoundException, Param, Post, Put, Res, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpStatus, NotFoundException, Param, Post, Put, Query, Res, UseGuards } from "@nestjs/common";
 import { Response } from "express";
 
 /** Контроллер принимающие запросы по товарам */
@@ -14,11 +15,12 @@ export class ProductController {
 
   /** Get-запрос на получение списка всех товаров
    * @param res переменная отвечает за возврат данных клиенту
+   * @param queryParams параметры от клиента
    * @return Возвращает массив товаров */
   @UseGuards(JwtAuthGuard)
   @Get()
-  public async getAll(@Res() res: Response) {
-    const entities = await this.productService.findAll();
+  public async getAll(@Res() res: Response, @Query() queryParams: any) {
+    const entities = await this.productService.findAll(queryParamParser(queryParams).filter);
     return res.status(HttpStatus.OK).json(entities).end();
   }
 

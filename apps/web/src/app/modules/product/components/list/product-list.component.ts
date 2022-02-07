@@ -5,6 +5,7 @@ import { CrmTableColumn } from "@crm/web/core/models/crm-table-column";
 import { CategoryStateService } from "@crm/web/core/services/category/category-state.service";
 import { ProductStateService } from "@crm/web/core/services/product/product-state.service";
 import { QueryParamsService } from "@crm/web/core/services/query-params.service";
+import { UtilsService } from "@crm/web/core/services/utils.service";
 
 /** Компонент показывает список товаров */
 @Component({
@@ -61,7 +62,8 @@ export class ProductListComponent implements OnInit {
 
   public constructor(private readonly productStateService: ProductStateService,
                      private readonly categoryStateService: CategoryStateService,
-                     private readonly queryParamsService: QueryParamsService) {
+                     private readonly queryParamsService: QueryParamsService,
+                     private readonly utilsService: UtilsService) {
   }
 
   public ngOnInit(): void {
@@ -69,9 +71,13 @@ export class ProductListComponent implements OnInit {
     this.queryParams = this.queryParamsService.getFilteredQueryParams(this.queryParams);
     this.queryParamsService.setQueryParams(this.queryParams);
 
+    this.loading = true;
+
     this.categoryStateService.find<CategoryDto>().subscribe((categories) => {
       this.filters.categories = categories;
-      this.selectedFilters = this.queryParamsService.getFilteredEntities(this.filters, this.queryParams);
+      this.selectedFilters.categories = this.utilsService.flattenCategory(this.filters.categories).filter((category) => {
+        return this.queryParams['category'].value.some((id) => id === category._id);
+      });
       this.loadProducts();
     });
   }
