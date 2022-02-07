@@ -30,7 +30,7 @@ export class CategorySingleSelectComponent implements OnChanges {
       this.dataCategories = this.parseCategories(changes['categories'].currentValue);
     }
     if (changes['selectedCategory']?.currentValue) {
-      this.dataSelectCategory = Array.from(this.utilsService.flattenCategory(this.dataCategories)).find((category) => {
+      this.dataSelectCategory = this.utilsService.flattenCategory(this.dataCategories).find((category) => {
         return category.key === changes['selectedCategory'].currentValue._id;
       });
     }

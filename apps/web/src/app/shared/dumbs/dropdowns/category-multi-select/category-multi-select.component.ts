@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { CategoryDto } from "@crm/shared/dtos/category/category.dto";
+import { UtilsService } from "@crm/web/core/services/utils.service";
 
 /** Компонент выбора категорий */
 @Component({
@@ -21,19 +22,22 @@ export class CategoryMultiSelectComponent implements OnChanges {
   public dataCategories: { label: string, key: string, children: any[] }[];
   public dataSelectCategories: { label: string, key: string, children: any[] }[];
 
+  public constructor(private readonly utilsService: UtilsService) {
+  }
+
   public ngOnChanges(changes: SimpleChanges) {
     if (changes['categories']?.currentValue) {
       this.dataCategories = this.parseCategories(changes['categories'].currentValue);
     }
     if (changes['selectedCategories']?.currentValue) {
-      this.dataSelectCategories = this.dataCategories.filter((category) => {
+      this.dataSelectCategories = this.utilsService.flattenCategory(this.dataCategories).filter((category) => {
         return changes['selectedCategories'].currentValue.some((c) => c._id === category.key);
       });
     }
   }
 
   public changeValue(items: { label: string, key: string, children: any[] }[]) {
-    const selectCategories = this.categories.filter((category) => {
+    const selectCategories = this.utilsService.flattenCategory(this.categories).filter((category) => {
       return items.some((c) => c.key === category._id);
     });
     this.selectedCategoriesChange.emit(selectCategories);
