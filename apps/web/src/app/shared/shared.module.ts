@@ -111,6 +111,7 @@ import { DatepickerComponent } from './dumbs/datepicker/datepicker.component';
 import { ShopSingleSelectComponent } from './dumbs/dropdowns/shop-single-select/shop-single-select.component';
 import { CategorySingleSelectComponent } from './dumbs/dropdowns/category-single-select/category-single-select.component';
 import { CategoryMultiSelectComponent } from './dumbs/dropdowns/category-multi-select/category-multi-select.component';
+import { ScheduleNamePipe } from './pipes/schedule-name.pipe';
 
 
 
@@ -136,7 +137,8 @@ import { CategoryMultiSelectComponent } from './dumbs/dropdowns/category-multi-s
     DatepickerComponent,
     ShopSingleSelectComponent,
     CategorySingleSelectComponent,
-    CategoryMultiSelectComponent
+    CategoryMultiSelectComponent,
+    ScheduleNamePipe
   ],
   imports: [
     CommonModule,
@@ -337,8 +339,10 @@ import { CategoryMultiSelectComponent } from './dumbs/dropdowns/category-multi-s
     ShopSingleSelectComponent,
     MultiSelectComponent,
     CategorySingleSelectComponent,
-    CategoryMultiSelectComponent
+    CategoryMultiSelectComponent,
+    ScheduleNamePipe,
+    SingleSelectComponent
   ],
-  providers: [RoleNamePipe]
+  providers: [RoleNamePipe, ScheduleNamePipe]
 })
 export class SharedModule { }

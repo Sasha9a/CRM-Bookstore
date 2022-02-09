@@ -1,4 +1,5 @@
 import { RoleEnum } from "@crm/shared/enums/role.enum";
+import { ScheduleEnum } from "@crm/shared/enums/schedule.enum";
 import { File } from "@crm/shared/schemas/file.schema";
 import { Shop } from "@crm/shared/schemas/shop.schema";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
@@ -25,6 +26,10 @@ export class User extends Document {
   @Prop({ required: true })
   public dateOfBirth: Date;
 
+  /** Дата начала работы */
+  @Prop({ required: true })
+  public startDate: Date;
+
   /** Магазин, где работает */
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Shop.name, autopopulate: true })
   public shop: Shop;
@@ -44,6 +49,10 @@ export class User extends Document {
   /** Роли пользователя */
   @Prop({ required: true })
   public roles: RoleEnum[];
+
+  /** График работы */
+  @Prop({ type: String, required: true })
+  public schedule: ScheduleEnum;
 
   /** Зарплата */
   @Prop({ default: 0 })

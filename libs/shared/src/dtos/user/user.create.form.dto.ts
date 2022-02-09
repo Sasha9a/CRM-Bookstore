@@ -1,5 +1,6 @@
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
 import { RoleEnum } from "@crm/shared/enums/role.enum";
+import { ScheduleEnum } from "@crm/shared/enums/schedule.enum";
 import { Expose, Transform, Type } from "class-transformer";
 import { IsDate, IsDefined, IsOptional, IsString } from "class-validator";
 
@@ -28,6 +29,12 @@ export class UserCreateFormDto {
   @IsDate({ message: "Выберите дату" })
   public dateOfBirth: Date;
 
+  /** Дата начала работы */
+  @Expose()
+  @Transform(({ value }) => value ? new Date(value) : undefined)
+  @IsDate({ message: "Выберите дату" })
+  public startDate: Date;
+
   /** Магазин, где работает */
   @Expose()
   @IsOptional()
@@ -53,6 +60,11 @@ export class UserCreateFormDto {
   @Expose()
   @IsDefined({ message: "Выберите роли" })
   public roles: RoleEnum[];
+
+  /** График работы */
+  @Expose()
+  @IsDefined({ message: "Выберите график работы" })
+  public schedule: ScheduleEnum;
 
   /** Зарплата */
   @Expose()

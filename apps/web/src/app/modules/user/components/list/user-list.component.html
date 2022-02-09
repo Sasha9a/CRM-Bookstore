@@ -38,6 +38,7 @@
       </td>
       <td><a routerLink="/user/card/{{ user._id }}">{{ user.name }}</a></td>
       <td>{{ user.dateOfBirth | date: 'dd MMMM YYYY' }}</td>
+      <td>{{ user.startDate | date: 'dd MMMM YYYY' }}</td>
       <td>
         <p>{{ user.shop?.address }}</p>
         <p class="greytext">{{ user.shop?.metro }}</p>
@@ -45,12 +46,6 @@
       <td>{{ user.telephone | phone }}</td>
       <td>{{ user.address }}</td>
       <td>{{ user.position }}</td>
-      <td>{{ user.salary | number }} руб.</td>
-      <td>
-        <p *ngFor="let role of toUser(user).roles; last as isLast" [class.mb-1]='!isLast'>
-          <small>{{ role | roleName }}</small>
-        </p>
-      </td>
     </tr>
   </ng-template>
 </crm-table>

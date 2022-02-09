@@ -27,12 +27,11 @@ export class UserListComponent implements OnInit {
     {  },
     { label: 'ФИО', name: 'name', sort: 'name:string' },
     { label: 'Дата рождения', name: 'dateOfBirth', sort: 'dateOfBirth:date' },
+    { label: 'Дата начала работы', name: 'startDate', sort: 'startDate:date' },
     { label: 'Магазин', name: 'shop', sort: 'shop.address:string' },
     { label: 'Телефон', name: 'telephone', sort: 'telephone:string' },
     { label: 'Адрес жительства', name: 'address', sort: 'address:string' },
-    { label: 'Должность', name: 'position', sort: 'position:string' },
-    { label: 'Зарплата', name: 'salary', sort: 'salary:number' },
-    { label: 'Роли' }
+    { label: 'Должность', name: 'position', sort: 'position:string' }
   ];
 
   /** Параметры адресной строки */

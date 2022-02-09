@@ -8,6 +8,7 @@ const roleName = {
   [RoleEnum.SELLER]: 'Продавец'
 };
 
+/** Пайп конвертирует enum в человеческое название роли */
 @Pipe({
   name: 'roleName'
 })

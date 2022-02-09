@@ -29,6 +29,10 @@
           <td class="fw-semibold">{{ user.dateOfBirth | date: 'dd MMMM YYYY' }}</td>
         </tr>
         <tr>
+          <td class="fw-bold">Дата начала работы</td>
+          <td class="fw-semibold">{{ user.startDate | date: 'dd MMMM YYYY' }}</td>
+        </tr>
+        <tr>
           <td class="fw-bold">Магазин</td>
           <td class="fw-semibold">{{ user.shop?.address }}</td>
         </tr>
@@ -43,6 +47,10 @@
         <tr>
           <td class="fw-bold">Должность</td>
           <td class="fw-semibold">{{ user.position }}</td>
+        </tr>
+        <tr>
+          <td class="fw-bold">График работы</td>
+          <td class="fw-semibold">{{ user.schedule | scheduleName }}</td>
         </tr>
         <tr>
           <td class="fw-bold">Зарплата</td>

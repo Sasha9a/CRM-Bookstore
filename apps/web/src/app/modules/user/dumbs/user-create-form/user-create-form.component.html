@@ -33,6 +33,12 @@
       </div>
 
       <div class="field">
+        <label class="fw-bold required-field">Дата начала работы</label>
+        <crm-datepicker [(value)]="user.startDate" [class]="errors?.startDate ? 'ng-invalid ng-dirty' : ''"></crm-datepicker>
+        <small *ngIf="errors?.startDate" class="p-error">{{ errors.startDate | join }}</small>
+      </div>
+
+      <div class="field">
         <label class="fw-bold">Магазин</label>
         <div class="flex align-items-center">
           <crm-shop-single-select class="w-full"
@@ -81,6 +87,17 @@
                           dataKey="role">
         </crm-multi-select>
         <small *ngIf="errors?.roles" class="p-error">{{ errors.roles | join }}</small>
+      </div>
+
+      <div class="field">
+        <label class="fw-bold required-field">График работы</label>
+        <crm-single-select (selectedItemChange)="user.schedule = $event.schedule"
+                           [options]="schedules"
+                           [class]="errors?.schedule ? 'ng-invalid ng-dirty' : ''"
+                           dataKey="schedule"
+                           [filter]="false">
+        </crm-single-select>
+        <small *ngIf="errors?.schedule" class="p-error">{{ errors.schedule | join }}</small>
       </div>
 
       <div class="field">
