@@ -3,9 +3,11 @@ import { SalaryFormDto } from "@crm/shared/dtos/salary/salary.form.dto";
 import { SalaryInfoFormDto } from "@crm/shared/dtos/salary/salary.info.form.dto";
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
 import { UserDto } from "@crm/shared/dtos/user/user.dto";
+import { ScheduleEnum } from "@crm/shared/enums/schedule.enum";
 import { CrmTableColumn } from "@crm/web/core/models/crm-table-column";
 import { ShopStateService } from "@crm/web/core/services/shop/shop-state.service";
 import { UserStateService } from "@crm/web/core/services/user/user-state.service";
+import * as moment from "moment-timezone";
 import { forkJoin } from "rxjs";
 
 /** Компонент создания акта о зарплатах */
@@ -36,11 +38,13 @@ export class SalaryAddComponent implements OnInit {
 
   /** Столбцы таблицы */
   public itemColumns: CrmTableColumn[] = [
-    { label: 'ФИО', name: 'name', sort: 'name:string' },
-    { label: 'Премия', name: 'premium', sort: 'premium:number' },
-    { label: 'Штраф', name: 'fine', sort: 'fine:number' },
-    { label: 'Болезнь (дней)', name: 'sickDays', sort: 'sickDays:number' },
-    { label: 'Отпуск (дней)', name: 'vacationDays', sort: 'vacationDays:number' },
+    { label: 'ФИО', name: 'name', sort: 'user.name:string' },
+    { label: 'Оклад', name: 'salary', sort: 'user.salary:number' },
+    { label: 'Отработанные дни', name: 'daysWorked', sort: 'daysWorked:number', style: { 'max-width.px': 120 } },
+    { label: 'Премия' },
+    { label: 'Штраф' },
+    { label: 'Болезнь (дней)' },
+    { label: 'Отпуск (дней)' },
     { label: 'Описание' }
   ];
 
@@ -64,9 +68,10 @@ export class SalaryAddComponent implements OnInit {
    * @param dates Период */
   public setDateRange(dates: [Date, Date]) {
     [this.salary.dateFrom, this.salary.dateTo] = dates;
+    this.updateAnalytic();
   }
 
-  /** Обновляет таблицу */
+  /** Обновляет таблицу сотрудников */
   public updateSelectedUsers() {
     const selectedUsers = this.users.filter((user) => {
       return (this.selectedShop && user.shop?._id === this.selectedShop._id) || (!this.selectedShop && !user.shop);
@@ -76,6 +81,24 @@ export class SalaryAddComponent implements OnInit {
       const info = new SalaryInfoFormDto();
       info.user = selectUser;
       this.salary.info.push(info);
+    });
+    this.updateAnalytic();
+  }
+
+  /** Функция обновляет аналитику в таблице */
+  public updateAnalytic() {
+    this.salary.info.forEach((info) => {
+      if (info.user?.schedule === ScheduleEnum.FIVE && this.salary.dateFrom && this.salary.dateTo) {
+        const dateTo = moment(this.salary.dateTo).clone().add(1, 'day');
+        for (const date = moment(this.salary.dateFrom).clone(); date.isBefore(dateTo, 'day'); date.add(1, 'day')) {
+          if (Number(date.format('d')) >= 1 && Number(date.format('d')) <= 5) {
+            info.daysWorked++;
+          }
+        }
+      }
+      if (info.user?.schedule === ScheduleEnum.SHIFT && this.salary.dateFrom && this.salary.dateTo) {
+
+      }
     });
   }
 

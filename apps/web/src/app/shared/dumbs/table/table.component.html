@@ -12,7 +12,7 @@
     <tr *ngIf="!headerTemplate">
       <th *ngIf="selectable" style="width: 50px"></th>
       <th *ngFor="let column of columns" [ngStyle]="column.style" [ngClass]="column.class">
-        <div *ngIf="column.sort" (click)="setSort(column.sort)" class="pointer white-space-nowrap">
+        <div *ngIf="column.sort" (click)="setSort(column.sort)" class="pointer">
           {{ column.label }}
           <i *ngIf="column.sort" [ngClass]="getSortIconClass(column.sort)"></i>
         </div>

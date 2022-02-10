@@ -15,7 +15,7 @@ export class SalaryInfoFormDto {
   /** Отработанные дни */
   @Expose()
   @IsDefined({ message: "Введите отработанные дни" })
-  public daysWorked: number;
+  public daysWorked = 0;
 
   /** Премия */
   @Expose()
