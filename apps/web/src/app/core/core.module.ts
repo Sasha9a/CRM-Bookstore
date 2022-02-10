@@ -16,6 +16,10 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       {
+        path: '',
+        loadChildren: () => import('../modules/dashboard/dashboard.module').then(m => m.DashboardModule)
+      },
+      {
         path: 'shop',
         loadChildren: () => import('../modules/shop/shop.module').then(m => m.ShopModule)
       },
@@ -34,6 +38,10 @@ const routes: Routes = [
       {
         path: 'product',
         loadChildren: () => import('../modules/product/product.module').then(m => m.ProductModule)
+      },
+      {
+        path: 'salary',
+        loadChildren: () => import('../modules/salary/salary.module').then(m => m.SalaryModule)
       }
     ]
   },
