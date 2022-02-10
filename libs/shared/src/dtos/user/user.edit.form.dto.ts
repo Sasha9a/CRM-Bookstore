@@ -17,13 +17,13 @@ export class UserEditFormDto {
   /** Дата рождения */
   @Expose()
   @Transform(({ value }) => value ? new Date(value) : undefined)
-  @IsDate({ message: "Выберите дату" })
+  @IsDate({ message: "Выберите дату рождения" })
   public dateOfBirth: Date;
 
   /** Дата начала работы */
   @Expose()
   @Transform(({ value }) => value ? new Date(value) : undefined)
-  @IsDate({ message: "Выберите дату" })
+  @IsDate({ message: "Выберите дату начала работы" })
   public startDate: Date;
 
   /** Магазин, где работает */
