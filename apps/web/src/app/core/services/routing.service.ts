@@ -5,6 +5,14 @@ import { RoleEnum } from "@crm/shared/enums/role.enum";
 import { AuthService } from "@crm/web/core/services/user/auth.service";
 import { filter } from "rxjs";
 
+/** Начальные страницы в зависимости от роли */
+const roleRoutes: Record<RoleEnum, string> = {
+  [RoleEnum.GENERAL_MANAGER]: '/',
+  [RoleEnum.STORE_DIRECTOR]: '/',
+  [RoleEnum.MANAGER]: '/product',
+  [RoleEnum.SELLER]: '/product'
+};
+
 /** Сервис для удобной работы с перенаправлениями */
 @Injectable({
   providedIn: 'root'
@@ -29,11 +37,7 @@ export class RoutingService {
         this.currentUrl = event.url;
 
         if (event.url === '/') {
-          if (this.authService.checkRoles([RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR])) {
-            this.router.navigate([event.url]).catch(console.error);
-          } else {
-            this.router.navigate(['/product']).catch(console.error);
-          }
+          this.redirectByRole();
         }
       });
 
@@ -47,6 +51,17 @@ export class RoutingService {
 
   /** Функция перенаправляет пользователя на предыдущий URL */
   public goToPreviousUrl() {
-    this.router.navigateByUrl(this.previousUrl).catch(console.error);
+    if (this.previousUrl === '/') {
+      this.redirectByRole();
+    } else {
+      this.router.navigateByUrl(this.previousUrl).catch(console.error);
+    }
   }
+
+  /** Функция перенаправляет пользователя на главную страницу в зависимости от роля */
+  public redirectByRole() {
+    const path = roleRoutes[this.authService.currentUser.roles[0]] || '/login';
+    this.router.navigate([path]).catch(console.error);
+  }
+
 }

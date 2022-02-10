@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { UserLoginFormDto } from "@crm/shared/dtos/user/user.login.form.dto";
 import { ErrorService } from "@crm/web/core/services/error.service";
+import { RoutingService } from "@crm/web/core/services/routing.service";
 import { AuthService } from "@crm/web/core/services/user/auth.service";
 import { validate } from "@crm/web/core/services/validation/validate.service";
 
@@ -23,7 +24,8 @@ export class LoginComponent implements OnInit {
   public constructor(private readonly authService: AuthService,
                      private readonly errorService: ErrorService,
                      private readonly router: Router,
-                     private readonly route: ActivatedRoute) { }
+                     private readonly route: ActivatedRoute,
+                     private readonly routingService: RoutingService) { }
 
   public ngOnInit(): void {
     this.url = this.route.snapshot.queryParams['url'] || '/';
@@ -52,7 +54,11 @@ export class LoginComponent implements OnInit {
         next: () => {
           this.loading = false;
           this.errorService.addSuccessMessage("Вы авторизовались!");
-          this.router.navigate([this.url], { queryParams: this.queryParams }).catch(console.error);
+          if (this.url === '/') {
+            this.routingService.redirectByRole();
+          } else {
+            this.router.navigate([this.url], { queryParams: this.queryParams }).catch(console.error);
+          }
         },
         error: (err) => {
           this.loading = false;
