@@ -1,1 +1,80 @@
-<p>salary-add works!</p>
+<h3 class="dividing-header">Акт зарплаты</h3>
+
+<div *ngIf="!loading">
+  <div class="grid">
+    <div class="col-12 md:col-6 xl:col-4">
+      <div class="p-fluid">
+        <div class="field">
+          <label class="fw-bold required-field">Дата начисления зарплаты</label>
+          <crm-datepicker [(value)]="salary.date" [class]="errors?.date ? 'ng-invalid ng-dirty' : ''"></crm-datepicker>
+          <small *ngIf="errors?.date" class="p-error">{{ errors.date | join }}</small>
+        </div>
+
+        <div class="field">
+          <label class="fw-bold required-field">Период отработанных дней</label>
+          <crm-daterangepicker [value]="[salary.dateFrom, salary.dateTo]"
+                               [class]="errors?.dateFrom || errors?.dateTo ? 'ng-invalid ng-dirty' : ''"
+                               (changeValue)="setDateRange($event)">
+          </crm-daterangepicker>
+          <small *ngIf="errors?.dateFrom" class="p-error">{{ errors.dateFrom | join }}</small>
+          <small *ngIf="errors?.dateTo" class="p-error">{{ errors.dateTo | join }}</small>
+        </div>
+
+        <div class="field">
+          <label class="fw-bold">Описание</label>
+          <textarea pInputTextarea [(ngModel)]="salary.description" [autoResize]="true"></textarea>
+          <small *ngIf="errors?.description" class="p-error">{{ errors.description | join }}</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <h4 class="dividing-header">Сотрудники</h4>
+
+      <div class="grid">
+        <div class="col-12 xl:col-4">
+          <crm-shop-single-select [shops]="shops"
+                                  [(selectedShop)]="selectedShop"
+                                  labelInput="Магазин"
+                                  (selectedShopChange)="updateSelectedUsers()">
+          </crm-shop-single-select>
+        </div>
+      </div>
+
+      <crm-table name="salary.add" styleClass="mt-3"
+                 [columns]="itemColumns"
+                 [values]="salary.info"
+                 [autoLayout]="true">
+        <ng-template #rowTemplate let-info="item" let-rowIndex="rowIndex">
+          <tr *ngIf="toInfo(info) as info">
+            <td>
+              <p class="w-15rem">{{ info.user?.name }}</p>
+            </td>
+            <td>
+              <p-inputNumber [(ngModel)]="info.premium" [inputStyle]="{ 'max-width.px': 100 }"></p-inputNumber>
+            </td>
+            <td>
+              <p-inputNumber [(ngModel)]="info.fine"></p-inputNumber>
+            </td>
+            <td>
+              <p-inputNumber [(ngModel)]="info.sickDays"></p-inputNumber>
+            </td>
+            <td>
+              <p-inputNumber [(ngModel)]="info.vacationDays"></p-inputNumber>
+            </td>
+            <td>
+              <textarea pInputTextarea [(ngModel)]="info.description" [autoResize]="true"></textarea>
+            </td>
+          </tr>
+        </ng-template>
+      </crm-table>
+    </div>
+
+    <div class="col-12 mt-4">
+      <button pButton label="Сохранить" icon="pi pi-check" class="p-button-success mr-2"></button>
+      <crm-go-back-button [route]="'/'"></crm-go-back-button>
+    </div>
+  </div>
+</div>
+
+<crm-spinner *ngIf="loading"></crm-spinner>

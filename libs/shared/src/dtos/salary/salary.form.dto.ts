@@ -34,7 +34,7 @@ export class SalaryFormDto {
   @ArrayMinSize(1, { message: "Список сотрудников пустой" })
   @ValidateNested()
   @Type(() => SalaryInfoFormDto)
-  public info?: SalaryInfoFormDto[];
+  public info?: SalaryInfoFormDto[] = [];
 
   /** Итого сумма зарплаты */
   @Expose()

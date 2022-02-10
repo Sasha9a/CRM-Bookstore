@@ -24,20 +24,11 @@
 
       <div class="field">
         <label class="fw-bold">Магазин</label>
-        <div class="flex align-items-center">
-          <crm-shop-single-select class="w-full"
-                                  [(selectedShop)]="user.shop"
-                                  [disabled]="isDirector"
-                                  [shops]="shops"
-                                  [class]="errors?.shop ? 'ng-invalid ng-dirty' : ''">
-          </crm-shop-single-select>
-          <button *ngIf="user.shop && !isDirector" pButton pRipple
-                  type="button"
-                  icon="pi pi-times"
-                  class="p-button-rounded p-button-danger p-button-text ml-2"
-                  (click)="user.shop = undefined">
-          </button>
-        </div>
+        <crm-shop-single-select [(selectedShop)]="user.shop"
+                                [disabled]="isDirector"
+                                [shops]="shops"
+                                [class]="errors?.shop ? 'ng-invalid ng-dirty' : ''">
+        </crm-shop-single-select>
         <small *ngIf="errors?.shop" class="p-error">{{ errors.shop | join }}</small>
       </div>
 
