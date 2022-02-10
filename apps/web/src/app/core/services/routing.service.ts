@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Title } from "@angular/platform-browser";
 import { ActivationEnd, NavigationEnd, Router } from "@angular/router";
+import { RoleEnum } from "@crm/shared/enums/role.enum";
+import { AuthService } from "@crm/web/core/services/user/auth.service";
 import { filter } from "rxjs";
 
 /** Сервис для удобной работы с перенаправлениями */
@@ -16,6 +18,7 @@ export class RoutingService {
   public previousUrl = '/';
 
   public constructor(private readonly router: Router,
+                     private readonly authService: AuthService,
                      private readonly titleService: Title) {
 
     /** Тут выполняется событие при изменении URL */
@@ -26,7 +29,11 @@ export class RoutingService {
         this.currentUrl = event.url;
 
         if (event.url === '/') {
-          this.router.navigate([event.url]).catch(console.error);
+          if (this.authService.checkRoles([RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR])) {
+            this.router.navigate([event.url]).catch(console.error);
+          } else {
+            this.router.navigate(['/product']).catch(console.error);
+          }
         }
       });
 
