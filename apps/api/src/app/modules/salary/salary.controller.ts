@@ -2,10 +2,11 @@ import { Roles } from "@crm/api/core/decorators/role.decorator";
 import { JwtAuthGuard } from "@crm/api/core/guards/jwt-auth.guard";
 import { RoleGuard } from "@crm/api/core/guards/role.guard";
 import { ValidateObjectId } from "@crm/api/core/pipes/validate.object.id.pipes";
+import { queryParamParser } from "@crm/api/core/services/query-param-parser.service";
 import { SalaryService } from "@crm/api/modules/salary/salary.service";
 import { SalaryFormDto } from "@crm/shared/dtos/salary/salary.form.dto";
 import { RoleEnum } from "@crm/shared/enums/role.enum";
-import { Body, Controller, Delete, Get, HttpStatus, NotFoundException, Param, Post, Res, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpStatus, NotFoundException, Param, Post, Query, Res, UseGuards } from "@nestjs/common";
 import { Response } from "express";
 
 /** Контроллер принимающие запросы по зарплатам */
@@ -17,12 +18,13 @@ export class SalaryController {
 
   /** Get-запрос на получение списка всех актов о зарплатах
    * @param res переменная отвечает за возврат данных клиенту
+   * @param queryParams параметры от клиента
    * @return Возвращает массив актов */
   @Roles(RoleEnum.GENERAL_MANAGER)
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Get()
-  public async getAll(@Res() res: Response) {
-    const entities = await this.salaryService.findAll();
+  public async getAll(@Res() res: Response, @Query() queryParams: any) {
+    const entities = await this.salaryService.findAll(queryParamParser(queryParams).filter);
     return res.status(HttpStatus.OK).json(entities).end();
   }
 
@@ -32,9 +34,21 @@ export class SalaryController {
    * @return Возвращает массив актов */
   @Roles(RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR)
   @UseGuards(JwtAuthGuard, RoleGuard)
+  @Get('/user/:id')
+  public async getAllByUser(@Res() res: Response, @Param('id', new ValidateObjectId()) id: string) {
+    const entities = await this.salaryService.getAllByUser(id);
+    return res.status(HttpStatus.OK).json(entities).end();
+  }
+
+  /** Get-запрос на получение акта зарплаты по ID
+   * @param res переменная отвечает за возврат данных клиенту
+   * @param id ID акта
+   * @return Возвращает акт о зарплате */
+  @Roles(RoleEnum.GENERAL_MANAGER)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Get(':id')
-  public async getAllFromUser(@Res() res: Response, @Param('id', new ValidateObjectId()) id: string) {
-    const entities = await this.salaryService.findAllFromUser(id);
+  public async getById(@Res() res: Response, @Param('id', new ValidateObjectId()) id: string) {
+    const entities = await this.salaryService.findById(id);
     return res.status(HttpStatus.OK).json(entities).end();
   }
 

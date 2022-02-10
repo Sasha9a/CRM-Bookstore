@@ -16,7 +16,7 @@ export class SalaryService extends BaseService<Salary> {
    * @param userId ID сотрудника
    * @param limit Сколько данных нужно получить
    * @return Массив данных о зарплатах */
-  public findAllFromUser(userId: string, limit = 10): Promise<Salary[]> {
+  public getAllByUser(userId: string, limit = 10): Promise<Salary[]> {
     return this.salaryModel.find({ info: { $elemMatch: { user: { _id: userId } } } }).sort({ date: -1 }).limit(limit).exec();
   }
 
