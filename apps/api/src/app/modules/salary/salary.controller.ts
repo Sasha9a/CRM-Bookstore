@@ -30,7 +30,7 @@ export class SalaryController {
    * @param res переменная отвечает за возврат данных клиенту
    * @param id ID сотрудника
    * @return Возвращает массив актов */
-  @Roles(RoleEnum.GENERAL_MANAGER)
+  @Roles(RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR)
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Get(':id')
   public async getAllFromUser(@Res() res: Response, @Param('id', new ValidateObjectId()) id: string) {
