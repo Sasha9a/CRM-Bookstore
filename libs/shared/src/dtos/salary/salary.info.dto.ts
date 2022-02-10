@@ -8,7 +8,7 @@ export class SalaryInfoDto {
   /** Сотрудник */
   @Expose()
   @Type(() => UserDto)
-  public user: UserDto;
+  public user: Partial<UserDto>;
 
   /** Отработанные дни */
   @Expose()

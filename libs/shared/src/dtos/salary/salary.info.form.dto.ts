@@ -10,7 +10,7 @@ export class SalaryInfoFormDto {
   @Expose()
   @IsDefined({ message: "Не выбран сотрудник" })
   @Type(() => UserDto)
-  public user: UserDto;
+  public user: Partial<UserDto>;
 
   /** Отработанные дни */
   @Expose()

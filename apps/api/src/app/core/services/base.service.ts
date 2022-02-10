@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { Model } from "mongoose";
+import { FilterQuery, Model } from "mongoose";
 
 /** Сервис выполняющие операции с БД сущности */
 @Injectable()
@@ -20,7 +20,7 @@ export class BaseService<T> {
    * @param filter Фильтры
    * @param projection проекция данных
    * @return Возвращает массив сущностей */
-  public async findAll(filter?: any, projection?: any): Promise<T[]> {
+  public async findAll(filter?: FilterQuery<T>, projection?: any): Promise<T[]> {
     return await this.model.find(filter, projection).exec();
   }
 
