@@ -52,7 +52,8 @@ export class CommonLayoutComponent implements OnInit {
         label: 'Рабочий стол',
         icon: PrimeIcons.DESKTOP,
         routerLink: '/',
-        routerLinkActiveOptions: { exact: true }
+        routerLinkActiveOptions: { exact: true },
+        visible: this.authService.checkRoles([RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR])
       },
       {
         label: 'Магазины',
