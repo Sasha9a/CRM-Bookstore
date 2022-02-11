@@ -12,6 +12,11 @@ export class SalaryInfoFormDto {
   @Type(() => UserDto)
   public user: Partial<UserDto>;
 
+  /** Всего рабочих дней */
+  @Expose()
+  @IsDefined({ message: "Введите всего рабочих дней" })
+  public daysWorkedAll = 0;
+
   /** Отработанные дни */
   @Expose()
   @IsDefined({ message: "Введите отработанные дни" })

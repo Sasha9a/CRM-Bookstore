@@ -10,6 +10,10 @@ export class SalaryInfoDto {
   @Type(() => UserDto)
   public user: Partial<UserDto>;
 
+  /** Всего рабочих дней */
+  @Expose()
+  public daysWorkedAll: number;
+
   /** Отработанные дни */
   @Expose()
   public daysWorked: number;
