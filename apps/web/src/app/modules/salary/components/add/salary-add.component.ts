@@ -40,6 +40,7 @@ export class SalaryAddComponent implements OnInit {
   public itemColumns: CrmTableColumn[] = [
     { label: 'ФИО', name: 'name', sort: 'user.name:string' },
     { label: 'Оклад', name: 'salary', sort: 'user.salary:number' },
+    { label: 'Всего рабочих дней', name: 'daysWorkedAll', sort: 'daysWorkedAll:number', style: { 'max-width.px': 120 } },
     { label: 'Отработанные дни', name: 'daysWorked', sort: 'daysWorked:number', style: { 'max-width.px': 120 } },
     { label: 'Премия' },
     { label: 'Штраф' },
@@ -101,7 +102,7 @@ export class SalaryAddComponent implements OnInit {
       if (dateFrom) {
         for (const date = dateFrom.clone(); date.isBefore(dateTo, 'day'); date.add(1, 'day')) {
           if (Number(date.format('d')) >= 1 && Number(date.format('d')) <= 5) {
-            info.daysWorked++;
+            info.daysWorkedAll++;
           }
         }
       }
@@ -128,9 +129,9 @@ export class SalaryAddComponent implements OnInit {
           dateFrom = periodInfo.to.clone().add(1, 'day');
           if (periodInfo.isWorked) {
             if (periodInfo.to.isSame(moment(this.salary.dateFrom), 'day')) {
-              info.daysWorked++;
+              info.daysWorkedAll++;
             } else if (periodInfo.to.isSame(moment(this.salary.dateFrom).clone().add(1, 'day'), 'day') && periodInfo.to.isBefore(dateTo, 'day')) {
-              info.daysWorked += 2;
+              info.daysWorkedAll += 2;
             }
           }
         } else {
@@ -140,14 +141,14 @@ export class SalaryAddComponent implements OnInit {
       if (dateFrom) {
         for (const date = dateFrom.clone(); date.isBefore(dateTo, 'day'); date.add(2, 'day')) {
           if (isWorked) {
-            info.daysWorked += 2;
+            info.daysWorkedAll += 2;
           }
           isWorked = !isWorked;
         }
       }
     }
 
-    info.daysWorked -= (info.sickDays ?? 0) - (info.vacationDays ?? 0);
+    info.daysWorked = info.daysWorkedAll - (info.sickDays ?? 0) - (info.vacationDays ?? 0);
     if (info.daysWorked < 0) {
       info.daysWorked = 0;
     }
