@@ -7,6 +7,7 @@ import { ScheduleEnum } from "@crm/shared/enums/schedule.enum";
 import { CrmTableColumn } from "@crm/web/core/models/crm-table-column";
 import { ShopStateService } from "@crm/web/core/services/shop/shop-state.service";
 import { UserStateService } from "@crm/web/core/services/user/user-state.service";
+import { Moment } from "moment-timezone";
 import * as moment from "moment-timezone";
 import { forkJoin } from "rxjs";
 
@@ -96,6 +97,8 @@ export class SalaryAddComponent implements OnInit {
   /** Функция обновляет аналитику в таблице для конкретного сотрудника
    * @param info информация */
   public updateAnalyticUser(info: SalaryInfoFormDto) {
+    info.daysWorkedAll = 0;
+    info.daysWorked = 0;
     if (info.user?.schedule === ScheduleEnum.FIVE && this.salary.dateFrom && this.salary.dateTo) {
       const dateTo = moment(this.salary.dateTo).clone().add(1, 'day');
       const dateFrom = moment(this.salary.dateFrom).isBefore(moment(info.user?.startDate)) ? moment(info.user?.startDate) : moment(this.salary.dateFrom);
@@ -121,7 +124,7 @@ export class SalaryAddComponent implements OnInit {
       }
 
       const dateTo = moment(this.salary.dateTo).clone().add(1, 'day');
-      let dateFrom;
+      let dateFrom: Moment;
       if (moment(this.salary.dateFrom).isBefore(moment(info.user?.startDate))) {
         dateFrom = moment(info.user?.startDate);
       } else {
@@ -140,8 +143,10 @@ export class SalaryAddComponent implements OnInit {
       }
       if (dateFrom) {
         for (const date = dateFrom.clone(); date.isBefore(dateTo, 'day'); date.add(2, 'day')) {
-          if (isWorked) {
+          if (isWorked && date.clone().add(1, 'day').isBefore(dateTo, 'day')) {
             info.daysWorkedAll += 2;
+          } else if (isWorked && !date.clone().add(1, 'day').isBefore(dateTo, 'day')) {
+            info.daysWorkedAll++;
           }
           isWorked = !isWorked;
         }
