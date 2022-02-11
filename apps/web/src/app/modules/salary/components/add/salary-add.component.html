@@ -58,21 +58,21 @@
             </td>
             <td>
               <div class="p-inputgroup">
-                <p-inputNumber [(ngModel)]="info.premium" [inputStyle]="{ 'min-width.px': 80 }"></p-inputNumber>
+                <p-inputNumber [(ngModel)]="info.premium" [inputStyle]="{ 'min-width.px': 80 }" (ngModelChange)="updateAnalyticUser(info)"></p-inputNumber>
                 <span class="p-inputgroup-addon">руб.</span>
               </div>
             </td>
             <td>
               <div class="p-inputgroup">
-                <p-inputNumber [(ngModel)]="info.fine" [inputStyle]="{ 'min-width.px': 80 }"></p-inputNumber>
+                <p-inputNumber [(ngModel)]="info.fine" [inputStyle]="{ 'min-width.px': 80 }" (ngModelChange)="updateAnalyticUser(info)"></p-inputNumber>
                 <span class="p-inputgroup-addon">руб.</span>
               </div>
             </td>
             <td>
-              <p-inputNumber [(ngModel)]="info.sickDays" inputStyleClass="w-full"></p-inputNumber>
+              <p-inputNumber [(ngModel)]="info.sickDays" inputStyleClass="w-full" (ngModelChange)="updateAnalyticUser(info)"></p-inputNumber>
             </td>
             <td>
-              <p-inputNumber [(ngModel)]="info.vacationDays" inputStyleClass="w-full"></p-inputNumber>
+              <p-inputNumber [(ngModel)]="info.vacationDays" inputStyleClass="w-full" (ngModelChange)="updateAnalyticUser(info)"></p-inputNumber>
             </td>
             <td>
               <textarea pInputTextarea [(ngModel)]="info.description" [autoResize]="true"></textarea>

@@ -68,7 +68,7 @@ export class SalaryAddComponent implements OnInit {
    * @param dates Период */
   public setDateRange(dates: [Date, Date]) {
     [this.salary.dateFrom, this.salary.dateTo] = dates;
-    this.updateAnalytic();
+    this.updateAnalyticTable();
   }
 
   /** Обновляет таблицу сотрудников */
@@ -82,24 +82,75 @@ export class SalaryAddComponent implements OnInit {
       info.user = selectUser;
       this.salary.info.push(info);
     });
-    this.updateAnalytic();
+    this.updateAnalyticTable();
   }
 
   /** Функция обновляет аналитику в таблице */
-  public updateAnalytic() {
+  public updateAnalyticTable() {
     this.salary.info.forEach((info) => {
-      if (info.user?.schedule === ScheduleEnum.FIVE && this.salary.dateFrom && this.salary.dateTo) {
-        const dateTo = moment(this.salary.dateTo).clone().add(1, 'day');
-        for (const date = moment(this.salary.dateFrom).clone(); date.isBefore(dateTo, 'day'); date.add(1, 'day')) {
+      this.updateAnalyticUser(info);
+    });
+  }
+
+  /** Функция обновляет аналитику в таблице для конкретного сотрудника
+   * @param info информация */
+  public updateAnalyticUser(info: SalaryInfoFormDto) {
+    if (info.user?.schedule === ScheduleEnum.FIVE && this.salary.dateFrom && this.salary.dateTo) {
+      const dateTo = moment(this.salary.dateTo).clone().add(1, 'day');
+      const dateFrom = moment(this.salary.dateFrom).isBefore(moment(info.user?.startDate)) ? moment(info.user?.startDate) : moment(this.salary.dateFrom);
+      if (dateFrom) {
+        for (const date = dateFrom.clone(); date.isBefore(dateTo, 'day'); date.add(1, 'day')) {
           if (Number(date.format('d')) >= 1 && Number(date.format('d')) <= 5) {
             info.daysWorked++;
           }
         }
       }
-      if (info.user?.schedule === ScheduleEnum.SHIFT && this.salary.dateFrom && this.salary.dateTo) {
-
+    }
+    if (info.user?.schedule === ScheduleEnum.SHIFT && this.salary.dateFrom && this.salary.dateTo) {
+      let isWorked = true;
+      const dateStart = moment(info.user?.startDate);
+      let periodInfo;
+      for (const date = dateStart.clone(); date.isBefore(this.salary.dateFrom, 'day'); date.add(2, 'day')) {
+        periodInfo = {
+          from: date,
+          to: date.clone().add(1, 'day'),
+          isWorked: isWorked
+        };
+        isWorked = !isWorked;
       }
-    });
+
+      const dateTo = moment(this.salary.dateTo).clone().add(1, 'day');
+      let dateFrom;
+      if (moment(this.salary.dateFrom).isBefore(moment(info.user?.startDate))) {
+        dateFrom = moment(info.user?.startDate);
+      } else {
+        if (periodInfo) {
+          dateFrom = periodInfo.to.clone().add(1, 'day');
+          if (periodInfo.isWorked) {
+            if (periodInfo.to.isSame(moment(this.salary.dateFrom), 'day')) {
+              info.daysWorked++;
+            } else if (periodInfo.to.isSame(moment(this.salary.dateFrom).clone().add(1, 'day'), 'day') && periodInfo.to.isBefore(dateTo, 'day')) {
+              info.daysWorked += 2;
+            }
+          }
+        } else {
+          dateFrom = moment(this.salary.dateFrom);
+        }
+      }
+      if (dateFrom) {
+        for (const date = dateFrom.clone(); date.isBefore(dateTo, 'day'); date.add(2, 'day')) {
+          if (isWorked) {
+            info.daysWorked += 2;
+          }
+          isWorked = !isWorked;
+        }
+      }
+    }
+
+    info.daysWorked -= (info.sickDays ?? 0) - (info.vacationDays ?? 0);
+    if (info.daysWorked < 0) {
+      info.daysWorked = 0;
+    }
   }
 
   /** Функция типизирует переменную
