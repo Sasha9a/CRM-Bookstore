@@ -13,14 +13,15 @@
         <div class="field">
           <label class="fw-bold required-field">Период отработанных дней</label>
           <crm-daterangepicker [value]="[salary.dateFrom, salary.dateTo]"
-                               [class]="errors?.dateFrom || errors?.dateTo ? 'ng-invalid ng-dirty' : ''"
+                               [calendarClass]="errors?.dateFrom || errors?.dateTo ? 'ng-invalid ng-dirty' : ''"
                                [maxDate]="maxDate"
                                [showButtons]="false"
                                (changeValue)="setDateRange($event)"
                                (changeAnyDate)="getDateInRange($event)">
           </crm-daterangepicker>
-          <small *ngIf="errors?.dateFrom" class="p-error">{{ errors.dateFrom | join }}</small>
-          <small *ngIf="errors?.dateTo" class="p-error">{{ errors.dateTo | join }}</small>
+          <small *ngIf="errors?.dateFrom && !errors?.dateTo" class="p-error">{{ errors.dateFrom | join }}</small>
+          <small *ngIf="errors?.dateTo && !errors?.dateFrom" class="p-error">{{ errors.dateTo | join }}</small>
+          <small *ngIf="errors?.dateTo && errors?.dateFrom" class="p-error">{{ errors.dateFrom | join }}, {{ errors.dateTo | join }}</small>
         </div>
 
         <div class="field">
@@ -44,23 +45,34 @@
         </div>
       </div>
 
-      <crm-table name="salary.add" styleClass="mt-3"
+      <crm-table name="salary.add" styleClass="mt-3 sticky-header"
                  [columns]="itemColumns"
-                 [values]="salary.info"
-                 [autoLayout]="true">
-        <ng-template #rowTemplate let-info="item" let-rowIndex="rowIndex">
+                 [values]="salary.info">
+        <ng-template #rowTemplate let-info="item">
           <tr *ngIf="toInfo(info) as info">
             <td>
-              <a class="w-15rem" target="_blank" routerLink="/user/card/{{ info.user?._id }}">{{ info.user?.name }}</a>
+              <a target="_blank" routerLink="/user/card/{{ info.user?._id }}">{{ info.user?.name }}</a>
             </td>
-            <td>
-              <p class="w-6rem">{{ info.user?.salary ?? 0 | number }} руб.</p>
+            <td nowrap>
+              <p>{{ info.user?.salary || 0 | number: '.0-2' }} руб.</p>
             </td>
             <td>
               <p>{{ info.daysWorkedAll }}</p>
             </td>
             <td>
               <p>{{ info.daysWorked }}</p>
+            </td>
+            <td nowrap>
+              <p>{{ info.sickPay || 0 | number: '.0-2' }} руб.</p>
+            </td>
+            <td nowrap>
+              <p>{{ info.vacationPay || 0 | number: '.0-2' }} руб.</p>
+            </td>
+            <td nowrap>
+              <p>{{ info.sumEmployee || 0 | number: '.0-2' }} руб.</p>
+            </td>
+            <td nowrap>
+              <p>{{ info.sumTaxes || 0 | number: '.0-2' }} руб.</p>
             </td>
             <td>
               <div class="p-inputgroup">
@@ -85,11 +97,19 @@
             </td>
           </tr>
         </ng-template>
+        <ng-template #footerTemplate>
+          <tr>
+            <td>
+              <p class="fw-bold text-left">ИТОГО: {{ salary.sum || 0 | number: '.0-2' }} руб.</p>
+            </td>
+            <td colspan="99"></td>
+          </tr>
+        </ng-template>
       </crm-table>
     </div>
 
     <div class="col-12 mt-4">
-      <button pButton label="Сохранить" icon="pi pi-check" class="p-button-success mr-2"></button>
+      <button pButton label="Сохранить" icon="pi pi-check" class="p-button-success mr-2" (click)="create()"></button>
       <crm-go-back-button [route]="'/'"></crm-go-back-button>
     </div>
   </div>

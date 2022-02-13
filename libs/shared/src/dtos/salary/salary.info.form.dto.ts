@@ -42,6 +42,16 @@ export class SalaryInfoFormDto {
   @IsOptional()
   public vacationDays?: number;
 
+  /** Денег выплаченные по больничному */
+  @Expose()
+  @IsOptional()
+  public sickPay?: number;
+
+  /** Денег выплаченные по отпуску */
+  @Expose()
+  @IsOptional()
+  public vacationPay?: number;
+
   /** Описание */
   @Expose()
   @IsOptional()

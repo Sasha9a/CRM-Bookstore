@@ -1,12 +1,17 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from "@angular/router";
+import { SalaryDto } from "@crm/shared/dtos/salary/salary.dto";
 import { SalaryFormDto } from "@crm/shared/dtos/salary/salary.form.dto";
 import { SalaryInfoFormDto } from "@crm/shared/dtos/salary/salary.info.form.dto";
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
 import { UserDto } from "@crm/shared/dtos/user/user.dto";
 import { ScheduleEnum } from "@crm/shared/enums/schedule.enum";
 import { CrmTableColumn } from "@crm/web/core/models/crm-table-column";
+import { ErrorService } from "@crm/web/core/services/error.service";
+import { SalaryStateService } from "@crm/web/core/services/salary/salary-state.service";
 import { ShopStateService } from "@crm/web/core/services/shop/shop-state.service";
 import { UserStateService } from "@crm/web/core/services/user/user-state.service";
+import { validate } from "@crm/web/core/services/validation/validate.service";
 import { Moment } from "moment-timezone";
 import * as moment from "moment-timezone";
 import { forkJoin } from "rxjs";
@@ -39,10 +44,14 @@ export class SalaryAddComponent implements OnInit {
 
   /** Столбцы таблицы */
   public itemColumns: CrmTableColumn[] = [
-    { label: 'ФИО', name: 'name', sort: 'user.name:string' },
+    { label: 'ФИО', name: 'name', sort: 'user.name:string', style: { 'min-width.rem': 15 } },
     { label: 'Оклад', name: 'salary', sort: 'user.salary:number' },
     { label: 'Всего рабочих дней', name: 'daysWorkedAll', sort: 'daysWorkedAll:number', style: { 'max-width.px': 120 } },
     { label: 'Отработанные дни', name: 'daysWorked', sort: 'daysWorked:number', style: { 'max-width.px': 120 } },
+    { label: 'Больничный', name: 'sickPay', sort: 'sickPay:number' },
+    { label: 'Отпускные', name: 'vacationPay', sort: 'vacationPay:number' },
+    { label: 'Зарплата', name: 'sumEmployee', sort: 'sumEmployee:number' },
+    { label: 'Зарплата с налогами', name: 'sumTaxes', sort: 'sumTaxes:number' },
     { label: 'Премия' },
     { label: 'Штраф' },
     { label: 'Болезнь (дней)' },
@@ -60,7 +69,10 @@ export class SalaryAddComponent implements OnInit {
   };
 
   public constructor(private readonly userStateService: UserStateService,
-                     private readonly shopStateService: ShopStateService) { }
+                     private readonly shopStateService: ShopStateService,
+                     private readonly salaryStateService: SalaryStateService,
+                     private readonly errorService: ErrorService,
+                     private readonly router: Router) { }
 
   public ngOnInit(): void {
     forkJoin(
@@ -163,10 +175,19 @@ export class SalaryAddComponent implements OnInit {
       }
     }
 
-    info.daysWorked = info.daysWorkedAll - (info.sickDays ?? 0) - (info.vacationDays ?? 0);
+    info.daysWorked = info.daysWorkedAll - (info.sickDays || 0) - (info.vacationDays || 0);
     if (info.daysWorked < 0) {
       info.daysWorked = 0;
     }
+
+    const salaryWithoutTaxes = (info.user?.salary || 0) / (this.maxWorkDaysToMonth[info.user?.schedule] || 0) * info.daysWorked;
+    info.sumEmployee = salaryWithoutTaxes * 0.87 + (info.premium || 0) - (info.fine || 0);
+    info.sumTaxes = salaryWithoutTaxes + (salaryWithoutTaxes * 0.22) + (salaryWithoutTaxes * 0.051)
+      + (salaryWithoutTaxes * 0.029) + (salaryWithoutTaxes * 0.002) + (info.premium || 0) - (info.fine || 0);
+    info.sickPay = (info.user?.salary || 0) * 0.87 / (this.maxWorkDaysToMonth[info.user?.schedule] || 0) * (info.sickDays || 0) * 0.4;
+    info.vacationPay = (info.user?.salary || 0) * 0.87 / (this.maxWorkDaysToMonth[info.user?.schedule] || 0) * (info.vacationDays || 0) * 0.7;
+
+    this.updateSum();
   }
 
   /** Функция обновляет данные о максимальном кол-ве рабочих дней в месяце */
@@ -195,6 +216,14 @@ export class SalaryAddComponent implements OnInit {
     }
   }
 
+  /** Функция обновляет итоговую сумму */
+  public updateSum() {
+    this.salary.sum = 0;
+    this.salary.info.forEach((info) => {
+      this.salary.sum += (info.sumTaxes || 0) + (info.sickPay || 0) + (info.vacationPay || 0);
+    });
+  }
+
   /** Функция отслеживает выбранный период
    * @param dates период дат */
   public getDateInRange(dates: [Date, Date]) {
@@ -203,6 +232,27 @@ export class SalaryAddComponent implements OnInit {
       this.maxDate = dateTo.isBefore(moment()) ? dateTo.toDate() : moment().toDate();
     } else if (dates[0] && dates[1]) {
       this.maxDate = moment().toDate();
+    }
+  }
+
+  /** Функция создает акт */
+  public create() {
+    this.loading = true;
+
+    const { valid, errors } = validate(this.salary, SalaryFormDto);
+    if (!valid) {
+      this.errors = errors;
+      this.errorService.errorValues<SalaryFormDto>(this.errors);
+      console.log(this.errors);
+      this.loading = false;
+    } else {
+      this.errors = null;
+
+      this.salaryStateService.create<SalaryFormDto, SalaryDto>(this.salary).subscribe(() => {
+        this.loading = false;
+        this.errorService.addSuccessMessage("Акт о зарплате создан");
+        this.router.navigate(['/']).catch(console.error);
+      }, () => this.loading = false);
     }
   }
 

@@ -20,6 +20,7 @@ export class DaterangepickerComponent {
   @Input() public inputId = `${Math.random()}`;
   @Input() public placeholder = '\u00A0';
   @Input() public readonlyInput = true;
+  @Input() public calendarClass = '';
   @Output() public changeValue = new EventEmitter<[Date, Date]>();
   @Output() public changeAnyDate = new EventEmitter<[Date, Date]>();
 

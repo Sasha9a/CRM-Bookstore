@@ -34,6 +34,14 @@ export class SalaryInfoDto {
   @Expose()
   public vacationDays: number;
 
+  /** Денег выплаченные по больничному */
+  @Expose()
+  public sickPay: number;
+
+  /** Денег выплаченные по отпуску */
+  @Expose()
+  public vacationPay: number;
+
   /** Описание */
   @Expose()
   public description: string;
