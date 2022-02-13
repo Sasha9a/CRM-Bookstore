@@ -67,6 +67,14 @@
       </button>
     </ng-container>
   </div>
+
+  <div *ngIf="payslip" class="col-12">
+    <h3 class="dividing-header">Расчетный лист</h3>
+
+    <crm-table name="payslip">
+
+    </crm-table>
+  </div>
 </div>
 
 <crm-spinner *ngIf="loading"></crm-spinner>

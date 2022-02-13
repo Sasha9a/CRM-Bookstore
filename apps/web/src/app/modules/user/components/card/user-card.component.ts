@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
+import { SalaryDto } from "@crm/shared/dtos/salary/salary.dto";
 import { UserDto } from "@crm/shared/dtos/user/user.dto";
 import { RoleEnum } from "@crm/shared/enums/role.enum";
 import { ConfirmDialogService } from "@crm/web/core/services/confirm-dialog.service";
 import { ErrorService } from "@crm/web/core/services/error.service";
+import { SalaryStateService } from "@crm/web/core/services/salary/salary-state.service";
 import { AuthService } from "@crm/web/core/services/user/auth.service";
 import { UserStateService } from "@crm/web/core/services/user/user-state.service";
 
@@ -19,6 +21,9 @@ export class UserCardComponent implements OnInit {
   /** Пользователь */
   public user: UserDto;
 
+  /** Расчетный лист сотрудника */
+  public payslip: SalaryDto[];
+
   /** Идет загрузка или нет */
   public loading = true;
 
@@ -31,6 +36,7 @@ export class UserCardComponent implements OnInit {
   public constructor(private readonly route: ActivatedRoute,
                      private readonly errorService: ErrorService,
                      private readonly userStateService: UserStateService,
+                     private readonly salaryStateService: SalaryStateService,
                      private readonly confirmDialogService: ConfirmDialogService,
                      private readonly authService: AuthService,
                      private readonly router: Router,
@@ -49,6 +55,7 @@ export class UserCardComponent implements OnInit {
       if (this.authService.checkRoles([RoleEnum.GENERAL_MANAGER]) || (
         this.authService.checkRoles([RoleEnum.STORE_DIRECTOR]) && this.authService.currentUser?.shop?._id === this.user?.shop?._id
       )) {
+        this.salaryStateService.getAllByUser(userId).subscribe((payslip) => this.payslip = payslip);
         this.isEditable = true;
       }
       this.loading = false;

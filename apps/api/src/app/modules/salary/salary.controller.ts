@@ -37,6 +37,10 @@ export class SalaryController {
   @Get('/user/:id')
   public async getAllByUser(@Res() res: Response, @Param('id', new ValidateObjectId()) id: string) {
     const entities = await this.salaryService.getAllByUser(id);
+    entities.forEach((entity) => {
+      entity.info = entity.info.filter((info) => info.user?._id === id);
+      delete entity.sum;
+    });
     return res.status(HttpStatus.OK).json(entities).end();
   }
 
