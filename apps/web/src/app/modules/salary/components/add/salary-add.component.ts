@@ -50,6 +50,15 @@ export class SalaryAddComponent implements OnInit {
     { label: 'Описание' }
   ];
 
+  /** Крайний день в периоде */
+  public maxDate = moment().toDate();
+
+  /** Максимальные кол-во рабочих дней в месяце */
+  public maxWorkDaysToMonth: Record<ScheduleEnum, number> = {
+    FIVE: 0,
+    SHIFT: 0
+  };
+
   public constructor(private readonly userStateService: UserStateService,
                      private readonly shopStateService: ShopStateService) { }
 
@@ -70,6 +79,7 @@ export class SalaryAddComponent implements OnInit {
    * @param dates Период */
   public setDateRange(dates: [Date, Date]) {
     [this.salary.dateFrom, this.salary.dateTo] = dates;
+    this.updateMaxWorkDaysToMonth();
     this.updateAnalyticTable();
   }
 
@@ -156,6 +166,43 @@ export class SalaryAddComponent implements OnInit {
     info.daysWorked = info.daysWorkedAll - (info.sickDays ?? 0) - (info.vacationDays ?? 0);
     if (info.daysWorked < 0) {
       info.daysWorked = 0;
+    }
+  }
+
+  /** Функция обновляет данные о максимальном кол-ве рабочих дней в месяце */
+  public updateMaxWorkDaysToMonth() {
+    this.maxWorkDaysToMonth = {
+      FIVE: 0,
+      SHIFT: 0
+    };
+    const startMonth = moment(this.salary.dateFrom).startOf('month');
+    const endMonth = moment(this.salary.dateFrom).endOf('month').add(1, 'day');
+
+    for (const date = startMonth.clone(); date.isBefore(endMonth, 'day'); date.add(1, 'day')) {
+      if (Number(date.format('d')) >= 1 && Number(date.format('d')) <= 5) {
+        this.maxWorkDaysToMonth.FIVE++;
+      }
+    }
+
+    let isWorked = true;
+    for (const date = startMonth.clone(); date.isBefore(endMonth, 'day'); date.add(2, 'day')) {
+      if (isWorked && date.clone().add(1, 'day').isBefore(endMonth, 'day')) {
+        this.maxWorkDaysToMonth.SHIFT += 2;
+      } else if (isWorked && !date.clone().add(1, 'day').isBefore(endMonth, 'day')) {
+        this.maxWorkDaysToMonth.SHIFT++;
+      }
+      isWorked = !isWorked;
+    }
+  }
+
+  /** Функция отслеживает выбранный период
+   * @param dates период дат */
+  public getDateInRange(dates: [Date, Date]) {
+    if (dates[0] && !dates[1]) {
+      const dateTo = moment(dates[0]).endOf('month');
+      this.maxDate = dateTo.isBefore(moment()) ? dateTo.toDate() : moment().toDate();
+    } else if (dates[0] && dates[1]) {
+      this.maxDate = moment().toDate();
     }
   }
 

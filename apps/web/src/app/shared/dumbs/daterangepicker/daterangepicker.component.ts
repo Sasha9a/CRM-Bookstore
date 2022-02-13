@@ -14,12 +14,17 @@ export class DaterangepickerComponent {
   @ViewChild('rangepicker') public rangepicker: Calendar;
   @Output() public valueChange = new EventEmitter<Date>();
   @Input() public showButtonBar = false;
+  @Input() public showButtons = true;
   @Input() public dateFormat = 'dd.mm.yy';
   @Input() public label: string;
   @Input() public inputId = `${Math.random()}`;
   @Input() public placeholder = '\u00A0';
   @Input() public readonlyInput = true;
   @Output() public changeValue = new EventEmitter<[Date, Date]>();
+  @Output() public changeAnyDate = new EventEmitter<[Date, Date]>();
+
+  public _minDate: Date;
+  public _maxDate: Date;
 
   public _value: [Date, Date];
 
@@ -30,7 +35,22 @@ export class DaterangepickerComponent {
     }
   }
 
+  @Input()
+  public set minDate(date: Date | string) {
+    if (date) {
+      this._minDate = new Date(date);
+    }
+  }
+
+  @Input()
+  public set maxDate(date: Date | string) {
+    if (date) {
+      this._maxDate = new Date(date);
+    }
+  }
+
   public changeDate(dates: [Date, Date]) {
+    this.changeAnyDate.emit(dates);
     if (dates[0] && dates[1]) {
       this.changeValue.emit(dates);
     }

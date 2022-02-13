@@ -5,41 +5,45 @@
 
 <ng-template #calendar>
   <p-calendar #rangepicker
-    (ngModelChange)="changeDate($event)"
-    [(ngModel)]="_value"
-    [dateFormat]="dateFormat"
-    [firstDayOfWeek]="1"
-    [inputId]="inputId"
-    [placeholder]="placeholder"
-    [selectOtherMonths]="true"
-    [showButtonBar]="showButtonBar"
-    selectionMode="range"
-    styleClass="w-full">
+              (ngModelChange)="changeDate($event)"
+              [(ngModel)]="_value"
+              [dateFormat]="dateFormat"
+              [firstDayOfWeek]="1"
+              [inputId]="inputId"
+              [placeholder]="placeholder"
+              [selectOtherMonths]="true"
+              [showButtonBar]="showButtonBar"
+              [minDate]="_minDate"
+              [maxDate]="_maxDate"
+              selectionMode="range"
+              styleClass="w-full">
     <ng-template pTemplate="header">
-      <div class="grid mt-2">
-        <div class="col">
-          <button (click)="setPeriodDates('day')" class="p-button-sm p-button-outlined w-full" label="сегодня" pButton></button>
+      <ng-container *ngIf="showButtons">
+        <div class="grid mt-2">
+          <div class="col">
+            <button (click)="setPeriodDates('day')" class="p-button-sm p-button-outlined w-full" label="сегодня" pButton></button>
+          </div>
+          <div class="col">
+            <button (click)="setPeriodDates('day', true)" class="p-button-sm p-button-outlined w-full" label="вчера" pButton></button>
+          </div>
         </div>
-        <div class="col">
-          <button (click)="setPeriodDates('day', true)" class="p-button-sm p-button-outlined w-full" label="вчера" pButton></button>
+        <div class="grid">
+          <div class="col">
+            <button (click)="setPeriodDates('week')" class="p-button-sm p-button-outlined w-full" label="текущая неделя" pButton></button>
+          </div>
+          <div class="col">
+            <button (click)="setPeriodDates('month')" class="p-button-sm p-button-outlined w-full" label="текущий месяц" pButton></button>
+          </div>
         </div>
-      </div>
-      <div class="grid">
-        <div class="col">
-          <button (click)="setPeriodDates('week')" class="p-button-sm p-button-outlined w-full" label="текущая неделя" pButton></button>
+        <div class="grid">
+          <div class="col">
+            <button (click)="setPeriodDates('month', true)" class="p-button-sm p-button-outlined w-full" label="прошлый месяц" pButton></button>
+          </div>
+          <div class="col">
+            <button (click)="setPeriodDates('year')" class="p-button-sm p-button-outlined w-full" label="текущий год" pButton></button>
+          </div>
         </div>
-        <div class="col">
-          <button (click)="setPeriodDates('month')" class="p-button-sm p-button-outlined w-full" label="текущий месяц" pButton></button>
-        </div>
-      </div>
-      <div class="grid">
-        <div class="col">
-          <button (click)="setPeriodDates('month', true)" class="p-button-sm p-button-outlined w-full" label="прошлый месяц" pButton></button>
-        </div>
-        <div class="col">
-          <button (click)="setPeriodDates('year')" class="p-button-sm p-button-outlined w-full" label="текущий год" pButton></button>
-        </div>
-      </div>
+      </ng-container>
     </ng-template>
   </p-calendar>
 </ng-template>

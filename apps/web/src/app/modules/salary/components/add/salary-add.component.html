@@ -14,7 +14,10 @@
           <label class="fw-bold required-field">Период отработанных дней</label>
           <crm-daterangepicker [value]="[salary.dateFrom, salary.dateTo]"
                                [class]="errors?.dateFrom || errors?.dateTo ? 'ng-invalid ng-dirty' : ''"
-                               (changeValue)="setDateRange($event)">
+                               [maxDate]="maxDate"
+                               [showButtons]="false"
+                               (changeValue)="setDateRange($event)"
+                               (changeAnyDate)="getDateInRange($event)">
           </crm-daterangepicker>
           <small *ngIf="errors?.dateFrom" class="p-error">{{ errors.dateFrom | join }}</small>
           <small *ngIf="errors?.dateTo" class="p-error">{{ errors.dateTo | join }}</small>
@@ -48,7 +51,7 @@
         <ng-template #rowTemplate let-info="item" let-rowIndex="rowIndex">
           <tr *ngIf="toInfo(info) as info">
             <td>
-              <p class="w-15rem">{{ info.user?.name }}</p>
+              <a class="w-15rem" target="_blank" routerLink="/user/card/{{ info.user?._id }}">{{ info.user?.name }}</a>
             </td>
             <td>
               <p class="w-6rem">{{ info.user?.salary ?? 0 | number }} руб.</p>
