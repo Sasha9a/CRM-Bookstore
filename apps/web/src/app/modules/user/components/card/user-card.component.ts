@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { SalaryDto } from "@crm/shared/dtos/salary/salary.dto";
 import { UserDto } from "@crm/shared/dtos/user/user.dto";
 import { RoleEnum } from "@crm/shared/enums/role.enum";
+import { CrmTableColumn } from "@crm/web/core/models/crm-table-column";
 import { ConfirmDialogService } from "@crm/web/core/services/confirm-dialog.service";
 import { ErrorService } from "@crm/web/core/services/error.service";
 import { SalaryStateService } from "@crm/web/core/services/salary/salary-state.service";
@@ -23,6 +24,23 @@ export class UserCardComponent implements OnInit {
 
   /** Расчетный лист сотрудника */
   public payslip: SalaryDto[];
+
+  /** Столбцы таблицы */
+  public itemColumns: CrmTableColumn[] = [
+    { label: 'День выдачи' },
+    { label: 'Период' },
+    { label: 'Общее описание' },
+    { label: 'Всего рабочих дней', style: { 'max-width.px': 120 } },
+    { label: 'Отработанные дни', style: { 'max-width.px': 120 } },
+    { label: 'Больничный' },
+    { label: 'Отпускные' },
+    { label: 'Зарплата' },
+    { label: 'Премия' },
+    { label: 'Штраф' },
+    { label: 'Болезнь (дней)' },
+    { label: 'Отпуск (дней)' },
+    { label: 'Личное описание' }
+  ];
 
   /** Идет загрузка или нет */
   public loading = true;
@@ -76,6 +94,13 @@ export class UserCardComponent implements OnInit {
         });
       }
     });
+  }
+
+  /** Функция типизирует переменную
+   * @param payslip данные о зарплате
+   * @return возвращает данные */
+  public toPayslip(payslip: any): SalaryDto {
+    return payslip as SalaryDto;
   }
 
 }

@@ -71,8 +71,53 @@
   <div *ngIf="payslip" class="col-12">
     <h3 class="dividing-header">Расчетный лист</h3>
 
-    <crm-table name="payslip">
-
+    <crm-table name="payslip"
+               styleClass="mt-3 sticky-header"
+               [columns]="itemColumns"
+               [values]="payslip | orderBy: '-date:date'">
+      <ng-template #rowTemplate let-payslip="item">
+        <tr *ngIf="toPayslip(payslip) as payslip">
+          <td nowrap>
+            <p>{{ payslip.date | date: 'dd.MM.YYYY' }}</p>
+          </td>
+          <td nowrap>
+            <p>{{ payslip.dateFrom | date: 'dd.MM.YYYY' }} - {{ payslip.dateTo | date: 'dd.MM.YYYY' }}</p>
+          </td>
+          <td>
+            <p>{{ payslip.description }}</p>
+          </td>
+          <td>
+            <p>{{ payslip.info[0]?.daysWorkedAll }}</p>
+          </td>
+          <td>
+            <p>{{ payslip.info[0]?.daysWorked }}</p>
+          </td>
+          <td nowrap>
+            <p>{{ payslip.info[0]?.sickPay || 0 | number: '.0-2' }} руб.</p>
+          </td>
+          <td nowrap>
+            <p>{{ payslip.info[0]?.vacationPay || 0 | number: '.0-2' }} руб.</p>
+          </td>
+          <td nowrap>
+            <p>{{ payslip.info[0]?.sumEmployee || 0 | number: '.0-2' }} руб.</p>
+          </td>
+          <td nowrap>
+            <p>{{ payslip.info[0]?.premium || 0 }} руб.</p>
+          </td>
+          <td nowrap>
+            <p>{{ payslip.info[0]?.fine || 0 }} руб.</p>
+          </td>
+          <td>
+            <p>{{ payslip.info[0]?.sickDays || 0 }}</p>
+          </td>
+          <td>
+            <p>{{ payslip.info[0]?.vacationDays || 0 }}</p>
+          </td>
+          <td>
+            <p>{{ payslip.info[0]?.description }}</p>
+          </td>
+        </tr>
+      </ng-template>
     </crm-table>
   </div>
 </div>

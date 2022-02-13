@@ -39,7 +39,7 @@ export class SalaryController {
     const entities = await this.salaryService.getAllByUser(id);
     entities.forEach((entity) => {
       entity.info = entity.info.filter((info) => info.user?._id === id);
-      delete entity.sum;
+      entity.sum = undefined;
     });
     return res.status(HttpStatus.OK).json(entities).end();
   }
