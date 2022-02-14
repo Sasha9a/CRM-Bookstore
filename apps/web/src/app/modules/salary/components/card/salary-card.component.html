@@ -1,0 +1,86 @@
+<div *ngIf="!loading" class="grid">
+  <div class="col-12 md:col-6 xl:col-4">
+    <p-table [value]=[null]>
+      <ng-template pTemplate="body">
+        <tr>
+          <td class="fw-bold">Дата выдачи</td>
+          <td class="fw-semibold">{{ salary.date | date: 'dd MMMM YYYY' }}</td>
+        </tr>
+        <tr>
+          <td class="fw-bold">Период</td>
+          <td class="fw-semibold">{{ salary.dateFrom | date: 'dd MMMM YYYY' }} - {{ salary.dateTo | date: 'dd MMMM YYYY' }}</td>
+        </tr>
+        <tr>
+          <td class="fw-bold">Магазин</td>
+          <td class="fw-semibold">{{ salary.shop?.address }}</td>
+        </tr>
+        <tr>
+          <td class="fw-bold">Описание</td>
+          <td class="fw-semibold">{{ salary.description }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <div class="col-12">
+    <h3 class="dividing-header">Сотрудники</h3>
+
+    <crm-table name="salary.card" styleClass="mt-3 sticky-header"
+               [columns]="itemColumns"
+               [values]="salary.info">
+      <ng-template #rowTemplate let-info="item">
+        <tr *ngIf="toInfo(info) as info">
+          <td>
+            <a target="_blank" routerLink="/user/card/{{ info.user?._id }}">{{ info.user?.name }}</a>
+          </td>
+          <td nowrap>
+            <p>{{ info.user?.salary || 0 | number: '.0-2' }} руб.</p>
+          </td>
+          <td>
+            <p>{{ info.daysWorkedAll }}</p>
+          </td>
+          <td>
+            <p>{{ info.daysWorked }}</p>
+          </td>
+          <td nowrap>
+            <p>{{ info.sickPay || 0 | number: '.0-2' }} руб.</p>
+          </td>
+          <td nowrap>
+            <p>{{ info.vacationPay || 0 | number: '.0-2' }} руб.</p>
+          </td>
+          <td nowrap>
+            <p>{{ info.sumEmployee || 0 | number: '.0-2' }} руб.</p>
+          </td>
+          <td nowrap>
+            <p>{{ info.sumTaxes || 0 | number: '.0-2' }} руб.</p>
+          </td>
+          <td nowrap>
+            <p>{{ info.premium || 0 | number: '.0-2' }} руб.</p>
+          </td>
+          <td nowrap>
+            <p>{{ info.fine || 0 | number: '.0-2' }} руб.</p>
+          </td>
+          <td>
+            <p>{{ info.sickDays || 0 }}</p>
+          </td>
+          <td>
+            <p>{{ info.vacationDays || 0 }}</p>
+          </td>
+          <td>
+            <p>{{ info.description }}</p>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template #footerTemplate>
+        <tr>
+          <td>
+            <p class="fw-bold text-left">ИТОГО: {{ salary.sum || 0 | number: '.0-2' }} руб.</p>
+          </td>
+          <td colspan="99"></td>
+        </tr>
+      </ng-template>
+    </crm-table>
+  </div>
+</div>
+
+<crm-spinner *ngIf="loading"></crm-spinner>

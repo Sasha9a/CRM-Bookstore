@@ -5,6 +5,7 @@ import { RoleEnum } from "@crm/shared/enums/role.enum";
 import { RoleGuard } from "@crm/web/core/guards/role.guard";
 import { SharedModule } from "@crm/web/shared/shared.module";
 import { SalaryAddComponent } from './components/add/salary-add.component';
+import { SalaryCardComponent } from './components/card/salary-card.component';
 
 const routes: Routes = [
   {
@@ -16,12 +17,22 @@ const routes: Routes = [
       roles: [RoleEnum.GENERAL_MANAGER],
       included: true
     }
+  },
+  {
+    path: 'card/:id',
+    component: SalaryCardComponent,
+    canActivate: [RoleGuard],
+    data: {
+      roles: [RoleEnum.GENERAL_MANAGER],
+      included: true
+    }
   }
 ];
 
 @NgModule({
   declarations: [
-    SalaryAddComponent
+    SalaryAddComponent,
+    SalaryCardComponent
   ],
   imports: [
     CommonModule,

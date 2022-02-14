@@ -52,8 +52,8 @@ export class SalaryController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Get(':id')
   public async getById(@Res() res: Response, @Param('id', new ValidateObjectId()) id: string) {
-    const entities = await this.salaryService.findById(id);
-    return res.status(HttpStatus.OK).json(entities).end();
+    const entity = await this.salaryService.findById(id);
+    return res.status(HttpStatus.OK).json(entity).end();
   }
 
   /** Post-запрос на создание акта о зарплате

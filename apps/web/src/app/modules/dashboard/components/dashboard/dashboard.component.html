@@ -1,5 +1,5 @@
 <div class="grid">
-  <div class="col-12 xl:col-6">
+  <div *ngIf="authService.checkRoles([RoleEnum.GENERAL_MANAGER])" class="col-12 xl:col-6">
     <crm-widget-salary [payslip]="payslip" [loading]="payslipLoading"></crm-widget-salary>
   </div>
 </div>

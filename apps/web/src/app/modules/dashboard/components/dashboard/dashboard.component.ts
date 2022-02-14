@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { SalaryDto } from "@crm/shared/dtos/salary/salary.dto";
+import { RoleEnum } from "@crm/shared/enums/role.enum";
 import { SalaryStateService } from "@crm/web/core/services/salary/salary-state.service";
+import { AuthService } from "@crm/web/core/services/user/auth.service";
 
 /** Компонент рабочего стола */
 @Component({
@@ -16,14 +18,21 @@ export class DashboardComponent implements OnInit {
   /** Грузится ли таблица расчетных листов или нет */
   public payslipLoading = true;
 
-  public constructor(private readonly salaryStateService: SalaryStateService) {
+  public get RoleEnum() {
+    return RoleEnum;
+  }
+
+  public constructor(private readonly salaryStateService: SalaryStateService,
+                     public readonly authService: AuthService) {
   }
 
   public ngOnInit(): void {
-    this.salaryStateService.find<SalaryDto>().subscribe((payslip) => {
-      this.payslip = payslip;
-      this.payslipLoading = false;
-    }, () => this.payslipLoading = false);
+    if (this.authService.checkRoles([RoleEnum.GENERAL_MANAGER])) {
+      this.salaryStateService.find<SalaryDto>().subscribe((payslip) => {
+        this.payslip = payslip;
+        this.payslipLoading = false;
+      }, () => this.payslipLoading = false);
+    }
   }
 
 }

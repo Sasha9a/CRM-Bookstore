@@ -102,10 +102,10 @@
             <p>{{ payslip.info[0]?.sumEmployee || 0 | number: '.0-2' }} руб.</p>
           </td>
           <td nowrap>
-            <p>{{ payslip.info[0]?.premium || 0 }} руб.</p>
+            <p>{{ payslip.info[0]?.premium || 0 | number: '.0-2' }} руб.</p>
           </td>
           <td nowrap>
-            <p>{{ payslip.info[0]?.fine || 0 }} руб.</p>
+            <p>{{ payslip.info[0]?.fine || 0 | number: '.0-2' }} руб.</p>
           </td>
           <td>
             <p>{{ payslip.info[0]?.sickDays || 0 }}</p>
