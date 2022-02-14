@@ -1,4 +1,5 @@
-<button pButton [label]="'Добавить акт зарплат'"
-        class="p-button-success"
-        routerLink="/salary/add">
-</button>
+<div class="grid">
+  <div class="col-12 xl:col-6">
+    <crm-widget-salary [payslip]="payslip" [loading]="payslipLoading"></crm-widget-salary>
+  </div>
+</div>

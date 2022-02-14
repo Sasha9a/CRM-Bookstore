@@ -1,1 +1,40 @@
-<p>widget-salary works!</p>
+<p-card styleClass="h-full">
+
+  <div class="flex justify-content-between align-items-center">
+    <h3 *ngIf="payslip?.length">Расчетные листы ({{ payslip?.length }})</h3>
+    <h3 *ngIf="!payslip?.length">Расчетные листы</h3>
+    <button pButton pRipple
+            type="button"
+            icon="pi pi-plus"
+            [label]="'Добавить'"
+            class="p-button-success p-button-text my-0"
+            routerLink="/salary/add">
+    </button>
+  </div>
+
+  <crm-table name="dashboard.payslip"
+             [columns]="itemColumns"
+             [loading]="loading"
+             [values]="payslip | orderBy: '-date:date'">
+    <ng-template #rowTemplate let-payslip="item">
+      <tr *ngIf="toPayslip(payslip) as payslip">
+        <td nowrap>
+          <a target="_blank" routerLink="/salary/card/{{ payslip._id }}">{{ payslip.date | date: 'dd.MM.YYYY' }}</a>
+        </td>
+        <td nowrap>
+          <p>{{ payslip.dateFrom | date: 'dd.MM.YYYY' }} - {{ payslip.dateTo | date: 'dd.MM.YYYY' }}</p>
+        </td>
+        <td>
+          <p>{{ payslip.shop?.address }}</p>
+        </td>
+        <td nowrap>
+          <p>{{ payslip.sum || 0 | number: '.0-2' }} руб.</p>
+        </td>
+        <td>
+          <p>{{ payslip.description }}</p>
+        </td>
+      </tr>
+    </ng-template>
+  </crm-table>
+
+</p-card>
