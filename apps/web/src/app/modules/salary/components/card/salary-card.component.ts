@@ -53,7 +53,7 @@ export class SalaryCardComponent implements OnInit {
 
     this.salaryStateService.findById<SalaryDto>(salaryId).subscribe((salary) => {
       this.salary = salary;
-      this.title.setTitle(`Расчетный лист за ${moment(this.salary.date).format('dd.MM.YYYY')} - CRM`);
+      this.title.setTitle(`Расчетный лист за ${moment(this.salary.date).format('DD.MM.YYYY')} - CRM`);
       this.loading = false;
     }, () => this.loading = false);
   }

@@ -68,6 +68,7 @@ export class SalaryController {
       if (entity.user) {
         entity.user = {
           _id: entity.user._id,
+          name: entity.user.name,
           salary: entity.user.salary,
           schedule: entity.user.schedule,
           startDate: entity.user.startDate

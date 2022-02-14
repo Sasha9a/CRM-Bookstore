@@ -1,8 +1,8 @@
 <p-card styleClass="h-full">
 
   <div class="flex justify-content-between align-items-center">
-    <h3 *ngIf="payslip?.length">Расчетные листы ({{ payslip?.length }})</h3>
-    <h3 *ngIf="!payslip?.length">Расчетные листы</h3>
+    <h3 *ngIf="payslip?.length" class="my-0">Расчетные листы ({{ payslip?.length }})</h3>
+    <h3 *ngIf="!payslip?.length" class="my-0">Расчетные листы</h3>
     <button pButton pRipple
             type="button"
             icon="pi pi-plus"
@@ -13,8 +13,11 @@
   </div>
 
   <crm-table name="dashboard.payslip"
+             styleClass="mt-3"
+             scrollHeight="300px"
              [columns]="itemColumns"
              [loading]="loading"
+             [autoLayout]="true"
              [values]="payslip | orderBy: '-date:date'">
     <ng-template #rowTemplate let-payslip="item">
       <tr *ngIf="toPayslip(payslip) as payslip">
