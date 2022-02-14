@@ -1,4 +1,5 @@
 import { SalaryInfoFormDto } from "@crm/shared/dtos/salary/salary.info.form.dto";
+import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
 import { Expose, Transform, Type } from "class-transformer";
 import { ArrayMinSize, IsDate, IsDefined, IsOptional, ValidateNested } from "class-validator";
 
@@ -28,6 +29,12 @@ export class SalaryFormDto {
   @Expose()
   @IsOptional()
   public description?: string;
+
+  /** Магазин */
+  @Expose()
+  @IsOptional()
+  @Type(() => ShopDto)
+  public shop?: ShopDto;
 
   /** Информация о зарплате списка сотрудников */
   @Expose()

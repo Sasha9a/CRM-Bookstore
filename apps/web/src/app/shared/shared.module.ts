@@ -113,6 +113,7 @@ import { CategorySingleSelectComponent } from './dumbs/dropdowns/category-single
 import { CategoryMultiSelectComponent } from './dumbs/dropdowns/category-multi-select/category-multi-select.component';
 import { ScheduleNamePipe } from './pipes/schedule-name.pipe';
 import { DaterangepickerComponent } from './dumbs/daterangepicker/daterangepicker.component';
+import { WidgetSalaryComponent } from './dumbs/widget-salary/widget-salary.component';
 
 
 
@@ -140,7 +141,8 @@ import { DaterangepickerComponent } from './dumbs/daterangepicker/daterangepicke
     CategorySingleSelectComponent,
     CategoryMultiSelectComponent,
     ScheduleNamePipe,
-    DaterangepickerComponent
+    DaterangepickerComponent,
+    WidgetSalaryComponent
   ],
   imports: [
     CommonModule,

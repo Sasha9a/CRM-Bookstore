@@ -39,9 +39,6 @@ export class SalaryAddComponent implements OnInit {
   /** Все магазины */
   public shops: ShopDto[];
 
-  /** Выбранный магазин */
-  public selectedShop: ShopDto;
-
   /** Столбцы таблицы */
   public itemColumns: CrmTableColumn[] = [
     { label: 'ФИО', name: 'name', sort: 'user.name:string', style: { 'min-width.rem': 15 } },
@@ -98,7 +95,7 @@ export class SalaryAddComponent implements OnInit {
   /** Обновляет таблицу сотрудников */
   public updateSelectedUsers() {
     const selectedUsers = this.users.filter((user) => {
-      return (this.selectedShop && user.shop?._id === this.selectedShop._id) || (!this.selectedShop && !user.shop);
+      return (this.salary.shop && user.shop?._id === this.salary.shop._id) || (!this.salary.shop && !user.shop);
     });
     this.salary.info = [];
     selectedUsers.forEach((selectUser) => {
