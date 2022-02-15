@@ -1,5 +1,5 @@
 import { BaseDto } from "@crm/shared/dtos/base.dto";
-import { ProductDto } from "@crm/shared/dtos/product/product.dto";
+import { ProductReceiptDto } from "@crm/shared/dtos/product/product.receipt.dto";
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
 import { UserDto } from "@crm/shared/dtos/user/user.dto";
 import { PaymentTypeEnum } from "@crm/shared/enums/payment.type.enum";
@@ -25,12 +25,8 @@ export class ReceiptDto extends BaseDto {
 
   /** Товары */
   @Expose()
-  @Type(() => ProductDto)
-  public products: ProductDto[];
-
-  /** Кол-во товара */
-  @Expose()
-  public count: Record<string, number>;
+  @Type(() => ProductReceiptDto)
+  public products: ProductReceiptDto[];
 
   /** Итоговая цена */
   @Expose()

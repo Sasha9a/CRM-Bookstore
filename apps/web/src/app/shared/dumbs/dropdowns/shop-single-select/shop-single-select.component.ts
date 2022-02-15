@@ -11,7 +11,7 @@ export class ShopSingleSelectComponent {
 
   @Input() public shops: ShopDto[] = [];
 
-  @Input() public selectedShop: ShopDto;
+  @Input() public selectedShop: ShopDto | Partial<ShopDto>;
   @Output() public selectedShopChange = new EventEmitter<ShopDto>();
 
   @Input() public virtualScroll = false;

@@ -1,4 +1,4 @@
-import { ProductDto } from "@crm/shared/dtos/product/product.dto";
+import { ProductReceiptDto } from "@crm/shared/dtos/product/product.receipt.dto";
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
 import { UserDto } from "@crm/shared/dtos/user/user.dto";
 import { PaymentTypeEnum } from "@crm/shared/enums/payment.type.enum";
@@ -24,11 +24,7 @@ export class Receipt extends Document {
 
   /** Товары */
   @Prop({ type: [mongoose.Schema.Types.Mixed], required: true })
-  public products: ProductDto[];
-
-  /** Кол-во товара */
-  @Prop({ type: mongoose.Schema.Types.Mixed, required: true })
-  public count: Record<string, number>;
+  public products: ProductReceiptDto[];
 
   /** Итоговая цена */
   @Prop({ type: mongoose.Schema.Types.Mixed, required: true })

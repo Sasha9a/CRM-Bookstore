@@ -1,4 +1,4 @@
-import { ProductDto } from "@crm/shared/dtos/product/product.dto";
+import { ProductReceiptDto } from "@crm/shared/dtos/product/product.receipt.dto";
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
 import { UserDto } from "@crm/shared/dtos/user/user.dto";
 import { PaymentTypeEnum } from "@crm/shared/enums/payment.type.enum";
@@ -30,13 +30,8 @@ export class ReceiptFormDto {
   /** Товары */
   @Expose()
   @ArrayMinSize(1, { message: "Список товаров пустой" })
-  @Type(() => ProductDto)
-  public products: ProductDto[] = [];
-
-  /** Кол-во товара */
-  @Expose()
-  @IsDefined({ message: "Введите кол-во товара" })
-  public count: Record<string, number> = {};
+  @Type(() => ProductReceiptDto)
+  public products: ProductReceiptDto[] = [];
 
   /** Итоговая цена */
   @Expose()
