@@ -41,11 +41,11 @@ export class ReceiptFormDto {
   /** Сумма наличными */
   @Expose()
   @IsOptional()
-  public amountCash?: number;
+  public amountCash?: number = 0;
 
   /** Сумма безналичными */
   @Expose()
   @IsOptional()
-  public amountCashless?: number;
+  public amountCashless?: number = 0;
 
 }

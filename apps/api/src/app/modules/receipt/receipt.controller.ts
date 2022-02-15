@@ -55,6 +55,12 @@ export class ReceiptController {
       _id: body.shop._id,
       address: body.shop.address
     };
+    body.products.forEach((product) => {
+      product.category = {
+        _id: product.category._id,
+        name: product.category.name
+      };
+    });
     const entity = await this.receiptService.create(body);
     return res.status(HttpStatus.CREATED).json(entity).end();
   }

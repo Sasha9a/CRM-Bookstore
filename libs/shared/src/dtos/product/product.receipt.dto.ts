@@ -23,7 +23,7 @@ export class ProductReceiptDto extends BaseDto {
   /** Категория */
   @Expose()
   @Type(() => CategoryDto)
-  public category: CategoryDto;
+  public category: Partial<CategoryDto>;
 
   /** Цена за штуку */
   @Expose()

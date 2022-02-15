@@ -30,16 +30,17 @@
 
         <div class="field">
           <label class="fw-bold required-field">Итоговая сумма</label>
-          <div *ngIf="receipt.paymentMethod === PaymentTypeEnum.SO_SO" class="my-2">
+          <p *ngIf="!receipt.paymentMethod">Выберите способ оплаты</p>
+          <div *ngIf="receipt.paymentMethod === PaymentTypeEnum.SO_SO" class="pb-2">
             <p-checkbox [(ngModel)]="isCashless" [binary]="true" inputId="isCashless"></p-checkbox>
-            <label [for]="'isCashless'">Ввести безналичные</label>
+            <label [for]="'isCashless'" class="ml-2">Ввести безналичные</label>
           </div>
-          <div class="flex mt-1">
-            <div *ngIf="receipt.paymentMethod === PaymentTypeEnum.CASH || receipt.paymentMethod === PaymentTypeEnum.SO_SO" class="p-inputgroup">
+          <div class="grid mt-3">
+            <div *ngIf="receipt.paymentMethod === PaymentTypeEnum.CASH || receipt.paymentMethod === PaymentTypeEnum.SO_SO" class="p-inputgroup col">
               <span class="p-float-label">
                 <p-inputNumber [(ngModel)]="receipt.amountCash"
                                inputId="amountCash"
-                               [disabled]="isCashless"
+                               [disabled]="isCashless || receipt.paymentMethod === PaymentTypeEnum.CASH"
                                (ngModelChange)="updateAnalytics()">
                 </p-inputNumber>
                 <label [for]="'amountCash'">Наличными</label>
@@ -47,11 +48,12 @@
               <span class="p-inputgroup-addon">руб.</span>
             </div>
 
-            <div *ngIf="receipt.paymentMethod === PaymentTypeEnum.CASHLESS || receipt.paymentMethod === PaymentTypeEnum.SO_SO" class="p-inputgroup">
+            <div *ngIf="receipt.paymentMethod === PaymentTypeEnum.CASHLESS || receipt.paymentMethod === PaymentTypeEnum.SO_SO"
+                 class="p-inputgroup col">
               <span class="p-float-label">
                 <p-inputNumber [(ngModel)]="receipt.amountCashless"
                                inputId="amountCashless"
-                               [disabled]="!isCashless"
+                               [disabled]="!isCashless || receipt.paymentMethod === PaymentTypeEnum.CASHLESS"
                                (ngModelChange)="updateAnalytics()">
                 </p-inputNumber>
                 <label [for]="'amountCashless'">Безналичными</label>
@@ -67,8 +69,8 @@
       <p class="fw-bold required-field mb-3">Товары</p>
       <p-pickList [source]="products"
                   [target]="receipt.products"
-                  (onMoveToSource)="updateAnalytics(); updateCountProduct($event, 0)"
-                  (onMoveToTarget)="updateAnalytics(); updateCountProduct($event, 1)"
+                  (onMoveToSource)="updateCountProduct($event, 0); updateAnalytics()"
+                  (onMoveToTarget)="updateCountProduct($event, 1); updateAnalytics()"
                   sourceHeader="Все товары"
                   targetHeader="Выбранные товары"
                   [dragdrop]="true"
@@ -85,15 +87,26 @@
                        [src]="('file/' + product.image.path) | apiUrl"
                        [alt]="product.name" width="75">
               </p-image>
-              <p-skeleton *ngIf="!product.image" size="4rem"></p-skeleton>
+              <p-skeleton *ngIf="!product.image" size="5rem"></p-skeleton>
             </div>
             <div>
-              <p class="mb-2">{{ product.name }}</p>
-              <i class="pi pi-tag product-category-icon"></i>
-              <span class="product-category text-sm">{{ product.category?.name }}</span>
+              <p class="mb-2 fw-bold">{{ product.name }}</p>
+              <div *ngIf="product.category">
+                <i class="pi pi-tag"></i>
+                <span class="ml-1">{{ product.category?.name }}</span>
+              </div>
             </div>
             <div class="text-right flex-grow-1">
-              <small class="mb-2">{{ product.price }} руб.</small>
+              <div>
+                <small>{{ product.price | number }} руб.</small>
+              </div>
+              <p-inputNumber *ngIf="receipt.products.includes(product)"
+                             class="mt-1"
+                             [(ngModel)]="product.count"
+                             (ngModelChange)="updateAnalytics()"
+                             [inputStyle]="{ 'width.px': 50 }"
+                             [showButtons]="true">
+              </p-inputNumber>
             </div>
           </div>
         </ng-template>

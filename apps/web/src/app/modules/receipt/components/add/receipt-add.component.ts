@@ -45,7 +45,7 @@ export class ReceiptAddComponent implements OnInit {
     { label: 'И то и то', value: PaymentTypeEnum.SO_SO }
   ];
 
-  /** Выбор ввести либо наличные либо безналичные при оплате "И то и то" */
+  /** Выбор ввести либо наличные, либо безналичные при оплате "И то и то" */
   public isCashless = false;
 
   public get PaymentTypeEnum() {
@@ -92,6 +92,8 @@ export class ReceiptAddComponent implements OnInit {
 
   /** Обновляет аналитику */
   public updateAnalytics() {
+    this.receipt.amountCash = 0;
+    this.receipt.amountCashless = 0;
     const sum = this.receipt.products.reduce((sum, product) => sum + product.price * product.count, 0);
     if (this.receipt.paymentMethod === PaymentTypeEnum.CASH) {
       this.receipt.amountCash = sum;
