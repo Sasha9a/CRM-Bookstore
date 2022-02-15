@@ -82,6 +82,8 @@ export class SalaryAddComponent implements OnInit {
       this.shops = shops;
       this.loading = false;
     }, () => this.loading = false);
+
+    this.salary.date = moment().toDate();
   }
 
   /** Функция записывает период в переменную
