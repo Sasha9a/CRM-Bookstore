@@ -19,13 +19,13 @@ export class ReceiptFormDto {
   @Expose()
   @IsDefined({ message: "Выберите магазин" })
   @Type(() => ShopDto)
-  public shop: ShopDto;
+  public shop: Partial<ShopDto>;
 
   /** Продавец */
   @Expose()
   @IsDefined({ message: "Выберите продавца" })
   @Type(() => UserDto)
-  public salesman: UserDto;
+  public salesman: Partial<UserDto>;
 
   /** Товары */
   @Expose()
