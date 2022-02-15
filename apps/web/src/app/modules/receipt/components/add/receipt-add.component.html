@@ -11,9 +11,9 @@
         </div>
 
         <div class="field">
+          <label class="fw-bold required-field">Магазин</label>
           <crm-shop-single-select [shops]="shops"
                                   [(selectedShop)]="receipt.shop"
-                                  labelInput="Магазин"
                                   [class]="errors?.shop ? 'ng-invalid ng-dirty' : ''"
                                   [disabled]="!!authService.currentUser.shop">
           </crm-shop-single-select>
@@ -23,25 +23,26 @@
     </div>
 
     <div class="col-12">
-      <p-pickList [source]="products" [target]="receipt.products" sourceHeader="Все товары" targetHeader="Выбранные товары"
+      <p class="fw-bold required-field mb-3">Товары</p>
+      <p-pickList [source]="products" [target]="receipt.products" sourceHeader="Все товары" targetHeader="Выбранные товары" [dragdrop]="true"
                   [responsive]="true" [sourceStyle]="{'height':'30rem'}" [targetStyle]="{'height':'30rem'}" filterBy="name"
                   sourceFilterPlaceholder="Название" targetFilterPlaceholder="Название">
         <ng-template let-product pTemplate="item">
-          <div *ngIf="toProduct(product) as product" class="product-item">
-            <div class="image-container">
+          <div *ngIf="toProduct(product) as product" class="flex align-items-center w-full">
+            <div class="pr-2">
               <p-image *ngIf="product.image"
                        [src]="('file/' + product.image.path) | apiUrl"
                        [alt]="product.name" width="75">
               </p-image>
-              <p-skeleton *ngIf="!product.image" size="5rem"></p-skeleton>
+              <p-skeleton *ngIf="!product.image" size="4rem"></p-skeleton>
             </div>
-            <div class="product-list-detail">
-              <h5 class="mb-2">{{ product.name }}</h5>
+            <div>
+              <p class="mb-2">{{ product.name }}</p>
               <i class="pi pi-tag product-category-icon"></i>
-              <span class="product-category">{{ product.category }}</span>
+              <span class="product-category text-sm">{{ product.category?.name }}</span>
             </div>
-            <div class="product-list-action">
-              <h6 class="mb-2">{{ product.price }} руб.</h6>
+            <div class="text-right flex-grow-1">
+              <small class="mb-2">{{ product.price }} руб.</small>
             </div>
           </div>
         </ng-template>

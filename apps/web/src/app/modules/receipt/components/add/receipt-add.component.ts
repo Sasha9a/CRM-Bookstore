@@ -18,7 +18,7 @@ import * as moment from "moment-timezone";
 @Component({
   selector: 'crm-receipt-add',
   templateUrl: './receipt-add.component.html',
-  styleUrls: ['receipt-add.component.scss']
+  styleUrls: []
 })
 export class ReceiptAddComponent implements OnInit {
 
