@@ -2,8 +2,14 @@
   <h1>Товары</h1>
   <div>
     <button pButton [label]="'Добавить'"
+            icon="pi pi-plus"
             class="p-button-success"
             routerLink="/product/add">
+    </button>
+    <button pButton [label]="'Добавить чек'"
+            icon="pi pi-shopping-cart"
+            class="p-button-secondary ml-2"
+            routerLink="/receipt/add">
     </button>
   </div>
 </div>
