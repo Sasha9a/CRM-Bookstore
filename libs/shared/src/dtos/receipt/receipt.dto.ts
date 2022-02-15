@@ -28,8 +28,16 @@ export class ReceiptDto extends BaseDto {
   @Type(() => ProductReceiptDto)
   public products: ProductReceiptDto[];
 
-  /** Итоговая цена */
+  /** Способ оплаты */
   @Expose()
-  public sum: Record<PaymentTypeEnum, number>;
+  public paymentMethod: PaymentTypeEnum;
+
+  /** Сумма наличными */
+  @Expose()
+  public amountCash: number;
+
+  /** Сумма безналичными */
+  @Expose()
+  public amountCashless: number;
 
 }

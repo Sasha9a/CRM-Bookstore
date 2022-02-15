@@ -3,7 +3,7 @@ import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
 import { UserDto } from "@crm/shared/dtos/user/user.dto";
 import { PaymentTypeEnum } from "@crm/shared/enums/payment.type.enum";
 import { Expose, Transform, Type } from "class-transformer";
-import { ArrayMinSize, IsDate, IsDefined } from "class-validator";
+import { ArrayMinSize, IsDate, IsDefined, IsOptional } from "class-validator";
 
 /** DTO создания чеков */
 @Expose()
@@ -33,13 +33,19 @@ export class ReceiptFormDto {
   @Type(() => ProductReceiptDto)
   public products: ProductReceiptDto[] = [];
 
-  /** Итоговая цена */
+  /** Способ оплаты */
   @Expose()
-  @IsDefined({ message: "Введите сумму оплаты" })
-  public sum: Record<PaymentTypeEnum, number> = {
-    CASH: undefined,
-    CASHLESS: undefined,
-    SO_SO: undefined
-  };
+  @IsDefined({ message: "Выберите способ оплаты" })
+  public paymentMethod: PaymentTypeEnum;
+
+  /** Сумма наличными */
+  @Expose()
+  @IsOptional()
+  public amountCash?: number;
+
+  /** Сумма безналичными */
+  @Expose()
+  @IsOptional()
+  public amountCashless?: number;
 
 }

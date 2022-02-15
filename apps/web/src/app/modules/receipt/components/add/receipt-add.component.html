@@ -19,14 +19,65 @@
           </crm-shop-single-select>
           <small *ngIf="errors?.shop" class="p-error">{{ errors.shop | join }}</small>
         </div>
+
+        <div class="field">
+          <label class="fw-bold required-field">Способ оплаты</label>
+          <p-selectButton [options]="paymentTypes" (onChange)="receipt.paymentMethod = $event.value; updateAnalytics()"
+                          optionLabel="label" optionValue="value">
+          </p-selectButton>
+          <small *ngIf="errors?.paymentMethod" class="p-error">{{ errors.paymentMethod | join }}</small>
+        </div>
+
+        <div class="field">
+          <label class="fw-bold required-field">Итоговая сумма</label>
+          <div *ngIf="receipt.paymentMethod === PaymentTypeEnum.SO_SO" class="my-2">
+            <p-checkbox [(ngModel)]="isCashless" [binary]="true" inputId="isCashless"></p-checkbox>
+            <label [for]="'isCashless'">Ввести безналичные</label>
+          </div>
+          <div class="flex mt-1">
+            <div *ngIf="receipt.paymentMethod === PaymentTypeEnum.CASH || receipt.paymentMethod === PaymentTypeEnum.SO_SO" class="p-inputgroup">
+              <span class="p-float-label">
+                <p-inputNumber [(ngModel)]="receipt.amountCash"
+                               inputId="amountCash"
+                               [disabled]="isCashless"
+                               (ngModelChange)="updateAnalytics()">
+                </p-inputNumber>
+                <label [for]="'amountCash'">Наличными</label>
+              </span>
+              <span class="p-inputgroup-addon">руб.</span>
+            </div>
+
+            <div *ngIf="receipt.paymentMethod === PaymentTypeEnum.CASHLESS || receipt.paymentMethod === PaymentTypeEnum.SO_SO" class="p-inputgroup">
+              <span class="p-float-label">
+                <p-inputNumber [(ngModel)]="receipt.amountCashless"
+                               inputId="amountCashless"
+                               [disabled]="!isCashless"
+                               (ngModelChange)="updateAnalytics()">
+                </p-inputNumber>
+                <label [for]="'amountCashless'">Безналичными</label>
+              </span>
+              <span class="p-inputgroup-addon">руб.</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="col-12">
       <p class="fw-bold required-field mb-3">Товары</p>
-      <p-pickList [source]="products" [target]="receipt.products" sourceHeader="Все товары" targetHeader="Выбранные товары" [dragdrop]="true"
-                  [responsive]="true" [sourceStyle]="{'height':'30rem'}" [targetStyle]="{'height':'30rem'}" filterBy="name"
-                  sourceFilterPlaceholder="Название" targetFilterPlaceholder="Название">
+      <p-pickList [source]="products"
+                  [target]="receipt.products"
+                  (onMoveToSource)="updateAnalytics(); updateCountProduct($event, 0)"
+                  (onMoveToTarget)="updateAnalytics(); updateCountProduct($event, 1)"
+                  sourceHeader="Все товары"
+                  targetHeader="Выбранные товары"
+                  [dragdrop]="true"
+                  [responsive]="true"
+                  [sourceStyle]="{'height':'30rem'}"
+                  [targetStyle]="{'height':'30rem'}"
+                  filterBy="name"
+                  sourceFilterPlaceholder="Название"
+                  targetFilterPlaceholder="Название">
         <ng-template let-product pTemplate="item">
           <div *ngIf="toProduct(product) as product" class="flex align-items-center w-full">
             <div class="pr-2">

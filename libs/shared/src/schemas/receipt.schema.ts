@@ -26,9 +26,17 @@ export class Receipt extends Document {
   @Prop({ type: [mongoose.Schema.Types.Mixed], required: true })
   public products: ProductReceiptDto[];
 
-  /** Итоговая цена */
-  @Prop({ type: mongoose.Schema.Types.Mixed, required: true })
-  public sum: Record<PaymentTypeEnum, number>;
+  /** Способ оплаты */
+  @Prop({ type: String, required: true })
+  public paymentMethod: PaymentTypeEnum;
+
+  /** Сумма наличными */
+  @Prop()
+  public amountCash: number;
+
+  /** Сумма безналичными */
+  @Prop()
+  public amountCashless: number;
 
 }
 

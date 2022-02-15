@@ -5,14 +5,15 @@ import { ProductReceiptDto } from "@crm/shared/dtos/product/product.receipt.dto"
 import { ReceiptDto } from "@crm/shared/dtos/receipt/receipt.dto";
 import { ReceiptFormDto } from "@crm/shared/dtos/receipt/receipt.form.dto";
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
+import { PaymentTypeEnum } from "@crm/shared/enums/payment.type.enum";
 import { ErrorService } from "@crm/web/core/services/error.service";
 import { ProductStateService } from "@crm/web/core/services/product/product-state.service";
 import { ReceiptStateService } from "@crm/web/core/services/receipt/receipt-state.service";
 import { ShopStateService } from "@crm/web/core/services/shop/shop-state.service";
 import { AuthService } from "@crm/web/core/services/user/auth.service";
 import { validate } from "@crm/web/core/services/validation/validate.service";
-import { forkJoin } from "rxjs";
 import * as moment from "moment-timezone";
+import { forkJoin } from "rxjs";
 
 /** Компонент создания чека */
 @Component({
@@ -36,6 +37,20 @@ export class ReceiptAddComponent implements OnInit {
 
   /** Все товары */
   public products: ProductReceiptDto[] = [];
+
+  /** Все виды оплаты */
+  public paymentTypes = [
+    { label: 'Наличными', value: PaymentTypeEnum.CASH },
+    { label: 'Безналичными', value: PaymentTypeEnum.CASHLESS },
+    { label: 'И то и то', value: PaymentTypeEnum.SO_SO }
+  ];
+
+  /** Выбор ввести либо наличные либо безналичные при оплате "И то и то" */
+  public isCashless = false;
+
+  public get PaymentTypeEnum() {
+    return PaymentTypeEnum;
+  }
 
   public constructor(private readonly receiptStateService: ReceiptStateService,
                      private readonly shopStateService: ShopStateService,
@@ -73,6 +88,37 @@ export class ReceiptAddComponent implements OnInit {
     this.receipt.date = moment().toDate();
 
     this.receipt.salesman = this.authService.currentUser;
+  }
+
+  /** Обновляет аналитику */
+  public updateAnalytics() {
+    const sum = this.receipt.products.reduce((sum, product) => sum + product.price * product.count, 0);
+    if (this.receipt.paymentMethod === PaymentTypeEnum.CASH) {
+      this.receipt.amountCash = sum;
+    } else if (this.receipt.paymentMethod === PaymentTypeEnum.CASHLESS) {
+      this.receipt.amountCashless = sum;
+    } else {
+      if (!this.isCashless) {
+        if (sum - this.receipt.amountCash < 0) {
+          this.receipt.amountCash = 0;
+          this.receipt.amountCashless = sum;
+        } else {
+          this.receipt.amountCashless = sum - this.receipt.amountCash;
+        }
+      } else {
+        if (sum - this.receipt.amountCashless < 0) {
+          this.receipt.amountCashless = 0;
+          this.receipt.amountCash = sum;
+        } else {
+          this.receipt.amountCash = sum - this.receipt.amountCashless;
+        }
+      }
+    }
+  }
+
+  /** Обновляет кол-во товара */
+  public updateCountProduct(event: { items: ProductReceiptDto[] }, count: number) {
+    event.items.forEach((product) => product.count = count);
   }
 
   /** Функция создает чек */
