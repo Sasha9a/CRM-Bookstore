@@ -37,18 +37,34 @@ export class DashboardComponent implements OnInit {
 
   public ngOnInit(): void {
     if (this.authService.checkRoles([RoleEnum.GENERAL_MANAGER])) {
-      this.salaryStateService.find<SalaryDto>().subscribe((payslip) => {
-        this.payslip = payslip;
-        this.payslipLoading = false;
-      }, () => this.payslipLoading = false);
+      this.loadPayslip();
     }
 
     if (this.authService.checkRoles([RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR])) {
-      this.receiptStateService.find<ReceiptDto>().subscribe((receipts) => {
-        this.receipts = receipts;
-        this.receiptsLoading = false;
-      }, () => this.receiptsLoading = false);
+      this.loadReceipts();
     }
+  }
+
+  /** Функция загружает данные о расчетных счетах
+   * @param queryParams параметры фильтрации */
+  public loadPayslip(queryParams?: any) {
+    this.payslipLoading = true;
+
+    this.salaryStateService.find<SalaryDto>(queryParams).subscribe((payslip) => {
+      this.payslip = payslip;
+      this.payslipLoading = false;
+    }, () => this.payslipLoading = false);
+  }
+
+  /** Функция загружает данные о чеках
+   * @param queryParams параметры фильтрации */
+  public loadReceipts(queryParams?: any) {
+    this.receiptsLoading = true;
+
+    this.receiptStateService.find<ReceiptDto>(queryParams).subscribe((receipts) => {
+      this.receipts = receipts;
+      this.receiptsLoading = false;
+    }, () => this.receiptsLoading = false);
   }
 
 }

@@ -5,8 +5,7 @@ import { MongooseQueryParser } from "mongoose-query-parser";
  * @return распарсенные параметры */
 export function queryParamParser(queryParams: any) {
   const parser = new MongooseQueryParser({
-    skipKey: 'offset',
-    limitKey: 'limit'
+    skipKey: 'offset'
   });
 
   return parser.parse(queryParams);
