@@ -47,7 +47,7 @@ export class DashboardComponent implements OnInit {
 
   /** Функция загружает данные о расчетных счетах
    * @param queryParams параметры фильтрации */
-  public loadPayslip(queryParams?: any) {
+  public loadPayslip(queryParams?: { dateFrom: Date, dateTo: Date }) {
     this.payslipLoading = true;
 
     this.salaryStateService.find<SalaryDto>(queryParams).subscribe((payslip) => {
@@ -58,7 +58,7 @@ export class DashboardComponent implements OnInit {
 
   /** Функция загружает данные о чеках
    * @param queryParams параметры фильтрации */
-  public loadReceipts(queryParams?: any) {
+  public loadReceipts(queryParams?: { dateFrom: Date, dateTo: Date }) {
     this.receiptsLoading = true;
 
     this.receiptStateService.find<ReceiptDto>(queryParams).subscribe((receipts) => {
