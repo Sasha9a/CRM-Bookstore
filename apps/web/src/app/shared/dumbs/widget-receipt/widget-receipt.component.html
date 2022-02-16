@@ -1,0 +1,36 @@
+<p-card styleClass="h-full">
+
+  <div class="flex justify-content-between align-items-center">
+    <h3 *ngIf="receipts?.length" class="my-0">Чеки ({{ receipts?.length }})</h3>
+    <h3 *ngIf="!receipts?.length" class="my-0">Чеки</h3>
+  </div>
+
+  <crm-table name="dashboard.receipts"
+             styleClass="mt-3"
+             scrollHeight="300px"
+             [columns]="itemColumns"
+             [loading]="loading"
+             [autoLayout]="true"
+             [values]="receipts | orderBy: '-date:date'">
+    <ng-template #rowTemplate let-receipt="item">
+      <tr *ngIf="toReceipt(receipt) as receipt">
+        <td nowrap>
+          <a target="_blank" routerLink="/receipt/card/{{ receipt._id }}">{{ receipt.date | date: 'dd.MM.YYYY' }}</a>
+        </td>
+        <td>
+          <p>{{ receipt.shop?.address }}</p>
+        </td>
+        <td>
+          <p>{{ receipt.paymentMethod | paymentTypeName }}</p>
+        </td>
+        <td nowrap>
+          <p>{{ receipt.amountCash || 0 | number: '.0-2' }} руб.</p>
+        </td>
+        <td nowrap>
+          <p>{{ receipt.amountCashless || 0 | number: '.0-2' }} руб.</p>
+        </td>
+      </tr>
+    </ng-template>
+  </crm-table>
+
+</p-card>
