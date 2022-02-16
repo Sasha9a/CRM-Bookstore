@@ -5,6 +5,7 @@ import { RoleEnum } from "@crm/shared/enums/role.enum";
 import { ReceiptStateService } from "@crm/web/core/services/receipt/receipt-state.service";
 import { SalaryStateService } from "@crm/web/core/services/salary/salary-state.service";
 import { AuthService } from "@crm/web/core/services/user/auth.service";
+import * as moment from "moment-timezone";
 
 /** Компонент рабочего стола */
 @Component({
@@ -47,10 +48,16 @@ export class DashboardComponent implements OnInit {
 
   /** Функция загружает данные о расчетных счетах
    * @param queryParams параметры фильтрации */
-  public loadPayslip(queryParams?: { dateFrom: Date, dateTo: Date }) {
+  public loadPayslip(queryParams?: [Date, Date]) {
     this.payslipLoading = true;
 
-    this.salaryStateService.find<SalaryDto>(queryParams).subscribe((payslip) => {
+    let params;
+    if (queryParams) {
+      params = {
+        filter: `{"date":{"$gte":"${moment(queryParams[0]).format('YYYY-MM-DD')}","$lte":"${moment(queryParams[1]).format('YYYY-MM-DD')}"}}`
+      }
+    }
+    this.salaryStateService.find<SalaryDto>(params).subscribe((payslip) => {
       this.payslip = payslip;
       this.payslipLoading = false;
     }, () => this.payslipLoading = false);

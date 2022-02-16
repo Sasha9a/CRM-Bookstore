@@ -12,6 +12,13 @@
     </button>
   </div>
 
+  <div class="mt-2">
+    <crm-daterangepicker [value]="[dateFrom, dateTo]"
+                         (changeValue)="selectRangeDate.emit($event)"
+                         placeholder="Период">
+    </crm-daterangepicker>
+  </div>
+
   <crm-table name="dashboard.payslip"
              styleClass="mt-3"
              scrollHeight="300px"

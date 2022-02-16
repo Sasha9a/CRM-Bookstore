@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { SalaryDto } from "@crm/shared/dtos/salary/salary.dto";
 import { CrmTableColumn } from "@crm/web/core/models/crm-table-column";
+import * as moment from "moment-timezone";
 
 /** Компонент показаза краткой сводки по рачетным листам */
 @Component({
@@ -15,6 +16,12 @@ export class WidgetSalaryComponent {
 
   /** Грузится ли или нет */
   @Input() public loading = false;
+
+  public dateFrom: Date = moment().startOf('month').toDate();
+
+  public dateTo: Date = moment().endOf('month').toDate();
+
+  @Output() public selectRangeDate = new EventEmitter<[Date, Date]>();
 
   /** Столбцы таблицы */
   public itemColumns: CrmTableColumn[] = [
