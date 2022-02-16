@@ -14,6 +14,7 @@
           <label class="fw-bold required-field">Магазин</label>
           <crm-shop-single-select [shops]="shops"
                                   [(selectedShop)]="receipt.shop"
+                                  (selectedShopChange)="updateTable(true)"
                                   [class]="errors?.shop ? 'ng-invalid ng-dirty' : ''"
                                   [disabled]="!!authService.currentUser.shop">
           </crm-shop-single-select>
@@ -66,11 +67,12 @@
     </div>
 
     <div class="col-12">
-      <p class="fw-bold required-field mb-3">Товары</p>
-      <p-pickList [source]="products"
+      <p class="fw-bold required-field mb-2">Товары</p>
+      <p-pickList *ngIf="receipt.shop"
+                  [source]="products"
                   [target]="receipt.products"
-                  (onMoveToSource)="updateCountProduct($event, 0); updateAnalytics()"
-                  (onMoveToTarget)="updateCountProduct($event, 1); updateAnalytics()"
+                  (onMoveToSource)="updateCountProduct($event, 0); updateTable()"
+                  (onMoveToTarget)="updateCountProduct($event, 1); updateTable()"
                   sourceHeader="Все товары"
                   targetHeader="Выбранные товары"
                   [dragdrop]="true"
@@ -100,17 +102,25 @@
               <div>
                 <small>{{ product.price | number }} руб.</small>
               </div>
-              <p-inputNumber *ngIf="receipt.products.includes(product)"
-                             class="mt-1"
-                             [(ngModel)]="product.count"
-                             (ngModelChange)="updateAnalytics()"
-                             [inputStyle]="{ 'width.px': 50 }"
-                             [showButtons]="true">
-              </p-inputNumber>
+              <div>
+                <small>{{ maxCountProduct[product._id] || 0 }} шт.</small>
+              </div>
+              <div>
+                <p-inputNumber *ngIf="receipt.products.includes(product)"
+                               class="mt-1"
+                               [(ngModel)]="product.count"
+                               (ngModelChange)="updateTable()"
+                               [inputStyle]="{ 'width.px': 50 }"
+                               [min]="1"
+                               [max]="maxCountProduct[product._id] || 1"
+                               [showButtons]="true">
+                </p-inputNumber>
+              </div>
             </div>
           </div>
         </ng-template>
       </p-pickList>
+      <p *ngIf="!receipt.shop">Выберите магазин</p>
     </div>
 
     <div class="col-12 mt-4">

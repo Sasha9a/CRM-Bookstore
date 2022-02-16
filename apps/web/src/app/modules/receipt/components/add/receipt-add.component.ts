@@ -13,7 +13,6 @@ import { ShopStateService } from "@crm/web/core/services/shop/shop-state.service
 import { AuthService } from "@crm/web/core/services/user/auth.service";
 import { validate } from "@crm/web/core/services/validation/validate.service";
 import * as moment from "moment-timezone";
-import { forkJoin } from "rxjs";
 
 /** Компонент создания чека */
 @Component({
@@ -48,6 +47,9 @@ export class ReceiptAddComponent implements OnInit {
   /** Выбор ввести либо наличные, либо безналичные при оплате "И то и то" */
   public isCashless = false;
 
+  /** Максимальное кол-во товара в магазине */
+  public maxCountProduct: Record<string, number> = {};
+
   public get PaymentTypeEnum() {
     return PaymentTypeEnum;
   }
@@ -60,28 +62,11 @@ export class ReceiptAddComponent implements OnInit {
                      private readonly router: Router) { }
 
   public ngOnInit(): void {
-    forkJoin(
-      this.shopStateService.find<ShopDto>(),
-      this.productStateService.find<ProductDto>()
-    )
-    .subscribe(([shops, products]) => {
+    this.shopStateService.find<ShopDto>().subscribe((shops) => {
       this.shops = shops;
       if (this.authService.currentUser.shop) {
         this.receipt.shop = this.shops.find((shop) => shop._id === this.authService.currentUser.shop._id);
       }
-      products.forEach((product) => {
-        if (!product.deleted) {
-          this.products.push({
-            _id: product._id,
-            name: product.name,
-            category: product.category,
-            code: product.code,
-            image: product.image,
-            price: product.price,
-            count: 0
-          });
-        }
-      });
       this.loading = false;
     }, () => this.loading = false);
 
@@ -121,6 +106,49 @@ export class ReceiptAddComponent implements OnInit {
   /** Обновляет кол-во товара */
   public updateCountProduct(event: { items: ProductReceiptDto[] }, count: number) {
     event.items.forEach((product) => product.count = count);
+  }
+
+  /** Обновляет таблицу */
+  public updateTable(fullUpdate = false) {
+    if (this.receipt.shop) {
+      if (fullUpdate) {
+        this.products = [];
+        this.receipt.products = [];
+        this.updateAnalytics();
+        this.productStateService.find<ProductDto>({ deleted: false }).subscribe((products) => {
+          const sourceProducts = [];
+          products.forEach((product) => {
+            if (product.count[this.receipt.shop._id] > 0) {
+              sourceProducts.push({
+                _id: product._id,
+                name: product.name,
+                category: product.category,
+                code: product.code,
+                image: product.image,
+                price: product.price,
+                count: 0
+              });
+            }
+            this.maxCountProduct[product._id] = product.count[this.receipt.shop._id];
+          });
+          this.products = sourceProducts;
+        });
+      } else {
+        this.productStateService.find<ProductDto>({ deleted: false }).subscribe((products) => {
+          products.forEach((product) => {
+            this.maxCountProduct[product._id] = product.count[this.receipt.shop._id];
+          });
+          this.receipt.products.forEach((product) => {
+            if (!this.maxCountProduct[product._id]) {
+              this.products.push(product);
+              this.products = this.products.filter(() => true);
+              this.receipt.products = this.receipt.products.filter((p) => p._id !== product._id);
+            }
+          });
+          this.updateAnalytics();
+        });
+      }
+    }
   }
 
   /** Функция создает чек */
