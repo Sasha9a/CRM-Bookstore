@@ -1,3 +1,4 @@
+import { ProductModule } from "@crm/api/modules/product/product.module";
 import { ReceiptController } from "@crm/api/modules/receipt/receipt.controller";
 import { ReceiptService } from "@crm/api/modules/receipt/receipt.service";
 import { UserModule } from "@crm/api/modules/user/user.module";
@@ -8,7 +9,8 @@ import { MongooseModule } from "@nestjs/mongoose";
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Receipt.name, schema: ReceiptSchema }]),
-    UserModule
+    UserModule,
+    ProductModule
   ],
   controllers: [ReceiptController],
   providers: [ReceiptService],

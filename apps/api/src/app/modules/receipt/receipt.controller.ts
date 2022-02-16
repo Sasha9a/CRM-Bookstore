@@ -3,6 +3,7 @@ import { JwtAuthGuard } from "@crm/api/core/guards/jwt-auth.guard";
 import { RoleGuard } from "@crm/api/core/guards/role.guard";
 import { ValidateObjectId } from "@crm/api/core/pipes/validate.object.id.pipes";
 import { queryParamParser } from "@crm/api/core/services/query-param-parser.service";
+import { ProductService } from "@crm/api/modules/product/product.service";
 import { ReceiptService } from "@crm/api/modules/receipt/receipt.service";
 import { ReceiptFormDto } from "@crm/shared/dtos/receipt/receipt.form.dto";
 import { RoleEnum } from "@crm/shared/enums/role.enum";
@@ -13,7 +14,8 @@ import { Response } from "express";
 @Controller('receipt')
 export class ReceiptController {
 
-  public constructor(private readonly receiptService: ReceiptService) {
+  public constructor(private readonly receiptService: ReceiptService,
+                     private readonly productService: ProductService) {
   }
 
   /** Get-запрос на получение списка всех чеков
@@ -55,12 +57,22 @@ export class ReceiptController {
       _id: body.shop._id,
       address: body.shop.address
     };
-    body.products.forEach((product) => {
+    for (const product of body.products) {
       product.category = {
         _id: product.category._id,
         name: product.category.name
       };
-    });
+      const selectProduct = await this.productService.findById(product._id);
+      if (selectProduct?.count) {
+        if (selectProduct.count[body.shop._id] - product.count < 0) {
+          selectProduct.count[body.shop._id] = 0;
+        } else {
+          selectProduct.count[body.shop._id] -= product.count;
+        }
+        selectProduct.markModified('count');
+        await selectProduct.save();
+      }
+    }
     const entity = await this.receiptService.create(body);
     return res.status(HttpStatus.CREATED).json(entity).end();
   }
