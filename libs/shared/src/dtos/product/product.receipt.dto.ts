@@ -33,4 +33,8 @@ export class ProductReceiptDto extends BaseDto {
   @Expose()
   public count: number;
 
+  /** Общая цена */
+  @Expose()
+  public totalPrice: number;
+
 }

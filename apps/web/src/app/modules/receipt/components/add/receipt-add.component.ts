@@ -77,7 +77,10 @@ export class ReceiptAddComponent implements OnInit {
 
   /** Обновляет аналитику */
   public updateAnalytics() {
-    const sum = this.receipt.products.reduce((sum, product) => sum + product.price * product.count, 0);
+    const sum = this.receipt.products.reduce((sum, product) => {
+      product.totalPrice = product.price * product.count;
+      return sum + product.totalPrice;
+    }, 0);
     if (this.receipt.paymentMethod === PaymentTypeEnum.CASH) {
       this.receipt.amountCash = sum;
     } else if (this.receipt.paymentMethod === PaymentTypeEnum.CASHLESS) {
@@ -114,7 +117,7 @@ export class ReceiptAddComponent implements OnInit {
         this.receipt.products = [];
         this.updateAnalytics();
         this.productStateService.find<ProductDto>({ deleted: false }).subscribe((products) => {
-          const sourceProducts = [];
+          const sourceProducts: ProductReceiptDto[] = [];
           products.forEach((product) => {
             if (product.count[this.receipt.shop._id] > 0) {
               sourceProducts.push({
@@ -124,7 +127,8 @@ export class ReceiptAddComponent implements OnInit {
                 code: product.code,
                 image: product.image,
                 price: product.price,
-                count: 0
+                count: 0,
+                totalPrice: 0
               });
             }
             this.maxCountProduct[product._id] = product.count[this.receipt.shop._id];
@@ -156,7 +160,8 @@ export class ReceiptAddComponent implements OnInit {
           code: product.code,
           image: product.image,
           price: product.price,
-          count: 0
+          count: 0,
+          totalPrice: 0
         });
         this.products = this.products.filter(() => true);
       }

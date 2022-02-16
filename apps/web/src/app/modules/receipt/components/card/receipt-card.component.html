@@ -1,1 +1,68 @@
-<p>receipt-card works!</p>
+<h2>Чек</h2>
+
+<div *ngIf="!loading" class="grid">
+  <div class="col-12 xl:col-6">
+    <p-table [value]=[null]>
+      <ng-template pTemplate="body">
+        <tr>
+          <td class="fw-bold">Дата оформления</td>
+          <td class="fw-semibold">{{ receipt.date | date: 'dd MMMM YYYY' }}</td>
+        </tr>
+        <tr>
+          <td class="fw-bold">Магазин</td>
+          <td class="fw-semibold">{{ receipt.shop?.address }}</td>
+        </tr>
+        <tr>
+          <td class="fw-bold">Продавец</td>
+          <td>
+            <a class="fw-semibold"
+               routerLink="/user/card/{{ receipt.salesman?._id }}"
+               target="_blank">
+              {{ receipt.salesman?.name }}
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td class="fw-bold">Способ оплаты</td>
+          <td class="fw-semibold">{{ receipt.paymentMethod | paymentTypeName }}</td>
+        </tr>
+        <tr *ngIf="receipt.amountCash">
+          <td class="fw-bold">Сумма наличными</td>
+          <td class="fw-semibold">{{ receipt.amountCash | number: '.0-2' }} руб.</td>
+        </tr>
+        <tr *ngIf="receipt.amountCashless">
+          <td class="fw-bold">Сумма безналичными</td>
+          <td class="fw-semibold">{{ receipt.amountCashless | number: '.0-2' }} руб.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <div class="col-12">
+    <h3 class="dividing-header">Товары</h3>
+
+    <crm-table name="receipt.card"
+               styleClass="mt-3 sticky-header"
+               [columns]="itemColumns"
+               [values]="receipt.products">
+      <ng-template #rowTemplate let-product="item">
+        <tr *ngIf="toProduct(product) as product">
+          <td>
+            <p-image *ngIf="product.image" [src]="('file/' + product.image.path) | apiUrl"
+                     alt="{{ product.name }}" width="80" [preview]="true">
+            </p-image>
+            <p-skeleton *ngIf="!product.image" size="5rem"></p-skeleton>
+          </td>
+          <td><a routerLink="/product/card/{{ product._id }}">{{ product.name }}</a></td>
+          <td>{{ product.code }}</td>
+          <td>{{ product.category?.name }}</td>
+          <td>{{ product.price | number: '.0-2' }} руб.</td>
+          <td>{{ product.count | number }}</td>
+          <td>{{ product.totalPrice | number: '.0-2' }} руб.</td>
+        </tr>
+      </ng-template>
+    </crm-table>
+  </div>
+</div>
+
+<crm-spinner *ngIf="loading"></crm-spinner>
