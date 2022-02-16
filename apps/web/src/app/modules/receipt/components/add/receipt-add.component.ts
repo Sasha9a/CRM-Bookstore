@@ -77,8 +77,6 @@ export class ReceiptAddComponent implements OnInit {
 
   /** Обновляет аналитику */
   public updateAnalytics() {
-    this.receipt.amountCash = 0;
-    this.receipt.amountCashless = 0;
     const sum = this.receipt.products.reduce((sum, product) => sum + product.price * product.count, 0);
     if (this.receipt.paymentMethod === PaymentTypeEnum.CASH) {
       this.receipt.amountCash = sum;
@@ -135,20 +133,52 @@ export class ReceiptAddComponent implements OnInit {
         });
       } else {
         this.productStateService.find<ProductDto>({ deleted: false }).subscribe((products) => {
-          products.forEach((product) => {
-            this.maxCountProduct[product._id] = product.count[this.receipt.shop._id];
-          });
-          this.receipt.products.forEach((product) => {
-            if (!this.maxCountProduct[product._id]) {
-              this.products.push(product);
-              this.products = this.products.filter(() => true);
-              this.receipt.products = this.receipt.products.filter((p) => p._id !== product._id);
-            }
-          });
-          this.updateAnalytics();
+          if (this.checkUpdateProducts(products)) {
+            this.errorService.addSuccessMessage('Товары обновились');
+          }
         });
       }
     }
+  }
+
+  /** Функция проверяет нет ли новых изменений в товарах
+   * @param products товары
+   * @return Возвращает производились ли изменения товаров или нет */
+  public checkUpdateProducts(products: ProductDto[]): boolean {
+    let isUpdate = false;
+    products.forEach((product) => {
+      if (!this.maxCountProduct[product._id] && product.count[this.receipt.shop._id]) {
+        isUpdate = true;
+        this.products.push({
+          _id: product._id,
+          name: product.name,
+          category: product.category,
+          code: product.code,
+          image: product.image,
+          price: product.price,
+          count: 0
+        });
+        this.products = this.products.filter(() => true);
+      }
+      if (this.maxCountProduct[product._id] !== product.count[this.receipt.shop._id]) {
+        isUpdate = true;
+        this.maxCountProduct[product._id] = product.count[this.receipt.shop._id];
+      }
+    });
+    this.receipt.products.forEach((product) => {
+      if (!this.maxCountProduct[product._id]) {
+        isUpdate = true;
+        this.receipt.products = this.receipt.products.filter((p) => p._id !== product._id);
+      }
+    });
+    this.products.forEach((product) => {
+      if (!this.maxCountProduct[product._id]) {
+        isUpdate = true;
+        this.products = this.products.filter((p) => p._id !== product._id);
+      }
+    });
+    this.updateAnalytics();
+    return isUpdate;
   }
 
   /** Функция создает чек */
@@ -164,10 +194,17 @@ export class ReceiptAddComponent implements OnInit {
     } else {
       this.errors = null;
 
-      this.receiptStateService.create<ReceiptFormDto, ReceiptDto>(this.receipt).subscribe(() => {
-        this.loading = false;
-        this.errorService.addSuccessMessage("Чек создан");
-        this.router.navigate(['/product']).catch(console.error);
+      this.productStateService.find<ProductDto>({ deleted: false }).subscribe((products) => {
+        if (this.checkUpdateProducts(products)) {
+          this.loading = false;
+          return this.errorService.addCustomError('Обновление товаров', 'В таблице обновились товары, перепроверьте, а затем создавайте чек');
+        }
+
+        this.receiptStateService.create<ReceiptFormDto, ReceiptDto>(this.receipt).subscribe(() => {
+          this.loading = false;
+          this.errorService.addSuccessMessage("Чек создан");
+          this.router.navigate(['/product']).catch(console.error);
+        }, () => this.loading = false);
       }, () => this.loading = false);
     }
   }

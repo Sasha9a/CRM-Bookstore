@@ -33,7 +33,11 @@
           <label class="fw-bold required-field">Итоговая сумма</label>
           <p *ngIf="!receipt.paymentMethod">Выберите способ оплаты</p>
           <div *ngIf="receipt.paymentMethod === PaymentTypeEnum.SO_SO" class="pb-2">
-            <p-checkbox [(ngModel)]="isCashless" [binary]="true" inputId="isCashless"></p-checkbox>
+            <p-checkbox [(ngModel)]="isCashless"
+                        [binary]="true"
+                        (ngModelChange)="updateAnalytics()"
+                        inputId="isCashless">
+            </p-checkbox>
             <label [for]="'isCashless'" class="ml-2">Ввести безналичные</label>
           </div>
           <div class="grid mt-3">
