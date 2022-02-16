@@ -114,6 +114,7 @@
                                class="mt-1"
                                [(ngModel)]="product.count"
                                (ngModelChange)="updateTable()"
+                               (click)="$event.stopPropagation()"
                                [inputStyle]="{ 'width.px': 50 }"
                                [min]="1"
                                [max]="maxCountProduct[product._id] || 1"
