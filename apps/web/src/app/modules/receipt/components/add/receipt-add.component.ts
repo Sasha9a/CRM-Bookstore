@@ -83,8 +83,10 @@ export class ReceiptAddComponent implements OnInit {
     }, 0);
     if (this.receipt.paymentMethod === PaymentTypeEnum.CASH) {
       this.receipt.amountCash = sum;
+      this.receipt.amountCashless = 0;
     } else if (this.receipt.paymentMethod === PaymentTypeEnum.CASHLESS) {
       this.receipt.amountCashless = sum;
+      this.receipt.amountCash = 0;
     } else {
       if (!this.isCashless) {
         if (sum - this.receipt.amountCash < 0) {
@@ -119,19 +121,21 @@ export class ReceiptAddComponent implements OnInit {
         this.productStateService.find<ProductDto>({ deleted: false }).subscribe((products) => {
           const sourceProducts: ProductReceiptDto[] = [];
           products.forEach((product) => {
-            if (product.count[this.receipt.shop._id] > 0) {
-              sourceProducts.push({
-                _id: product._id,
-                name: product.name,
-                category: product.category,
-                code: product.code,
-                image: product.image,
-                price: product.price,
-                count: 0,
-                totalPrice: 0
-              });
+            if (product.count) {
+              if (product.count[this.receipt.shop._id] > 0) {
+                sourceProducts.push({
+                  _id: product._id,
+                  name: product.name,
+                  category: product.category,
+                  code: product.code,
+                  image: product.image,
+                  price: product.price,
+                  count: 0,
+                  totalPrice: 0
+                });
+              }
+              this.maxCountProduct[product._id] = product.count[this.receipt.shop._id];
             }
-            this.maxCountProduct[product._id] = product.count[this.receipt.shop._id];
           });
           this.products = sourceProducts;
         });
@@ -151,23 +155,25 @@ export class ReceiptAddComponent implements OnInit {
   public checkUpdateProducts(products: ProductDto[]): boolean {
     let isUpdate = false;
     products.forEach((product) => {
-      if (!this.maxCountProduct[product._id] && product.count[this.receipt.shop._id]) {
-        isUpdate = true;
-        this.products.push({
-          _id: product._id,
-          name: product.name,
-          category: product.category,
-          code: product.code,
-          image: product.image,
-          price: product.price,
-          count: 0,
-          totalPrice: 0
-        });
-        this.products = this.products.filter(() => true);
-      }
-      if (this.maxCountProduct[product._id] !== product.count[this.receipt.shop._id]) {
-        isUpdate = true;
-        this.maxCountProduct[product._id] = product.count[this.receipt.shop._id];
+      if (product.count) {
+        if (!this.maxCountProduct[product._id] && product.count[this.receipt.shop._id]) {
+          isUpdate = true;
+          this.products.push({
+            _id: product._id,
+            name: product.name,
+            category: product.category,
+            code: product.code,
+            image: product.image,
+            price: product.price,
+            count: 0,
+            totalPrice: 0
+          });
+          this.products = this.products.filter(() => true);
+        }
+        if (this.maxCountProduct[product._id] !== product.count[this.receipt.shop._id]) {
+          isUpdate = true;
+          this.maxCountProduct[product._id] = product.count[this.receipt.shop._id];
+        }
       }
     });
     this.receipt.products.forEach((product) => {

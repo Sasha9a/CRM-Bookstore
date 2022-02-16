@@ -1,8 +1,8 @@
 <p-card styleClass="h-full">
 
   <div class="flex justify-content-between align-items-center">
-    <h3 *ngIf="payslip?.length" class="my-0">Расчетные листы ({{ payslip?.length }})</h3>
-    <h3 *ngIf="!payslip?.length" class="my-0">Расчетные листы</h3>
+    <h3 *ngIf="payslip?.length" class="fw-bold my-0">Расчетные листы ({{ payslip?.length }})</h3>
+    <h3 *ngIf="!payslip?.length" class="fw-bold my-0">Расчетные листы</h3>
     <button pButton pRipple
             type="button"
             icon="pi pi-plus"
