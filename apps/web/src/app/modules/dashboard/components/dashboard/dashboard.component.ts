@@ -62,6 +62,7 @@ export class DashboardComponent implements OnInit {
         filter: `{"date":{"$gte":"${moment(queryParams[0]).toISOString()}","$lte":"${moment(queryParams[1]).toISOString()}"}}`
       }
     }
+
     this.salaryStateService.find<SalaryDto>(params).subscribe((payslip) => {
       this.payslip = payslip;
       this.payslipLoading = false;
