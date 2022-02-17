@@ -6,7 +6,10 @@
       <div class="p-fluid">
         <div class="field">
           <label class="fw-bold required-field">Дата начисления зарплаты</label>
-          <crm-datepicker [(value)]="salary.date" [class]="errors?.date ? 'ng-invalid ng-dirty' : ''"></crm-datepicker>
+          <crm-datepicker [(value)]="salary.date"
+                          [class]="errors?.date ? 'ng-invalid ng-dirty' : ''"
+                          [maxDate]="currentDate">
+          </crm-datepicker>
           <small *ngIf="errors?.date" class="p-error">{{ errors.date | join }}</small>
         </div>
 

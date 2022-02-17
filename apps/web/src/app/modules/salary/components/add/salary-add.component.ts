@@ -65,6 +65,9 @@ export class SalaryAddComponent implements OnInit {
     SHIFT: 0
   };
 
+  /** Сегодняшняя дата */
+  public currentDate = moment().toDate();
+
   public constructor(private readonly userStateService: UserStateService,
                      private readonly shopStateService: ShopStateService,
                      private readonly salaryStateService: SalaryStateService,

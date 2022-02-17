@@ -50,6 +50,9 @@ export class ReceiptAddComponent implements OnInit {
   /** Максимальное кол-во товара в магазине */
   public maxCountProduct: Record<string, number> = {};
 
+  /** Сегодняшняя дата */
+  public currentDate = moment().toDate();
+
   public get PaymentTypeEnum() {
     return PaymentTypeEnum;
   }
