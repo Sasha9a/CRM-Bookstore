@@ -18,6 +18,7 @@ export class ShopSingleSelectComponent {
   @Input() public itemSize = 47;
 
   @Input() public labelInput = '';
+  @Input() public placeholder = '\u00A0';
 
   @Input() public class = '';
 

@@ -6,6 +6,7 @@ import { ReceiptDto } from "@crm/shared/dtos/receipt/receipt.dto";
 import { ReceiptFormDto } from "@crm/shared/dtos/receipt/receipt.form.dto";
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
 import { PaymentTypeEnum } from "@crm/shared/enums/payment.type.enum";
+import { RoleEnum } from "@crm/shared/enums/role.enum";
 import { ErrorService } from "@crm/web/core/services/error.service";
 import { ProductStateService } from "@crm/web/core/services/product/product-state.service";
 import { ReceiptStateService } from "@crm/web/core/services/receipt/receipt-state.service";
@@ -65,13 +66,25 @@ export class ReceiptAddComponent implements OnInit {
                      private readonly router: Router) { }
 
   public ngOnInit(): void {
-    this.shopStateService.find<ShopDto>().subscribe((shops) => {
-      this.shops = shops;
-      if (this.authService.currentUser.shop) {
-        this.receipt.shop = this.shops.find((shop) => shop._id === this.authService.currentUser.shop._id);
-      }
-      this.loading = false;
-    }, () => this.loading = false);
+    if (!this.authService.checkRoles([RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR])) {
+      this.shopStateService.findById<ShopDto>(this.authService.currentUser.shop?._id).subscribe((shop) => {
+        this.shops = [shop];
+        if (this.authService.currentUser.shop) {
+          this.receipt.shop = shop;
+          this.updateTable(true);
+        }
+        this.loading = false;
+      }, () => this.loading = false);
+    } else {
+      this.shopStateService.find<ShopDto>().subscribe((shops) => {
+        this.shops = shops;
+        if (this.authService.currentUser.shop) {
+          this.receipt.shop = this.shops.find((shop) => shop._id === this.authService.currentUser.shop._id);
+          this.updateTable(true);
+        }
+        this.loading = false;
+      }, () => this.loading = false);
+    }
 
     this.receipt.date = moment().startOf('day').toDate();
 
