@@ -7,6 +7,9 @@
   </div>
 
   <div *ngIf="authService.checkRoles([RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR])" class="col-12 xl:col-6">
-    <crm-widget-receipt [receipts]="receipts" [loading]="receiptsLoading"></crm-widget-receipt>
+    <crm-widget-receipt [receipts]="receipts"
+                        [loading]="receiptsLoading"
+                        (selectRangeDate)="loadReceipts($event)">
+    </crm-widget-receipt>
   </div>
 </div>

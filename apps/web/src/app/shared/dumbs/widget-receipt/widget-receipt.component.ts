@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ReceiptDto } from "@crm/shared/dtos/receipt/receipt.dto";
 import { CrmTableColumn } from "@crm/web/core/models/crm-table-column";
+import * as moment from "moment-timezone";
 
 @Component({
   selector: 'crm-widget-receipt',
@@ -14,6 +15,15 @@ export class WidgetReceiptComponent {
 
   /** Грузится ли или нет */
   @Input() public loading = false;
+
+  /** Фильтр периода дат */
+  public datePeriod = {
+    from: moment().startOf('month').toDate(),
+    to: moment().endOf('month').toDate()
+  };
+
+  /** Событие вызывается когда период выбран */
+  @Output() public selectRangeDate = new EventEmitter<[Date, Date]>();
 
   /** Столбцы таблицы */
   public itemColumns: CrmTableColumn[] = [

@@ -5,6 +5,13 @@
     <h3 *ngIf="!receipts?.length" class="fw-bold mt-1 mb-2">Чеки</h3>
   </div>
 
+  <div class="mt-2">
+    <crm-daterangepicker [value]="[datePeriod.from, datePeriod.to]"
+                         (changeValue)="selectRangeDate.emit($event)"
+                         placeholder="Период">
+    </crm-daterangepicker>
+  </div>
+
   <crm-table name="dashboard.receipts"
              styleClass="mt-3"
              scrollHeight="300px"

@@ -37,12 +37,17 @@ export class DashboardComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    const datePeriod: [Date, Date] = [
+      moment().startOf('month').toDate(),
+      moment().endOf('month').toDate()
+    ];
+
     if (this.authService.checkRoles([RoleEnum.GENERAL_MANAGER])) {
-      this.loadPayslip();
+      this.loadPayslip(datePeriod);
     }
 
     if (this.authService.checkRoles([RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR])) {
-      this.loadReceipts();
+      this.loadReceipts(datePeriod);
     }
   }
 
@@ -54,7 +59,7 @@ export class DashboardComponent implements OnInit {
     let params;
     if (queryParams) {
       params = {
-        filter: `{"date":{"$gte":"${moment(queryParams[0]).format('YYYY-MM-DD')}","$lte":"${moment(queryParams[1]).format('YYYY-MM-DD')}"}}`
+        filter: `{"date":{"$gte":"${moment(queryParams[0]).toISOString()}","$lte":"${moment(queryParams[1]).toISOString()}"}}`
       }
     }
     this.salaryStateService.find<SalaryDto>(params).subscribe((payslip) => {
@@ -65,10 +70,17 @@ export class DashboardComponent implements OnInit {
 
   /** Функция загружает данные о чеках
    * @param queryParams параметры фильтрации */
-  public loadReceipts(queryParams?: { dateFrom: Date, dateTo: Date }) {
+  public loadReceipts(queryParams?: [Date, Date]) {
     this.receiptsLoading = true;
 
-    this.receiptStateService.find<ReceiptDto>(queryParams).subscribe((receipts) => {
+    let params;
+    if (queryParams) {
+      params = {
+        filter: `{"date":{"$gte":"${moment(queryParams[0]).toISOString()}","$lte":"${moment(queryParams[1]).toISOString()}"}}`
+      }
+    }
+
+    this.receiptStateService.find<ReceiptDto>(params).subscribe((receipts) => {
       this.receipts = receipts;
       this.receiptsLoading = false;
     }, () => this.receiptsLoading = false);

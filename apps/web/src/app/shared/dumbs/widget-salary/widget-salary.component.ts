@@ -17,10 +17,13 @@ export class WidgetSalaryComponent {
   /** Грузится ли или нет */
   @Input() public loading = false;
 
-  public dateFrom: Date = moment().startOf('month').toDate();
+  /** Фильтр периода дат */
+  public datePeriod = {
+    from: moment().startOf('month').toDate(),
+    to: moment().endOf('month').toDate()
+  };
 
-  public dateTo: Date = moment().endOf('month').toDate();
-
+  /** Событие вызывается когда период выбран */
   @Output() public selectRangeDate = new EventEmitter<[Date, Date]>();
 
   /** Столбцы таблицы */
