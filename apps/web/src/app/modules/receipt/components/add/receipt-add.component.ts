@@ -70,7 +70,7 @@ export class ReceiptAddComponent implements OnInit {
       this.loading = false;
     }, () => this.loading = false);
 
-    this.receipt.date = moment().toDate();
+    this.receipt.date = moment().startOf('day').toDate();
 
     this.receipt.salesman = this.authService.currentUser;
   }
