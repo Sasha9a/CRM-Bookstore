@@ -2,14 +2,15 @@
   <div *ngIf="authService.checkRoles([RoleEnum.GENERAL_MANAGER])" class="col-12 xl:col-6">
     <crm-widget-salary [payslip]="payslip"
                        [loading]="payslipLoading"
-                       (selectRangeDate)="loadPayslip($event)">
+                       (changeQueryParams)="loadPayslip($event)">
     </crm-widget-salary>
   </div>
 
   <div *ngIf="authService.checkRoles([RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR])" class="col-12 xl:col-6">
     <crm-widget-receipt [receipts]="receipts"
+                        [shops]="shops"
                         [loading]="receiptsLoading"
-                        (selectRangeDate)="loadReceipts($event)">
+                        (changeQueryParams)="loadReceipts($event)">
     </crm-widget-receipt>
   </div>
 </div>

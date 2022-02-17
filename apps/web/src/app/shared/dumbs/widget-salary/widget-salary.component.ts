@@ -23,8 +23,8 @@ export class WidgetSalaryComponent {
     to: moment().endOf('month').toDate()
   };
 
-  /** Событие вызывается когда период выбран */
-  @Output() public selectRangeDate = new EventEmitter<[Date, Date]>();
+  /** Событие вызывается меняются фильтры */
+  @Output() public changeQueryParams = new EventEmitter<any>();
 
   /** Столбцы таблицы */
   public itemColumns: CrmTableColumn[] = [
@@ -34,6 +34,16 @@ export class WidgetSalaryComponent {
     { label: 'Итого', name: 'sum', sort: 'sum:number' },
     { label: 'Общее описание' }
   ];
+
+  /** Сохраняет даты в фильтры
+   * @param dates Даты */
+  public setDateFilter(dates: [Date, Date]) {
+    this.datePeriod = {
+      from: dates[0],
+      to: dates[1]
+    }
+    this.changeQueryParams.emit(this.datePeriod);
+  }
 
   /** Функция типизирует переменную
    * @param payslip данные о зарплате

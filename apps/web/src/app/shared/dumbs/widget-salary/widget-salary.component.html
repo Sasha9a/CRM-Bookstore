@@ -14,7 +14,7 @@
 
   <div class="mt-2">
     <crm-daterangepicker [value]="[datePeriod.from, datePeriod.to]"
-                         (changeValue)="selectRangeDate.emit($event)"
+                         (changeValue)="setDateFilter($event)"
                          placeholder="Период">
     </crm-daterangepicker>
   </div>

@@ -1,6 +1,9 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ReceiptDto } from "@crm/shared/dtos/receipt/receipt.dto";
+import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
+import { RoleEnum } from "@crm/shared/enums/role.enum";
 import { CrmTableColumn } from "@crm/web/core/models/crm-table-column";
+import { AuthService } from "@crm/web/core/services/user/auth.service";
 import * as moment from "moment-timezone";
 
 @Component({
@@ -8,22 +11,26 @@ import * as moment from "moment-timezone";
   templateUrl: './widget-receipt.component.html',
   styleUrls: []
 })
-export class WidgetReceiptComponent {
+export class WidgetReceiptComponent implements OnInit {
 
   /** Чеки */
   @Input() public receipts: ReceiptDto[];
+
+  /** Магазины */
+  @Input() public shops: ShopDto[];
 
   /** Грузится ли или нет */
   @Input() public loading = false;
 
   /** Фильтр периода дат */
-  public datePeriod = {
+  public filters = {
     from: moment().startOf('month').toDate(),
-    to: moment().endOf('month').toDate()
+    to: moment().endOf('month').toDate(),
+    shop: undefined
   };
 
-  /** Событие вызывается когда период выбран */
-  @Output() public selectRangeDate = new EventEmitter<[Date, Date]>();
+  /** Событие вызывается меняются фильтры */
+  @Output() public changeQueryParams = new EventEmitter<any>();
 
   /** Столбцы таблицы */
   public itemColumns: CrmTableColumn[] = [
@@ -33,6 +40,29 @@ export class WidgetReceiptComponent {
     { label: 'Наличными', name: 'amountCash', sort: 'amountCash:number' },
     { label: 'Безналичными', name: 'amountCashless', sort: 'amountCashless:number' }
   ];
+
+  /** Директор ли смотрит виджет или нет */
+  public isDirector = false;
+
+  public constructor(private readonly authService: AuthService) {
+  }
+
+  public ngOnInit() {
+    if (!this.authService.checkRoles([RoleEnum.GENERAL_MANAGER]) &&
+      this.authService.checkRoles([RoleEnum.STORE_DIRECTOR]) &&
+      this.authService.currentUser.shop) {
+      this.isDirector = true;
+      this.filters.shop = this.authService.currentUser.shop;
+    }
+  }
+
+  /** Сохраняет даты в фильтры
+   * @param dates Даты */
+  public setDateFilter(dates: [Date, Date]) {
+    this.filters.from = dates[0];
+    this.filters.to = dates[1];
+    this.changeQueryParams.emit(this.filters);
+  }
 
   /** Функция типизирует переменную
    * @param receipt чек
