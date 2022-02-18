@@ -1,6 +1,7 @@
 import { BaseDto } from "@crm/shared/dtos/base.dto";
 import { SalaryInfoDto } from "@crm/shared/dtos/salary/salary.info.dto";
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
+import { UserDto } from "@crm/shared/dtos/user/user.dto";
 import { Expose, Type } from "class-transformer";
 
 /** DTO зарплат */
@@ -18,6 +19,11 @@ export class SalaryDto extends BaseDto {
   /** Период окончания работ */
   @Expose()
   public dateTo: Date;
+
+  /** Сотрудник кто создал акт */
+  @Expose()
+  @Type(() => UserDto)
+  public employee: UserDto;
 
   /** Описание */
   @Expose()

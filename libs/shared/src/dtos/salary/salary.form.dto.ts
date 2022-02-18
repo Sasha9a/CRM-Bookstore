@@ -1,5 +1,6 @@
 import { SalaryInfoFormDto } from "@crm/shared/dtos/salary/salary.info.form.dto";
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
+import { UserDto } from "@crm/shared/dtos/user/user.dto";
 import { Expose, Transform, Type } from "class-transformer";
 import { ArrayMinSize, IsDate, IsDefined, IsOptional, ValidateNested } from "class-validator";
 
@@ -24,6 +25,12 @@ export class SalaryFormDto {
   @Transform(({ value }) => value ? new Date(value) : undefined)
   @IsDate({ message: "Выберите дату окончания работ" })
   public dateTo: Date;
+
+  /** Сотрудник кто создал акт */
+  @Expose()
+  @IsDefined({ message: "Выберите бугалтера" })
+  @Type(() => UserDto)
+  public employee: Partial<UserDto>;
 
   /** Описание */
   @Expose()

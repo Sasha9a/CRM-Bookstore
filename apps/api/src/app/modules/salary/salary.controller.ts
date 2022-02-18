@@ -64,6 +64,10 @@ export class SalaryController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Post()
   public async create(@Res() res: Response, @Body() body: SalaryFormDto) {
+    body.employee = {
+      _id: body.employee._id,
+      name: body.employee.name
+    };
     body.info.forEach((entity) => {
       if (entity.user) {
         entity.user = {

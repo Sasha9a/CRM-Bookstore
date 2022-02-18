@@ -10,6 +10,7 @@ import { CrmTableColumn } from "@crm/web/core/models/crm-table-column";
 import { ErrorService } from "@crm/web/core/services/error.service";
 import { SalaryStateService } from "@crm/web/core/services/salary/salary-state.service";
 import { ShopStateService } from "@crm/web/core/services/shop/shop-state.service";
+import { AuthService } from "@crm/web/core/services/user/auth.service";
 import { UserStateService } from "@crm/web/core/services/user/user-state.service";
 import { validate } from "@crm/web/core/services/validation/validate.service";
 import { Moment } from "moment-timezone";
@@ -72,6 +73,7 @@ export class SalaryAddComponent implements OnInit {
                      private readonly shopStateService: ShopStateService,
                      private readonly salaryStateService: SalaryStateService,
                      private readonly errorService: ErrorService,
+                     private readonly authService: AuthService,
                      private readonly router: Router) { }
 
   public ngOnInit(): void {
@@ -87,6 +89,8 @@ export class SalaryAddComponent implements OnInit {
     }, () => this.loading = false);
 
     this.salary.date = moment().startOf('day').toDate();
+
+    this.salary.employee = this.authService.currentUser;
   }
 
   /** Функция записывает период в переменную

@@ -1,4 +1,5 @@
 import { SalaryInfoDto } from "@crm/shared/dtos/salary/salary.info.dto";
+import { UserDto } from "@crm/shared/dtos/user/user.dto";
 import { Shop } from "@crm/shared/schemas/shop.schema";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import * as mongoose from "mongoose";
@@ -19,6 +20,10 @@ export class Salary extends Document {
   /** Период окончания работ */
   @Prop({ required: true })
   public dateTo: Date;
+
+  /** Сотрудник кто создал акт */
+  @Prop({ type: mongoose.Schema.Types.Mixed, required: true })
+  public employee: UserDto;
 
   /** Описание */
   @Prop()

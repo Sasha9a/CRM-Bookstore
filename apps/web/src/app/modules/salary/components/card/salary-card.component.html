@@ -13,6 +13,16 @@
           <td class="fw-semibold">{{ salary.dateFrom | date: 'dd MMMM YYYY' }} - {{ salary.dateTo | date: 'dd MMMM YYYY' }}</td>
         </tr>
         <tr>
+          <td class="fw-bold">Бугалтер</td>
+          <td>
+            <a class="fw-semibold"
+               routerLink="/user/card/{{ salary.employee?._id }}"
+               target="_blank">
+              {{ salary.employee?.name }}
+            </a>
+          </td>
+        </tr>
+        <tr>
           <td class="fw-bold">Магазин</td>
           <td class="fw-semibold">{{ salary.shop?.address }}</td>
         </tr>
