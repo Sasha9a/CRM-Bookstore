@@ -12,4 +12,17 @@ export class OrderService extends BaseService<Order> {
     super(orderModel);
   }
 
+  /** Получить последние данные заказов по конкретному товару
+   * @param productId ID сотрудника
+   * @param shopId ID магазина
+   * @param limit Сколько данных нужно получить
+   * @return Массив данных о заказах */
+  public getAllByProduct(productId: string, shopId: string, limit = 10): Promise<Order[]> {
+    if (shopId) {
+      return this.orderModel.find({ 'shop._id': shopId, products: { $elemMatch: { _id: productId } } }).sort({ date: -1 }).limit(limit).exec();
+    } else {
+      return this.orderModel.find({ products: { $elemMatch: { _id: productId } } }).sort({ date: -1 }).limit(limit).exec();
+    }
+  }
+
 }
