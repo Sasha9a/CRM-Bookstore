@@ -4,7 +4,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { RoleEnum } from "@crm/shared/enums/role.enum";
 import { RoleGuard } from "@crm/web/core/guards/role.guard";
 import { SharedModule } from "@crm/web/shared/shared.module";
-import { OrderAddComponent } from './components/order-add/order-add.component';
+import { OrderAddComponent } from './components/add/order-add.component';
 
 const routes: Routes = [
   {
