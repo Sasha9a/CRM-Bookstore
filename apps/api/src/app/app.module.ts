@@ -1,6 +1,7 @@
 import { LoggerMiddleware } from "@crm/api/core/middlewares/logger.middleware";
 import { CategoryModule } from "@crm/api/modules/category/category.module";
 import { FileModule } from "@crm/api/modules/file/file.module";
+import { OrderModule } from "@crm/api/modules/order/order.module";
 import { ProductModule } from "@crm/api/modules/product/product.module";
 import { ReceiptModule } from "@crm/api/modules/receipt/receipt.module";
 import { SalaryModule } from "@crm/api/modules/salary/salary.module";
@@ -28,7 +29,8 @@ moment.locale('ru');
     CategoryModule,
     ProductModule,
     SalaryModule,
-    ReceiptModule
+    ReceiptModule,
+    OrderModule
   ],
   controllers: [],
   providers: []
