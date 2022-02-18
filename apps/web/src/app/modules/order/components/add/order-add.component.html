@@ -84,6 +84,7 @@
                 <div class="p-inputgroup">
                   <p-inputNumber [(ngModel)]="product.priceManufacture"
                                  [min]="0"
+                                 (click)="$event.stopPropagation()"
                                  [inputStyle]="{ 'width.px': 80 }">
                   </p-inputNumber>
                   <span class="p-inputgroup-addon">руб.</span>
