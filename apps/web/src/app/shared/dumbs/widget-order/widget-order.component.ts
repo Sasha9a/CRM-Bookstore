@@ -1,21 +1,21 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ReceiptDto } from "@crm/shared/dtos/receipt/receipt.dto";
+import { OrderDto } from "@crm/shared/dtos/order/order.dto";
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
 import { RoleEnum } from "@crm/shared/enums/role.enum";
 import { CrmTableColumn } from "@crm/web/core/models/crm-table-column";
 import { AuthService } from "@crm/web/core/services/user/auth.service";
 import * as moment from "moment-timezone";
 
-/** Компонент показаза краткой сводки по чекам */
+/** Компонент показаза краткой сводки по заказам */
 @Component({
-  selector: 'crm-widget-receipt',
-  templateUrl: './widget-receipt.component.html',
+  selector: 'crm-widget-order',
+  templateUrl: './widget-order.component.html',
   styleUrls: []
 })
-export class WidgetReceiptComponent implements OnInit {
+export class WidgetOrderComponent implements OnInit {
 
-  /** Чеки */
-  @Input() public receipts: ReceiptDto[];
+  /** Заказы */
+  @Input() public orders: OrderDto[];
 
   /** Магазины */
   @Input() public shops: ShopDto[];
@@ -37,18 +37,15 @@ export class WidgetReceiptComponent implements OnInit {
   public itemColumns: CrmTableColumn[] = [
     { label: 'День оформления', name: 'date', sort: 'date:date' },
     { label: 'Магазин', name: 'shop', sort: 'shop.address:string' },
-    { label: 'Способ оплаты', name: 'paymentMethod', sort: 'paymentMethod:string' },
-    { label: 'Наличными', name: 'amountCash', sort: 'amountCash:number' },
-    { label: 'Безналичными', name: 'amountCashless', sort: 'amountCashless:number' }
+    { label: 'Сумма', name: 'sum', sort: 'sum:number' }
   ];
 
   /** Директор ли смотрит виджет или нет */
   public isDirector = false;
 
-  public constructor(private readonly authService: AuthService) {
-  }
+  public constructor(private readonly authService: AuthService) { }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     if (!this.authService.checkRoles([RoleEnum.GENERAL_MANAGER]) &&
       this.authService.checkRoles([RoleEnum.STORE_DIRECTOR]) &&
       this.authService.currentUser.shop) {
@@ -66,10 +63,10 @@ export class WidgetReceiptComponent implements OnInit {
   }
 
   /** Функция типизирует переменную
-   * @param receipt чек
-   * @return возвращает чек */
-  public toReceipt(receipt: any): ReceiptDto {
-    return receipt as ReceiptDto;
+   * @param order заказ
+   * @return возвращает заказ */
+  public toOrder(order: any): OrderDto {
+    return order as OrderDto;
   }
 
 }

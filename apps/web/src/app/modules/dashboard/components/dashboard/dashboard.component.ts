@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { OrderDto } from "@crm/shared/dtos/order/order.dto";
 import { ReceiptDto } from "@crm/shared/dtos/receipt/receipt.dto";
 import { SalaryDto } from "@crm/shared/dtos/salary/salary.dto";
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
 import { RoleEnum } from "@crm/shared/enums/role.enum";
+import { OrderStateService } from "@crm/web/core/services/order/order-state.service";
 import { ReceiptStateService } from "@crm/web/core/services/receipt/receipt-state.service";
 import { SalaryStateService } from "@crm/web/core/services/salary/salary-state.service";
 import { ShopStateService } from "@crm/web/core/services/shop/shop-state.service";
@@ -23,6 +25,9 @@ export class DashboardComponent implements OnInit {
   /** Чеки */
   public receipts: ReceiptDto[];
 
+  /** Заказы */
+  public orders: OrderDto[];
+
   /** Магазины */
   public shops: ShopDto[];
 
@@ -32,6 +37,9 @@ export class DashboardComponent implements OnInit {
   /** Грузится ли таблица чеков или нет */
   public receiptsLoading = true;
 
+  /** Грузится ли таблица заказов или нет */
+  public ordersLoading = true;
+
   public get RoleEnum() {
     return RoleEnum;
   }
@@ -39,6 +47,7 @@ export class DashboardComponent implements OnInit {
   public constructor(private readonly salaryStateService: SalaryStateService,
                      private readonly shopStateService: ShopStateService,
                      private readonly receiptStateService: ReceiptStateService,
+                     private readonly ordersStateService: OrderStateService,
                      public readonly authService: AuthService) {
   }
 
@@ -60,6 +69,7 @@ export class DashboardComponent implements OnInit {
         selectShop = this.authService.currentUser.shop;
       }
       this.loadReceipts({ ...datePeriod, ...{ shop: selectShop } });
+      this.loadOrders({ ...datePeriod, ...{ shop: selectShop } });
     }
 
     this.shopStateService.find<ShopDto>().subscribe((shops) => this.shops = shops);
@@ -114,6 +124,33 @@ export class DashboardComponent implements OnInit {
       this.receipts = receipts;
       this.receiptsLoading = false;
     }, () => this.receiptsLoading = false);
+  }
+
+  /** Функция загружает данные о заказах
+   * @param queryParams параметры фильтрации */
+  public loadOrders(queryParams?: { from: Date, to: Date, shop: ShopDto }) {
+    this.ordersLoading = true;
+
+    let params;
+    if (queryParams) {
+      params = {
+        date: {
+          $gte: moment(queryParams.from).toISOString(),
+          $lte: moment(queryParams.to).toISOString()
+        }
+      };
+      if (queryParams.shop) {
+        params['shop._id'] = queryParams.shop?._id;
+      }
+      params = {
+        filter: JSON.stringify(params)
+      }
+    }
+
+    this.ordersStateService.find<OrderDto>(params).subscribe((orders) => {
+      this.orders = orders;
+      this.ordersLoading = false;
+    }, () => this.ordersLoading = false);
   }
 
 }

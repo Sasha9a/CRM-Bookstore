@@ -1,0 +1,47 @@
+<p-card styleClass="h-full">
+
+  <div class="flex justify-content-between align-items-center">
+    <h3 *ngIf="orders?.length" class="fw-bold mt-1 mb-2">Заказы ({{ orders?.length }})</h3>
+    <h3 *ngIf="!orders?.length" class="fw-bold mt-1 mb-2">Заказы</h3>
+  </div>
+
+  <div class="grid mt-2">
+    <div class="col-12 md:col-6">
+      <crm-daterangepicker [value]="[filters.from, filters.to]"
+                           (changeValue)="setDateFilter($event)"
+                           placeholder="Период">
+      </crm-daterangepicker>
+    </div>
+
+    <div class="col-12 md:col-6">
+      <crm-shop-single-select [shops]="shops"
+                              [(selectedShop)]="filters.shop"
+                              [disabled]="isDirector"
+                              (selectedShopChange)="changeQueryParams.emit(filters)">
+      </crm-shop-single-select>
+    </div>
+  </div>
+
+  <crm-table name="dashboard.receipts"
+             styleClass="mt-3"
+             scrollHeight="300px"
+             [columns]="itemColumns"
+             [loading]="loading"
+             [autoLayout]="true"
+             [values]="orders | orderBy: '-date:date'">
+    <ng-template #rowTemplate let-order="item">
+      <tr *ngIf="toOrder(order) as order">
+        <td nowrap>
+          <a target="_blank" routerLink="/order/card/{{ order._id }}">{{ order.date | date: 'dd.MM.YYYY' }}</a>
+        </td>
+        <td>
+          <p>{{ order.shop?.address }}</p>
+        </td>
+        <td nowrap>
+          <p>{{ order.sum || 0 | number: '.0-2' }} руб.</p>
+        </td>
+      </tr>
+    </ng-template>
+  </crm-table>
+
+</p-card>

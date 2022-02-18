@@ -13,4 +13,12 @@
                         (changeQueryParams)="loadReceipts($event)">
     </crm-widget-receipt>
   </div>
+
+  <div *ngIf="authService.checkRoles([RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR])" class="col-12 xl:col-6">
+    <crm-widget-order [orders]="orders"
+                      [shops]="shops"
+                      [loading]="ordersLoading"
+                      (changeQueryParams)="loadOrders($event)">
+    </crm-widget-order>
+  </div>
 </div>
