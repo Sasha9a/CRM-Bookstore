@@ -1,1 +1,106 @@
-<p>order-add works!</p>
+<h3 class="dividing-header">Заказ</h3>
+
+<div *ngIf="!loading">
+  <div class="grid">
+    <div class="col-12 md:col-6 xl:col-4">
+      <div class="p-fluid">
+        <div class="field">
+          <label class="fw-bold required-field">Дата составления заказа</label>
+          <crm-datepicker [(value)]="order.date"
+                          [class]="errors?.date ? 'ng-invalid ng-dirty' : ''"
+                          [maxDate]="currentDate">
+          </crm-datepicker>
+          <small *ngIf="errors?.date" class="p-error">{{ errors.date | join }}</small>
+        </div>
+
+        <div class="field">
+          <label class="fw-bold required-field">Магазин</label>
+          <crm-shop-single-select [shops]="shops"
+                                  [(selectedShop)]="order.shop"
+                                  [class]="errors?.shop ? 'ng-invalid ng-dirty' : ''"
+                                  [disabled]="!!authService.currentUser.shop">
+          </crm-shop-single-select>
+          <small *ngIf="errors?.shop" class="p-error">{{ errors.shop | join }}</small>
+        </div>
+
+        <div class="field">
+          <label class="fw-bold required-field">Итоговая сумма</label>
+          <div class="p-inputgroup">
+            <p-inputNumber [(ngModel)]="order.sum" [disabled]="true"></p-inputNumber>
+            <span class="p-inputgroup-addon">руб.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <p class="fw-bold required-field mb-2">Товары</p>
+      <p-pickList *ngIf="order.shop"
+                  [source]="products"
+                  [target]="order.products"
+                  (onMoveToSource)="updateCountProduct($event, 0); updateAnalytics()"
+                  (onMoveToTarget)="updateCountProduct($event, 1); updateAnalytics()"
+                  sourceHeader="Все товары"
+                  targetHeader="Выбранные товары"
+                  [dragdrop]="true"
+                  [responsive]="true"
+                  [sourceStyle]="{'height':'30rem'}"
+                  [targetStyle]="{'height':'30rem'}"
+                  filterBy="name"
+                  sourceFilterPlaceholder="Название"
+                  targetFilterPlaceholder="Название">
+        <ng-template let-product pTemplate="item">
+          <div *ngIf="toProduct(product) as product" class="flex align-items-center w-full">
+            <div class="pr-2">
+              <p-image *ngIf="product.image"
+                       [src]="('file/' + product.image.path) | apiUrl"
+                       [alt]="product.name" width="75">
+              </p-image>
+              <p-skeleton *ngIf="!product.image" size="5rem"></p-skeleton>
+            </div>
+            <div>
+              <p class="mb-2 fw-bold">{{ product.name }}</p>
+              <div *ngIf="product.category">
+                <i class="pi pi-tag"></i>
+                <span class="ml-1">{{ product.category?.name }}</span>
+              </div>
+            </div>
+            <div class="text-right flex-grow-1">
+              <div>
+                <small>{{ product.price | number }} руб.</small>
+              </div>
+              <div>
+                <p-inputNumber *ngIf="order.products.includes(product)"
+                               class="mt-1"
+                               [(ngModel)]="product.count"
+                               (ngModelChange)="updateAnalytics()"
+                               (click)="$event.stopPropagation()"
+                               [inputStyle]="{ 'width.px': 50 }"
+                               [min]="1"
+                               [showButtons]="true">
+                </p-inputNumber>
+              </div>
+              <div>
+                <div class="p-inputgroup">
+                  <p-inputNumber [(ngModel)]="product.priceManufacture"
+                                 [min]="0"
+                                 [inputStyle]="{ 'width.px': 80 }">
+                  </p-inputNumber>
+                  <span class="p-inputgroup-addon">руб.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </p-pickList>
+      <p *ngIf="!order.shop">Выберите магазин</p>
+    </div>
+
+    <div class="col-12 mt-4">
+      <button pButton label="Сохранить" icon="pi pi-check" class="p-button-success mr-2" (click)="create()"></button>
+      <crm-go-back-button [route]="'/product'"></crm-go-back-button>
+    </div>
+  </div>
+</div>
+
+<crm-spinner *ngIf="loading"></crm-spinner>
