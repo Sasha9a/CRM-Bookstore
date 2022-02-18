@@ -7,9 +7,15 @@
             routerLink="/product/add">
     </button>
     <button pButton [label]="'Добавить чек'"
-            icon="pi pi-shopping-cart"
+            icon="pi pi-wallet"
             class="p-button-secondary ml-2"
             routerLink="/receipt/add">
+    </button>
+    <button *ngIf="!authService.checkRoles([RoleEnum.SELLER])"
+            pButton [label]="'Создать заказ'"
+            icon="pi pi-download"
+            class="p-button-warning ml-2"
+            routerLink="/order/add">
     </button>
   </div>
 </div>

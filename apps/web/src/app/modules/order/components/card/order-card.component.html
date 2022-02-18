@@ -1,0 +1,65 @@
+<h2>Заказ</h2>
+
+<div *ngIf="!loading" class="grid">
+  <div class="col-12 xl:col-6">
+    <p-table [value]=[null]>
+      <ng-template pTemplate="body">
+        <tr>
+          <td class="fw-bold">Дата оформления</td>
+          <td class="fw-semibold">{{ order.date | date: 'dd MMMM YYYY' }}</td>
+        </tr>
+        <tr>
+          <td class="fw-bold">Магазин</td>
+          <td class="fw-semibold">{{ order.shop?.address }}</td>
+        </tr>
+        <tr>
+          <td class="fw-bold">Менеджер</td>
+          <td>
+            <a class="fw-semibold"
+               routerLink="/user/card/{{ order.employee?._id }}"
+               target="_blank">
+              {{ order.employee?.name }}
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td class="fw-bold">Итоговая сумма</td>
+          <td class="fw-semibold">{{ order.sum | number: '.0-2' }} руб.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <div class="col-12">
+    <h3 class="dividing-header">Товары</h3>
+
+    <crm-table name="receipt.card"
+               styleClass="mt-3 sticky-header"
+               [columns]="itemColumns"
+               [values]="order.products">
+      <ng-template #rowTemplate let-product="item">
+        <tr *ngIf="toProduct(product) as product">
+          <td>
+            <p-image *ngIf="product.image" [src]="('file/' + product.image.path) | apiUrl"
+                     alt="{{ product.name }}" width="80" [preview]="true">
+            </p-image>
+            <p-skeleton *ngIf="!product.image" size="5rem"></p-skeleton>
+          </td>
+          <td><a routerLink="/product/card/{{ product._id }}">{{ product.name }}</a></td>
+          <td>{{ product.code }}</td>
+          <td>{{ product.category?.name }}</td>
+          <td>{{ product.price || 0 | number: '.0-2' }} руб.</td>
+          <td>{{ product.priceManufacture || 0 | number: '.0-2' }} руб.</td>
+          <td>{{ product.count | number }}</td>
+          <td>{{ product.totalPrice || 0 | number: '.0-2' }} руб.</td>
+          <td [class.text-red]="product.markup < 0">
+            <p>{{ product.markup || 0 | number: '.0-2' }} руб.</p>
+            <small>{{ product.markupPercent || 0 | number: '.0-2' }}%</small>
+          </td>
+        </tr>
+      </ng-template>
+    </crm-table>
+  </div>
+</div>
+
+<crm-spinner *ngIf="loading"></crm-spinner>

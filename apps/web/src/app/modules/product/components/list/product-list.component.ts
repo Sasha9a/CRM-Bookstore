@@ -70,12 +70,16 @@ export class ProductListComponent implements OnInit {
   /** Запрещает ли менять фильтр смены магазина */
   public isNotChangeShop = true;
 
+  public get RoleEnum() {
+    return RoleEnum;
+  }
+
   public constructor(private readonly productStateService: ProductStateService,
                      private readonly categoryStateService: CategoryStateService,
                      private readonly shopStateService: ShopStateService,
                      private readonly queryParamsService: QueryParamsService,
                      private readonly utilsService: UtilsService,
-                     private readonly authService: AuthService) {
+                     public readonly authService: AuthService) {
   }
 
   public ngOnInit(): void {
