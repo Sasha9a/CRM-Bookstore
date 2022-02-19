@@ -81,13 +81,16 @@
                 </p-inputNumber>
               </div>
               <div>
-                <div class="p-inputgroup">
-                  <p-inputNumber [(ngModel)]="product.priceManufacture"
-                                 [min]="0"
-                                 (click)="$event.stopPropagation()"
-                                 [inputStyle]="{ 'width.px': 80 }">
-                  </p-inputNumber>
-                  <span class="p-inputgroup-addon">руб.</span>
+                <div *ngIf="order.products.includes(product)" class="flex justify-content-end">
+                  <div *ngIf="order.products.includes(product)" class="p-inputgroup mt-1" style="width: 120px;">
+                    <p-inputNumber [(ngModel)]="product.priceManufacture"
+                                   [min]="0"
+                                   (click)="$event.stopPropagation()"
+                                   (ngModelChange)="updateAnalytics()"
+                                   [inputStyle]="{ 'width.px': 80 }">
+                    </p-inputNumber>
+                    <span class="p-inputgroup-addon">руб.</span>
+                  </div>
                 </div>
               </div>
             </div>

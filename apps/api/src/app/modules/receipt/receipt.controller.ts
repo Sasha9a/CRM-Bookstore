@@ -58,10 +58,12 @@ export class ReceiptController {
       address: body.shop.address
     };
     for (const product of body.products) {
-      product.category = {
-        _id: product.category._id,
-        name: product.category.name
-      };
+      if (product.category) {
+        product.category = {
+          _id: product.category._id,
+          name: product.category.name
+        };
+      }
       const selectProduct = await this.productService.findById(product._id);
       if (selectProduct?.count) {
         if (selectProduct.count[body.shop._id] - product.count < 0) {

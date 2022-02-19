@@ -57,7 +57,7 @@
           <td>{{ product.code }}</td>
           <td>{{ product.category?.name }}</td>
           <td>{{ product.price || 0 | number: '.0-2' }} руб.</td>
-          <td>{{ product.count | number }}</td>
+          <td>{{ product.count || 0 | number }} шт.</td>
           <td>{{ product.totalPrice || 0 | number: '.0-2' }} руб.</td>
         </tr>
       </ng-template>

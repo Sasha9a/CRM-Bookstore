@@ -53,8 +53,8 @@ export class OrderAddComponent implements OnInit {
         this.shops = [shop];
         if (this.authService.currentUser.shop) {
           this.order.shop = shop;
-          this.updateTable();
         }
+        this.updateTable();
         this.loading = false;
       }, () => this.loading = false);
     } else {
@@ -62,8 +62,8 @@ export class OrderAddComponent implements OnInit {
         this.shops = shops;
         if (this.authService.currentUser.shop) {
           this.order.shop = this.shops.find((shop) => shop._id === this.authService.currentUser.shop._id);
-          this.updateTable();
         }
+        this.updateTable();
         this.loading = false;
       }, () => this.loading = false);
     }

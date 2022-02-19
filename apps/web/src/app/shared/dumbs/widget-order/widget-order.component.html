@@ -17,7 +17,8 @@
       <crm-shop-single-select [shops]="shops"
                               [(selectedShop)]="filters.shop"
                               [disabled]="isDirector"
-                              (selectedShopChange)="changeQueryParams.emit(filters)">
+                              (selectedShopChange)="changeQueryParams.emit(filters)"
+                              placeholder="Магазин">
       </crm-shop-single-select>
     </div>
   </div>
