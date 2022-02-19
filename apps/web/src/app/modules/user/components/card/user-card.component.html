@@ -78,7 +78,13 @@
       <ng-template #rowTemplate let-payslip="item">
         <tr *ngIf="toPayslip(payslip) as payslip">
           <td nowrap>
-            <p>{{ payslip.date | date: 'dd.MM.YYYY' }}</p>
+            <a *ngIf="authService.checkRoles([RoleEnum.GENERAL_MANAGER])"
+               routerLink="/salary/card/{{ payslip._id }}" target="_blank">
+              {{ payslip.date | date: 'dd.MM.YYYY' }}
+            </a>
+            <p *ngIf="!authService.checkRoles([RoleEnum.GENERAL_MANAGER])">
+              {{ payslip.date | date: 'dd.MM.YYYY' }}
+            </p>
           </td>
           <td nowrap>
             <p>{{ payslip.dateFrom | date: 'dd.MM.YYYY' }} - {{ payslip.dateTo | date: 'dd.MM.YYYY' }}</p>

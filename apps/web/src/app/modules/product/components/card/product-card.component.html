@@ -67,6 +67,39 @@
         </ng-template>
       </p-table>
     </div>
+
+    <div *ngIf="orders" class="col-12">
+      <h3 class="dividing-header">Заказы</h3>
+
+      <crm-table name="order.product"
+                 styleClass="mt-3 sticky-header"
+                 [columns]="itemColumns"
+                 [values]="orders | orderBy: '-date:date'">
+        <ng-template #rowTemplate let-order="item">
+          <tr *ngIf="toOrder(order) as order">
+            <td nowrap>
+              <a routerLink="/order/card/{{ order._id }}" target="_blank">
+                {{ order.date | date: 'dd.MM.YYYY' }}
+              </a>
+            </td>
+            <td>{{ order.shop?.address }}</td>
+            <td>
+              <a routerLink="/user/card/{{ order.employee?._id }}" target="_blank">
+                {{ order.employee?.name }}
+              </a>
+            </td>
+            <td nowrap>{{ order.products[0]?.price || 0 | number: '.0-2' }} руб.</td>
+            <td nowrap>{{ order.products[0]?.priceManufacture || 0 | number: '.0-2' }} руб.</td>
+            <td nowrap>{{ order.products[0]?.count || 0 | number }} шт.</td>
+            <td nowrap>{{ order.products[0]?.totalPrice || 0 | number: '.0-2' }} руб.</td>
+            <td nowrap [class.text-red]="order.products[0]?.markup < 0">
+              <p>{{ order.products[0]?.markup || 0 | number: '.0-2' }} руб.</p>
+              <small>{{ order.products[0]?.markupPercent || 0 | number: '.0-2' }}%</small>
+            </td>
+          </tr>
+        </ng-template>
+      </crm-table>
+    </div>
   </div>
 </div>
 

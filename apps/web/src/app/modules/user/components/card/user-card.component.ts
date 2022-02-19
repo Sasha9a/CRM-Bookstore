@@ -51,12 +51,16 @@ export class UserCardComponent implements OnInit {
   /** Может ли редактировать пользователя */
   public isEditable = false;
 
+  public get RoleEnum() {
+    return RoleEnum;
+  }
+
   public constructor(private readonly route: ActivatedRoute,
                      private readonly errorService: ErrorService,
                      private readonly userStateService: UserStateService,
                      private readonly salaryStateService: SalaryStateService,
                      private readonly confirmDialogService: ConfirmDialogService,
-                     private readonly authService: AuthService,
+                     public readonly authService: AuthService,
                      private readonly router: Router,
                      private readonly title: Title) { }
 

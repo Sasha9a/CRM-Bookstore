@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from "@angular/platform-browser";
 import { ActivatedRoute } from "@angular/router";
+import { OrderDto } from "@crm/shared/dtos/order/order.dto";
 import { ProductDto } from "@crm/shared/dtos/product/product.dto";
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
 import { RoleEnum } from "@crm/shared/enums/role.enum";
+import { CrmTableColumn } from "@crm/web/core/models/crm-table-column";
 import { ConfirmDialogService } from "@crm/web/core/services/confirm-dialog.service";
 import { ErrorService } from "@crm/web/core/services/error.service";
+import { OrderStateService } from "@crm/web/core/services/order/order-state.service";
 import { ProductStateService } from "@crm/web/core/services/product/product-state.service";
 import { ShopStateService } from "@crm/web/core/services/shop/shop-state.service";
 import { AuthService } from "@crm/web/core/services/user/auth.service";
@@ -24,15 +27,31 @@ export class ProductCardComponent implements OnInit {
   /** Список магазинов */
   public shops: ShopDto[];
 
+  /** Список заказов */
+  public orders: OrderDto[];
+
   /** Идет загрузка или нет */
   public loading = true;
 
   /** Загрузилась ли фотография */
   public showImage = false;
 
+  /** Столбцы таблицы */
+  public itemColumns: CrmTableColumn[] = [
+    { label: 'День заказа' },
+    { label: 'Магазин' },
+    { label: 'Кто заказал' },
+    { label: 'Цена за шт. на сайте' },
+    { label: 'Цена за шт. от произв.' },
+    { label: 'Кол-во заказано' },
+    { label: 'Общая цена' },
+    { label: 'Наценка' }
+  ];
+
   public constructor(private readonly productStateService: ProductStateService,
+                     private readonly orderStateService: OrderStateService,
                      private readonly shopStateService: ShopStateService,
-                     private readonly authService: AuthService,
+                     public readonly authService: AuthService,
                      private readonly route: ActivatedRoute,
                      private readonly confirmDialogService: ConfirmDialogService,
                      private readonly errorService: ErrorService,
@@ -67,6 +86,10 @@ export class ProductCardComponent implements OnInit {
         this.shops = shops;
       });
     }
+
+    if (this.authService.checkRoles([RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR])) {
+      this.orderStateService.getAllByProduct(productId).subscribe((orders) => this.orders = orders);
+    }
   }
 
   /** Функция отправляет в архив товар */
@@ -99,6 +122,13 @@ export class ProductCardComponent implements OnInit {
         });
       }
     });
+  }
+
+  /** Функция типизирует переменную
+   * @param order заказ
+   * @return возвращает заказ */
+  public toOrder(order: any): OrderDto {
+    return order as OrderDto;
   }
 
 }
