@@ -6,6 +6,7 @@ import { ProductModule } from "@crm/api/modules/product/product.module";
 import { ReceiptModule } from "@crm/api/modules/receipt/receipt.module";
 import { SalaryModule } from "@crm/api/modules/salary/salary.module";
 import { ShopModule } from "@crm/api/modules/shop/shop.module";
+import { TrafficModule } from "@crm/api/modules/traffic/traffic.module";
 import { UserModule } from "@crm/api/modules/user/user.module";
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { MongooseModule } from "@nestjs/mongoose";
@@ -30,7 +31,8 @@ moment.locale('ru');
     ProductModule,
     SalaryModule,
     ReceiptModule,
-    OrderModule
+    OrderModule,
+    TrafficModule
   ],
   controllers: [],
   providers: []
