@@ -1,0 +1,68 @@
+<h3 class="dividing-header">Трафик</h3>
+
+<div *ngIf="!loading">
+  <div class="grid">
+
+    <div class="col-12 md:col-6 xl:col-5">
+      <div class="p-fluid">
+        <div class="field">
+          <label class="fw-bold required-field">Дата</label>
+          <crm-datepicker [(value)]="traffic.date"
+                          [class]="errors?.date ? 'ng-invalid ng-dirty' : ''"
+                          [maxDate]="currentDate">
+          </crm-datepicker>
+          <small *ngIf="errors?.date" class="p-error">{{ errors.date | join }}</small>
+        </div>
+
+        <div class="field">
+          <label class="fw-bold required-field">Магазины</label>
+          <crm-table name="traffic.add" styleClass="sticky-header"
+                     [columns]="itemColumns"
+                     [values]="traffic.shops">
+            <ng-template #rowTemplate let-shop="item">
+              <tr *ngIf="toShop(shop) as shop">
+                <td>
+                  <p>{{ shop.shop?.address }}</p>
+                  <small class="text-green-400">{{ shop.shop?.metro }}</small>
+                </td>
+                <td>
+                  <p-inputNumber [(ngModel)]="shop.in"
+                                 inputStyleClass="w-full"
+                                 [min]="0"
+                                 (ngModelChange)="updateAnalytics()">
+                  </p-inputNumber>
+                </td>
+                <td>
+                  <p-inputNumber [(ngModel)]="shop.notcome"
+                                 inputStyleClass="w-full"
+                                 [min]="0"
+                                 (ngModelChange)="updateAnalytics()">
+                  </p-inputNumber>
+                </td>
+                <td>
+                  <p>{{ shop.entrance || 0 | number: '.0-2' }}%</p>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template #footerTemplate>
+              <tr>
+                <td>ИТОГО:</td>
+                <td>{{ traffic.in || 0 | number }}</td>
+                <td>{{ traffic.notcome || 0 | number }}</td>
+                <td>{{ traffic.entrance || 0 | number: '.0-2' }}%</td>
+              </tr>
+            </ng-template>
+          </crm-table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 mt-4">
+      <button pButton label="Сохранить" icon="pi pi-check" class="p-button-success mr-2" (click)="create()"></button>
+      <crm-go-back-button [route]="'/'"></crm-go-back-button>
+    </div>
+
+  </div>
+</div>
+
+<crm-spinner *ngIf="loading"></crm-spinner>

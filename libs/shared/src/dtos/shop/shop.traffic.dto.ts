@@ -1,8 +1,14 @@
-import { Expose } from "class-transformer";
+import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
+import { Expose, Type } from "class-transformer";
 
 /** DTO данных о трафике по магазину */
 @Expose()
 export class ShopTrafficDto {
+
+  /** Магазин */
+  @Expose()
+  @Type(() => ShopDto)
+  public shop: ShopDto;
 
   /** Сколько зашло */
   @Expose()

@@ -15,4 +15,16 @@ export class TrafficDto extends BaseDto {
   @Type(() => ShopTrafficDto)
   public shops: ShopTrafficDto[];
 
+  /** Сколько зашло итого */
+  @Expose()
+  public in: number;
+
+  /** Сколько прошло мимо итого */
+  @Expose()
+  public notcome: number;
+
+  /** Конверсия, вход итого */
+  @Expose()
+  public entrance: number;
+
 }
