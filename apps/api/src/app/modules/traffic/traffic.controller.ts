@@ -32,24 +32,33 @@ export class TrafficController {
   @Get()
   public async getAll(@Res() res: Response, @Query() queryParams: TrafficReportQueryParamsDto) {
     const result: TrafficReportDto = {
-      sums: undefined,
+      sums: {
+        days: {},
+        weeks: {},
+        months: {},
+        in: 0,
+        notcome: 0,
+        entrance: 0,
+        countReceipt: 0,
+        conversionReceipt: 0
+      },
       items: []
     };
 
     let receipts: ReceiptDto[];
     let traffics: TrafficDto[];
-    if (queryParams.shop) {
+    if (queryParams.shop !== 'null') {
       receipts = await this.receiptService.findAll({
         date: {
-          $gte: moment(queryParams.from).toISOString(),
-          $lte: moment(queryParams.to).toISOString()
+          $gte: moment(queryParams.from, 'YYYY-MM-DD').toISOString(),
+          $lte: moment(queryParams.to, 'YYYY-MM-DD').toISOString()
         },
         'shop._id': queryParams.shop
       });
       traffics = await this.trafficService.findAll({
         date: {
-          $gte: moment(queryParams.from).toISOString(),
-          $lte: moment(queryParams.to).toISOString()
+          $gte: moment(queryParams.from, 'YYYY-MM-DD').toISOString(),
+          $lte: moment(queryParams.to, 'YYYY-MM-DD').toISOString()
         },
         shops: {
           $elemMatch: {
@@ -60,21 +69,22 @@ export class TrafficController {
     } else if (queryParams) {
       receipts = await this.receiptService.findAll({
         date: {
-          $gte: moment(queryParams.from).toISOString(),
-          $lte: moment(queryParams.to).toISOString()
+          $gte: moment(queryParams.from, 'YYYY-MM-DD').toISOString(),
+          $lte: moment(queryParams.to, 'YYYY-MM-DD').toISOString()
         }
       });
       traffics = await this.trafficService.findAll({
         date: {
-          $gte: moment(queryParams.from).toISOString(),
-          $lte: moment(queryParams.to).toISOString()
+          $gte: moment(queryParams.from, 'YYYY-MM-DD').toISOString(),
+          $lte: moment(queryParams.to, 'YYYY-MM-DD').toISOString()
         }
       });
     }
     for (const traffic of traffics) {
       for (const shop of traffic.shops) {
         const countReceipt = receipts.reduce((sum, receipt) => {
-          if (receipt.date === traffic.date && receipt.shop?._id === shop.shop?._id) {
+          if (moment(receipt.date).format('YYYY-MM-DD') === moment(traffic.date).format('YYYY-MM-DD')
+            && receipt.shop?._id === shop.shop?._id) {
             return sum + 1;
           }
           return sum;
@@ -90,7 +100,6 @@ export class TrafficController {
     }
 
     const dateTo = moment(queryParams.to).clone().add(1, 'day');
-    result.sums.days = {};
     for (const date = moment(queryParams.from); date.isBefore(dateTo, 'day'); date.add(1, 'day')) {
       if (result.items.findIndex((item) => moment(item.date).format('YYYY-MM-DD') === date.format('YYYY-MM-DD')) !== -1) {
         const items = result.items.filter((item) => moment(item.date).format('YYYY-MM-DD') === date.format('YYYY-MM-DD'));
@@ -102,7 +111,6 @@ export class TrafficController {
       }
     }
 
-    result.sums.weeks = {};
     for (const date = moment(queryParams.from); date.isBefore(dateTo, 'week'); date.add(1, 'week')) {
       if (result.items.findIndex((item) => moment(item.date).format('YYYY-WW') === date.format('YYYY-WW')) !== -1) {
         const items = result.items.filter((item) => moment(item.date).format('YYYY-WW') === date.format('YYYY-WW'));
@@ -114,7 +122,6 @@ export class TrafficController {
       }
     }
 
-    result.sums.months = {};
     for (const date = moment(queryParams.from); date.isBefore(dateTo, 'month'); date.add(1, 'month')) {
       if (result.items.findIndex((item) => moment(item.date).format('YYYY-MM') === date.format('YYYY-MM')) !== -1) {
         const items = result.items.filter((item) => moment(item.date).format('YYYY-MM') === date.format('YYYY-MM'));

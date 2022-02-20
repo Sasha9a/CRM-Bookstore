@@ -1,4 +1,5 @@
 import { Expose } from "class-transformer";
+import { IsOptional } from "class-validator";
 
 /** DTO параметров для отчета по трафику */
 @Expose()
@@ -14,6 +15,7 @@ export class TrafficReportQueryParamsDto {
 
   /** Магазин */
   @Expose()
-  public shop: string;
+  @IsOptional()
+  public shop?: string;
 
 }

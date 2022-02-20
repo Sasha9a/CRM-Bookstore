@@ -3,11 +3,14 @@ import { OrderDto } from "@crm/shared/dtos/order/order.dto";
 import { ReceiptDto } from "@crm/shared/dtos/receipt/receipt.dto";
 import { SalaryDto } from "@crm/shared/dtos/salary/salary.dto";
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
+import { TrafficReportDto } from "@crm/shared/dtos/traffic/report/traffic.report.dto";
+import { TrafficReportQueryParamsDto } from "@crm/shared/dtos/traffic/report/traffic.report.query.params.dto";
 import { RoleEnum } from "@crm/shared/enums/role.enum";
 import { OrderStateService } from "@crm/web/core/services/order/order-state.service";
 import { ReceiptStateService } from "@crm/web/core/services/receipt/receipt-state.service";
 import { SalaryStateService } from "@crm/web/core/services/salary/salary-state.service";
 import { ShopStateService } from "@crm/web/core/services/shop/shop-state.service";
+import { TrafficStateService } from "@crm/web/core/services/traffic/traffic-state.service";
 import { AuthService } from "@crm/web/core/services/user/auth.service";
 import * as moment from "moment-timezone";
 
@@ -28,6 +31,9 @@ export class DashboardComponent implements OnInit {
   /** Заказы */
   public orders: OrderDto[];
 
+  /** Трафик */
+  public traffics: TrafficReportDto;
+
   /** Магазины */
   public shops: ShopDto[];
 
@@ -40,6 +46,9 @@ export class DashboardComponent implements OnInit {
   /** Грузится ли таблица заказов или нет */
   public ordersLoading = true;
 
+  /** Грузится ли трафик или нет */
+  public trafficsLoading = true;
+
   public get RoleEnum() {
     return RoleEnum;
   }
@@ -48,6 +57,7 @@ export class DashboardComponent implements OnInit {
                      private readonly shopStateService: ShopStateService,
                      private readonly receiptStateService: ReceiptStateService,
                      private readonly ordersStateService: OrderStateService,
+                     private readonly trafficStateService: TrafficStateService,
                      public readonly authService: AuthService) {
   }
 
@@ -70,6 +80,11 @@ export class DashboardComponent implements OnInit {
       }
       this.loadReceipts({ ...datePeriod, ...{ shop: selectShop } });
       this.loadOrders({ ...datePeriod, ...{ shop: selectShop } });
+      this.loadTraffic({
+        from: moment(datePeriod.from).format('YYYY-MM-DD') as unknown as Date,
+        to: moment(datePeriod.to).format('YYYY-MM-DD') as unknown as Date,
+        shop: selectShop?._id || null
+      });
     }
 
     this.shopStateService.find<ShopDto>().subscribe((shops) => this.shops = shops);
@@ -151,6 +166,17 @@ export class DashboardComponent implements OnInit {
       this.orders = orders;
       this.ordersLoading = false;
     }, () => this.ordersLoading = false);
+  }
+
+  /** Функция загружает данные о трафике
+   * @param queryParams параметры фильтрации */
+  public loadTraffic(queryParams: TrafficReportQueryParamsDto) {
+    this.trafficsLoading = true;
+
+    this.trafficStateService.report(queryParams).subscribe((data) => {
+      this.traffics = data;
+      this.trafficsLoading = false;
+    }, () => this.trafficsLoading = false);
   }
 
 }
