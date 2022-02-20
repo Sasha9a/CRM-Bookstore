@@ -36,6 +36,10 @@ export class TrafficController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Post()
   public async create(@Res() res: Response, @Body() body: TrafficFormDto) {
+    const entities = await this.trafficService.findAll({ date: body.date });
+    if (entities.length) {
+      throw new NotFoundException("Аналитика за этот день уже есть");
+    }
     const entity = await this.trafficService.create(body);
     return res.status(HttpStatus.CREATED).json(entity).end();
   }
