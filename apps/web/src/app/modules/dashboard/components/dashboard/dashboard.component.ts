@@ -83,7 +83,7 @@ export class DashboardComponent implements OnInit {
       this.loadTraffic({
         from: moment(datePeriod.from).format('YYYY-MM-DD') as unknown as Date,
         to: moment(datePeriod.to).format('YYYY-MM-DD') as unknown as Date,
-        shop: selectShop?._id || null
+        shop: selectShop?._id || undefined
       });
     }
 

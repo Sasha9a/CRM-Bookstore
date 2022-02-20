@@ -23,14 +23,14 @@ export class WidgetOrderComponent implements OnInit {
   /** Грузится ли или нет */
   @Input() public loading = false;
 
-  /** Фильтр периода дат */
+  /** Фильтры */
   public filters = {
     from: moment().startOf('month').toDate(),
     to: moment().endOf('month').toDate(),
     shop: undefined
   };
 
-  /** Событие вызывается меняются фильтры */
+  /** Событие вызывается когда меняются фильтры */
   @Output() public changeQueryParams = new EventEmitter<any>();
 
   /** Столбцы таблицы */

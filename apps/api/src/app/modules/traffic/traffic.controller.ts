@@ -47,7 +47,7 @@ export class TrafficController {
 
     let receipts: ReceiptDto[];
     let traffics: TrafficDto[];
-    if (queryParams.shop !== 'null') {
+    if (queryParams.shop !== 'undefined') {
       receipts = await this.receiptService.findAll({
         date: {
           $gte: moment(queryParams.from, 'YYYY-MM-DD').toISOString(),
@@ -81,6 +81,9 @@ export class TrafficController {
       });
     }
     for (const traffic of traffics) {
+      if (queryParams.shop !== 'undefined') {
+        traffic.shops = traffic.shops.filter((shop) => shop.shop?._id === queryParams.shop);
+      }
       for (const shop of traffic.shops) {
         const countReceipt = receipts.reduce((sum, receipt) => {
           if (moment(receipt.date).format('YYYY-MM-DD') === moment(traffic.date).format('YYYY-MM-DD')

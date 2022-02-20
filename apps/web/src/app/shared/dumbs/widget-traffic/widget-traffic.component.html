@@ -1,0 +1,65 @@
+<p-card styleClass="h-full">
+
+  <div class="flex justify-content-between align-items-center">
+    <h3 class="fw-bold mt-1 mb-2">Трафик</h3>
+    <button *ngIf="!isDirector" pButton pRipple
+            type="button"
+            icon="pi pi-plus"
+            [label]="'Добавить'"
+            class="p-button-success p-button-text my-0"
+            routerLink="/traffic/add">
+    </button>
+  </div>
+
+  <div class="grid mt-2">
+    <div class="col-12 md:col-6">
+      <crm-daterangepicker [value]="[filters.from, filters.to]"
+                           (changeValue)="setDateFilter($event)"
+                           placeholder="Период">
+      </crm-daterangepicker>
+    </div>
+
+    <div class="col-12 md:col-6">
+      <crm-shop-single-select [shops]="shops"
+                              [(selectedShop)]="selectedFilters.shop"
+                              [disabled]="isDirector"
+                              (selectedShopChange)="setShopFilter()"
+                              placeholder="Магазин">
+      </crm-shop-single-select>
+    </div>
+  </div>
+
+  <crm-table name="dashboard.receipts"
+             styleClass="mt-3"
+             scrollHeight="300px"
+             [columns]="itemColumns"
+             [loading]="loading"
+             [autoLayout]="true"
+             [values]="traffic?.items">
+    <ng-template #rowTemplate let-item="item">
+      <tr *ngIf="toTraffic(item) as item">
+        <td nowrap>
+          <p>{{ item.date | date: 'dd.MM.YYYY, EEEEEE' }}</p>
+        </td>
+        <td>{{ item.shop?.shop?.address }}</td>
+        <td>{{ item.countReceipt || 0 | number }}</td>
+        <td>{{ item.shop?.in || 0 | number }}</td>
+        <td>{{ item.shop?.notcome || 0 | number }}</td>
+        <td>{{ item.shop?.entrance || 0 | number: '.0-2' }}%</td>
+        <td>{{ item.conversionReceipt || 0 | number: '.0-2' }}%</td>
+      </tr>
+    </ng-template>
+    <ng-template #footerTemplate>
+      <tr>
+        <td>ИТОГО:</td>
+        <td></td>
+        <td>{{ traffic?.sums?.countReceipt || 0 | number }}</td>
+        <td>{{ traffic?.sums?.in || 0 | number }}</td>
+        <td>{{ traffic?.sums?.notcome || 0 | number }}</td>
+        <td>{{ traffic?.sums?.entrance || 0 | number: '.0-2' }}%</td>
+        <td>{{ traffic?.sums?.conversionReceipt || 0 | number: '.0-2' }}%</td>
+      </tr>
+    </ng-template>
+  </crm-table>
+
+</p-card>

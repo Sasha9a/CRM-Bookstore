@@ -117,6 +117,7 @@ import { WidgetSalaryComponent } from './dumbs/widget-salary/widget-salary.compo
 import { PaymentTypeNamePipe } from './pipes/payment-type-name.pipe';
 import { WidgetReceiptComponent } from './dumbs/widget-receipt/widget-receipt.component';
 import { WidgetOrderComponent } from './dumbs/widget-order/widget-order.component';
+import { WidgetTrafficComponent } from './dumbs/widget-traffic/widget-traffic.component';
 
 
 
@@ -148,7 +149,8 @@ import { WidgetOrderComponent } from './dumbs/widget-order/widget-order.componen
     WidgetSalaryComponent,
     PaymentTypeNamePipe,
     WidgetReceiptComponent,
-    WidgetOrderComponent
+    WidgetOrderComponent,
+    WidgetTrafficComponent
   ],
   imports: [
     CommonModule,
@@ -356,7 +358,8 @@ import { WidgetOrderComponent } from './dumbs/widget-order/widget-order.componen
 		WidgetSalaryComponent,
 		PaymentTypeNamePipe,
 		WidgetReceiptComponent,
-		WidgetOrderComponent
+		WidgetOrderComponent,
+		WidgetTrafficComponent
 	],
   providers: [RoleNamePipe, ScheduleNamePipe]
 })
