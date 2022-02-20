@@ -1,0 +1,11 @@
+<div class="flex p-2 mb-4">
+  <div class="fw-bold">Группировка:</div>
+  <div class="flex ml-4">
+    <div *ngFor="let group of groups"
+         class="report-sums-item"
+         [class.active]="group.period === activeGroupPeriod"
+         (click)="activeGroupPeriod = group.period; activeGroupPeriodChange.emit(activeGroupPeriod)">
+      {{ group.label }}
+    </div>
+  </div>
+</div>

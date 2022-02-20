@@ -547,3 +547,17 @@ a:hover {
   }
 
 }
+
+.report-sums-item {
+  color: rgba(0, 0, 0, .6);
+  cursor: pointer;
+
+  &:not(:last-child) {
+    margin-right: 1rem;
+  }
+
+  &:hover, &.active {
+    color: rgba(0, 0, 0, .95);
+  }
+}
+

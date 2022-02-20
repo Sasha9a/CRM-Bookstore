@@ -29,6 +29,14 @@
     </div>
   </div>
 
+  <div class="mt-2">
+    <crm-chart-group-menu [(activeGroupPeriod)]="activeGroupPeriod" (activeGroupPeriodChange)="updateChart()"></crm-chart-group-menu>
+  </div>
+
+  <p-chart *ngIf="chartData" #chart [data]="chartData" [options]="chartOptions" type="bar" height="450"></p-chart>
+  <p-skeleton *ngIf="!chartData" width="100%" height="450px"></p-skeleton>
+
+
   <crm-table name="dashboard.receipts"
              styleClass="mt-3"
              scrollHeight="300px"

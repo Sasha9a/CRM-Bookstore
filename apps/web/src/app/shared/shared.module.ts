@@ -1,6 +1,6 @@
 import { ScrollingModule } from "@angular/cdk/scrolling";
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { AccordionModule } from "primeng/accordion";
 import { AutoCompleteModule } from "primeng/autocomplete";
 import { AvatarModule } from "primeng/avatar";
@@ -118,6 +118,7 @@ import { PaymentTypeNamePipe } from './pipes/payment-type-name.pipe';
 import { WidgetReceiptComponent } from './dumbs/widget-receipt/widget-receipt.component';
 import { WidgetOrderComponent } from './dumbs/widget-order/widget-order.component';
 import { WidgetTrafficComponent } from './dumbs/widget-traffic/widget-traffic.component';
+import { ChartGroupMenuComponent } from './dumbs/chart-group-menu/chart-group-menu.component';
 
 
 
@@ -150,7 +151,8 @@ import { WidgetTrafficComponent } from './dumbs/widget-traffic/widget-traffic.co
     PaymentTypeNamePipe,
     WidgetReceiptComponent,
     WidgetOrderComponent,
-    WidgetTrafficComponent
+    WidgetTrafficComponent,
+    ChartGroupMenuComponent
   ],
   imports: [
     CommonModule,
@@ -361,6 +363,6 @@ import { WidgetTrafficComponent } from './dumbs/widget-traffic/widget-traffic.co
 		WidgetOrderComponent,
 		WidgetTrafficComponent
 	],
-  providers: [RoleNamePipe, ScheduleNamePipe]
+  providers: [RoleNamePipe, ScheduleNamePipe, DecimalPipe]
 })
 export class SharedModule { }
