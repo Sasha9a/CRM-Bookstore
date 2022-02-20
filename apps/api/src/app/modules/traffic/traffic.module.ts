@@ -1,3 +1,4 @@
+import { ReceiptModule } from "@crm/api/modules/receipt/receipt.module";
 import { TrafficController } from "@crm/api/modules/traffic/traffic.controller";
 import { TrafficService } from "@crm/api/modules/traffic/traffic.service";
 import { UserModule } from "@crm/api/modules/user/user.module";
@@ -8,7 +9,8 @@ import { MongooseModule } from "@nestjs/mongoose";
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Traffic.name, schema: TrafficSchema }]),
-    UserModule
+    UserModule,
+    ReceiptModule
   ],
   controllers: [TrafficController],
   providers: [TrafficService],
