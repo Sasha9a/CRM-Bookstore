@@ -58,6 +58,9 @@
         <td colspan="99">
           <p>ДОХОД: {{ report.sums.income || 0 | number }} руб.</p>
           <p>РАСХОД: {{ report.sums.expenses || 0 | number }} руб.</p>
+          <p>РАЗНИЦА: <span [class.text-red]="(report.sums.income || 0) - (report.sums.expenses || 0) < 0">
+            {{ ((report.sums.income || 0) - (report.sums.expenses || 0)) | number }} руб.
+          </span></p>
         </td>
       </tr>
     </ng-template>
