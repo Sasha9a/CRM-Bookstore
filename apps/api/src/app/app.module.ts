@@ -4,6 +4,7 @@ import { FileModule } from "@crm/api/modules/file/file.module";
 import { OrderModule } from "@crm/api/modules/order/order.module";
 import { ProductModule } from "@crm/api/modules/product/product.module";
 import { ReceiptModule } from "@crm/api/modules/receipt/receipt.module";
+import { ReportModule } from "@crm/api/modules/report/report.module";
 import { SalaryModule } from "@crm/api/modules/salary/salary.module";
 import { ShopModule } from "@crm/api/modules/shop/shop.module";
 import { TrafficModule } from "@crm/api/modules/traffic/traffic.module";
@@ -32,7 +33,8 @@ moment.locale('ru');
     SalaryModule,
     ReceiptModule,
     OrderModule,
-    TrafficModule
+    TrafficModule,
+    ReportModule
   ],
   controllers: [],
   providers: []
