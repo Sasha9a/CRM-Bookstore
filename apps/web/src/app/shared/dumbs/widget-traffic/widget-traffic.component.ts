@@ -1,4 +1,3 @@
-import { DecimalPipe } from "@angular/common";
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
 import { TrafficReportDto } from "@crm/shared/dtos/traffic/report/traffic.report.dto";
@@ -82,8 +81,7 @@ export class WidgetTrafficComponent implements OnInit, OnChanges {
 
   @ViewChild('chart') public chart: UIChart;
 
-  public constructor(private readonly authService: AuthService,
-                     public readonly decimalPipe: DecimalPipe) { }
+  public constructor(private readonly authService: AuthService) { }
 
   public ngOnInit(): void {
     if (!this.authService.checkRoles([RoleEnum.GENERAL_MANAGER]) &&

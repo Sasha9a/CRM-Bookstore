@@ -1,5 +1,13 @@
 <div class="grid">
   <div *ngIf="authService.checkRoles([RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR])" class="col-12">
+    <crm-widget-money-turnover [report]="moneyTurnover"
+                               [shops]="shops"
+                               [loading]="moneyTurnoverLoading"
+                               (changeQueryParams)="loadMoneyTurnover($event)">
+    </crm-widget-money-turnover>
+  </div>
+
+  <div *ngIf="authService.checkRoles([RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR])" class="col-12">
     <crm-widget-traffic [traffic]="traffics"
                         [shops]="shops"
                         [loading]="trafficsLoading"
