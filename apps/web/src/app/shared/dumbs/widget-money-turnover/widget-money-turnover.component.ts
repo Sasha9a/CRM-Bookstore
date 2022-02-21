@@ -1,6 +1,5 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MoneyTurnoverDto } from "@crm/shared/dtos/report/money-turnover/money.turnover.dto";
-import { MoneyTurnoverItemDto } from "@crm/shared/dtos/report/money-turnover/money.turnover.item.dto";
 import { MoneyTurnoverQueryParamsDto } from "@crm/shared/dtos/report/money-turnover/money.turnover.query.params.dto";
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
 import { RoleEnum } from "@crm/shared/enums/role.enum";
@@ -55,17 +54,29 @@ export class WidgetMoneyTurnoverComponent implements OnInit, OnChanges {
 
   /** Настройки графики */
   public chartOptions = {
-    tooltips: {
-      mode: 'index',
-      intersect: false
+    plugins: {
+      legend: {
+        labels: {
+          color: '#495057'
+        }
+      }
     },
-    responsive: true,
     scales: {
       x: {
-        stacked: true
+        ticks: {
+          color: '#495057'
+        },
+        grid: {
+          color: '#ebedef'
+        }
       },
       y: {
-        stacked: true
+        ticks: {
+          color: '#495057'
+        },
+        grid: {
+          color: '#ebedef'
+        }
       }
     }
   };
@@ -74,6 +85,10 @@ export class WidgetMoneyTurnoverComponent implements OnInit, OnChanges {
   public activeGroupPeriod = ChartGroupPeriodEnum.days;
 
   @ViewChild('chart') public chart: UIChart;
+
+  public get Object() {
+    return Object;
+  }
 
   public constructor(private readonly authService: AuthService) { }
 
@@ -85,6 +100,62 @@ export class WidgetMoneyTurnoverComponent implements OnInit, OnChanges {
       this.filters.shop = this.authService.currentUser.shop?._id;
       this.selectedFilters.shop = this.authService.currentUser.shop;
     }
+  }
+
+  public ngOnChanges(changes: SimpleChanges) {
+    if (changes['report']?.currentValue) {
+      this.updateChart();
+    }
+  }
+
+  /** Функция обновляет график */
+  public updateChart() {
+    this.chartData = {
+      labels: Object.keys(this.report.sums[this.activeGroupPeriod])
+        .map((key) => {
+          if (this.activeGroupPeriod === ChartGroupPeriodEnum.days) {
+            return moment(key, 'YYYY-MM-DD').format('DD.MM.YYYY');
+          } else if (this.activeGroupPeriod === ChartGroupPeriodEnum.weeks) {
+            return `${moment(key, 'YYYY-WW').startOf('week').format('DD.MM.YYYY')} - ${moment(key, 'YYYY-WW').endOf('week').format('DD.MM.YYYY')}`;
+          } else if (this.activeGroupPeriod === ChartGroupPeriodEnum.months) {
+            return moment(key, 'YYYY-MM').format('MMMM YYYY');
+          }
+          return '';
+        }),
+      datasets: [
+        {
+          label: 'Доходы',
+          backgroundColor: 'rgba(70, 255, 63, 0.5)',
+          data: Object.values(this.report.sums[this.activeGroupPeriod]).map((value) => value['income'])
+        },
+        {
+          label: 'Расходы',
+          backgroundColor: 'rgba(255,72,72,0.5)',
+          data: Object.values(this.report.sums[this.activeGroupPeriod]).map((value) => value['expenses'])
+        }
+      ]
+    };
+    this.chart?.refresh();
+
+    this.itemColumns = [
+      { label: 'Статьи' }
+    ];
+    this.itemColumns.push(
+      Object.keys(this.report.sums[this.activeGroupPeriod])
+        .map((key) => {
+          let date;
+          if (this.activeGroupPeriod === ChartGroupPeriodEnum.days) {
+            date = moment(key, 'YYYY-MM-DD').format('DD.MM.YYYY');
+          } else if (this.activeGroupPeriod === ChartGroupPeriodEnum.weeks) {
+            date = `${moment(key, 'YYYY-WW').startOf('week').format('DD.MM.YYYY')} - ${moment(key, 'YYYY-WW').endOf('week').format('DD.MM.YYYY')}`;
+          } else if (this.activeGroupPeriod === ChartGroupPeriodEnum.months) {
+            date = moment(key, 'YYYY-MM').format('MMMM YYYY');
+          }
+          return {
+            label: date
+          };
+        })
+    );
   }
 
   /** Сохраняет даты в фильтры
@@ -99,13 +170,6 @@ export class WidgetMoneyTurnoverComponent implements OnInit, OnChanges {
   public setShopFilter() {
     this.filters.shop = this.selectedFilters.shop?._id;
     this.changeQueryParams.emit(this.filters);
-  }
-
-  /** Функция типизирует переменную
-   * @param item данные денежного оборота
-   * @return возвращает данные денежного оборота */
-  public toMoneyTurnover(item: any): MoneyTurnoverItemDto {
-    return item as MoneyTurnoverItemDto;
   }
 
 }
