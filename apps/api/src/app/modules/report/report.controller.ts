@@ -80,23 +80,25 @@ export class ReportController {
         months: {}
       }
     }
-    const dateTo = moment(queryParams.to).clone().add(1, 'day');
+    const dateToDay = moment(queryParams.to).clone().add(1, 'day');
+    const dateToWeek = moment(queryParams.to).clone().add(1, 'week');
+    const dateToMonth = moment(queryParams.to).clone().add(1, 'month');
 
-    for (const date = moment(queryParams.from); date.isBefore(dateTo, 'day'); date.add(1, 'day')) {
+    for (const date = moment(queryParams.from); date.isBefore(dateToDay, 'day'); date.add(1, 'day')) {
       if (receipts.findIndex((item) => moment(item.date).format('YYYY-MM-DD') === date.format('YYYY-MM-DD')) !== -1) {
         const items = receipts.filter((item) => moment(item.date).format('YYYY-MM-DD') === date.format('YYYY-MM-DD'));
         budgetItem.moneyTurnover.days[date.format('YYYY-MM-DD')] = items.reduce((sum, item) => sum + item.amountCash + item.amountCashless, 0);
       }
     }
 
-    for (const date = moment(queryParams.from); date.isBefore(dateTo, 'week'); date.add(1, 'week')) {
+    for (const date = moment(queryParams.from); date.isBefore(dateToWeek, 'week'); date.add(1, 'week')) {
       if (receipts.findIndex((item) => moment(item.date).format('YYYY-WW') === date.format('YYYY-WW')) !== -1) {
         const items = receipts.filter((item) => moment(item.date).format('YYYY-WW') === date.format('YYYY-WW'));
         budgetItem.moneyTurnover.weeks[date.format('YYYY-WW')] = items.reduce((sum, item) => sum + item.amountCash + item.amountCashless, 0);
       }
     }
 
-    for (const date = moment(queryParams.from); date.isBefore(dateTo, 'month'); date.add(1, 'month')) {
+    for (const date = moment(queryParams.from); date.isBefore(dateToMonth, 'month'); date.add(1, 'month')) {
       if (receipts.findIndex((item) => moment(item.date).format('YYYY-MM') === date.format('YYYY-MM')) !== -1) {
         const items = receipts.filter((item) => moment(item.date).format('YYYY-MM') === date.format('YYYY-MM'));
         budgetItem.moneyTurnover.months[date.format('YYYY-MM')] = items.reduce((sum, item) => sum + item.amountCash + item.amountCashless, 0);
@@ -112,21 +114,21 @@ export class ReportController {
         months: {}
       }
     }
-    for (const date = moment(queryParams.from); date.isBefore(dateTo, 'day'); date.add(1, 'day')) {
+    for (const date = moment(queryParams.from); date.isBefore(dateToDay, 'day'); date.add(1, 'day')) {
       if (salaries.findIndex((item) => moment(item.date).format('YYYY-MM-DD') === date.format('YYYY-MM-DD')) !== -1) {
         const items = salaries.filter((item) => moment(item.date).format('YYYY-MM-DD') === date.format('YYYY-MM-DD'));
         budgetItem.moneyTurnover.days[date.format('YYYY-MM-DD')] = items.reduce((sum, item) => sum + item.sum, 0);
       }
     }
 
-    for (const date = moment(queryParams.from); date.isBefore(dateTo, 'week'); date.add(1, 'week')) {
+    for (const date = moment(queryParams.from); date.isBefore(dateToWeek, 'week'); date.add(1, 'week')) {
       if (salaries.findIndex((item) => moment(item.date).format('YYYY-WW') === date.format('YYYY-WW')) !== -1) {
         const items = salaries.filter((item) => moment(item.date).format('YYYY-WW') === date.format('YYYY-WW'));
         budgetItem.moneyTurnover.weeks[date.format('YYYY-WW')] = items.reduce((sum, item) => sum + item.sum, 0);
       }
     }
 
-    for (const date = moment(queryParams.from); date.isBefore(dateTo, 'month'); date.add(1, 'month')) {
+    for (const date = moment(queryParams.from); date.isBefore(dateToMonth, 'month'); date.add(1, 'month')) {
       if (salaries.findIndex((item) => moment(item.date).format('YYYY-MM') === date.format('YYYY-MM')) !== -1) {
         const items = salaries.filter((item) => moment(item.date).format('YYYY-MM') === date.format('YYYY-MM'));
         budgetItem.moneyTurnover.months[date.format('YYYY-MM')] = items.reduce((sum, item) => sum + item.sum, 0);
@@ -142,21 +144,21 @@ export class ReportController {
         months: {}
       }
     }
-    for (const date = moment(queryParams.from); date.isBefore(dateTo, 'day'); date.add(1, 'day')) {
+    for (const date = moment(queryParams.from); date.isBefore(dateToDay, 'day'); date.add(1, 'day')) {
       if (orders.findIndex((item) => moment(item.date).format('YYYY-MM-DD') === date.format('YYYY-MM-DD')) !== -1) {
         const items = orders.filter((item) => moment(item.date).format('YYYY-MM-DD') === date.format('YYYY-MM-DD'));
         budgetItem.moneyTurnover.days[date.format('YYYY-MM-DD')] = items.reduce((sum, item) => sum + item.sum, 0);
       }
     }
 
-    for (const date = moment(queryParams.from); date.isBefore(dateTo, 'week'); date.add(1, 'week')) {
+    for (const date = moment(queryParams.from); date.isBefore(dateToWeek, 'week'); date.add(1, 'week')) {
       if (orders.findIndex((item) => moment(item.date).format('YYYY-WW') === date.format('YYYY-WW')) !== -1) {
         const items = orders.filter((item) => moment(item.date).format('YYYY-WW') === date.format('YYYY-WW'));
         budgetItem.moneyTurnover.weeks[date.format('YYYY-WW')] = items.reduce((sum, item) => sum + item.sum, 0);
       }
     }
 
-    for (const date = moment(queryParams.from); date.isBefore(dateTo, 'month'); date.add(1, 'month')) {
+    for (const date = moment(queryParams.from); date.isBefore(dateToMonth, 'month'); date.add(1, 'month')) {
       if (orders.findIndex((item) => moment(item.date).format('YYYY-MM') === date.format('YYYY-MM')) !== -1) {
         const items = orders.filter((item) => moment(item.date).format('YYYY-MM') === date.format('YYYY-MM'));
         budgetItem.moneyTurnover.months[date.format('YYYY-MM')] = items.reduce((sum, item) => sum + item.sum, 0);
@@ -164,33 +166,63 @@ export class ReportController {
     }
     result.expenses.push(budgetItem);
 
-    for (const date = moment(queryParams.from); date.isBefore(dateTo, 'day'); date.add(1, 'day')) {
+    for (const date = moment(queryParams.from); date.isBefore(dateToDay, 'day'); date.add(1, 'day')) {
       result.sums.days[date.format('YYYY-MM-DD')] = {
         income: result.income.reduce((sum, item) => {
-          return sum + Object.values(item.moneyTurnover.days).reduce((_sum, value) => _sum + value, 0);
+          return sum + Object.entries(item.moneyTurnover.days).reduce((_sum, value) => {
+            if (value[0] === date.format('YYYY-MM-DD')) {
+              return _sum + value[1];
+            }
+            return _sum;
+          }, 0);
         }, 0),
         expenses: result.expenses.reduce((sum, item) => {
-          return sum + Object.values(item.moneyTurnover.days).reduce((_sum, value) => _sum + value, 0);
+          return sum + Object.entries(item.moneyTurnover.days).reduce((_sum, value) => {
+            if (value[0] === date.format('YYYY-MM-DD')) {
+              return _sum + value[1];
+            }
+            return _sum;
+          }, 0);
         }, 0)
       };
     }
-    for (const date = moment(queryParams.from); date.isBefore(dateTo, 'week'); date.add(1, 'week')) {
+    for (const date = moment(queryParams.from); date.isBefore(dateToWeek, 'week'); date.add(1, 'week')) {
       result.sums.weeks[date.format('YYYY-WW')] = {
         income: result.income.reduce((sum, item) => {
-          return sum + Object.values(item.moneyTurnover.weeks).reduce((_sum, value) => _sum + value, 0);
+          return sum + Object.entries(item.moneyTurnover.weeks).reduce((_sum, value) => {
+            if (value[0] === date.format('YYYY-WW')) {
+              return _sum + value[1];
+            }
+            return _sum;
+          }, 0);
         }, 0),
         expenses: result.expenses.reduce((sum, item) => {
-          return sum + Object.values(item.moneyTurnover.weeks).reduce((_sum, value) => _sum + value, 0);
+          return sum + Object.entries(item.moneyTurnover.weeks).reduce((_sum, value) => {
+            if (value[0] === date.format('YYYY-WW')) {
+              return _sum + value[1];
+            }
+            return _sum;
+          }, 0);
         }, 0)
       };
     }
-    for (const date = moment(queryParams.from); date.isBefore(dateTo, 'month'); date.add(1, 'month')) {
+    for (const date = moment(queryParams.from); date.isBefore(dateToMonth, 'month'); date.add(1, 'month')) {
       result.sums.months[date.format('YYYY-MM')] = {
         income: result.income.reduce((sum, item) => {
-          return sum + Object.values(item.moneyTurnover.months).reduce((_sum, value) => _sum + value, 0);
+          return sum + Object.entries(item.moneyTurnover.months).reduce((_sum, value) => {
+            if (value[0] === date.format('YYYY-MM')) {
+              return _sum + value[1];
+            }
+            return _sum;
+          }, 0);
         }, 0),
         expenses: result.expenses.reduce((sum, item) => {
-          return sum + Object.values(item.moneyTurnover.months).reduce((_sum, value) => _sum + value, 0);
+          return sum + Object.entries(item.moneyTurnover.months).reduce((_sum, value) => {
+            if (value[0] === date.format('YYYY-MM')) {
+              return _sum + value[1];
+            }
+            return _sum;
+          }, 0);
         }, 0)
       };
     }

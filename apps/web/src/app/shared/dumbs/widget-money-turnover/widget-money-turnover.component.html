@@ -32,7 +32,7 @@
 
   <crm-table name="dashboard.money"
              styleClass="mt-3"
-             scrollHeight="300px"
+             scrollHeight="400px"
              [columns]="itemColumns"
              [loading]="loading"
              [autoLayout]="true"
@@ -42,26 +42,41 @@
         <td colspan="99" class="fw-bold">ДОХОДЫ</td>
       </tr>
       <tr *ngFor="let item of report.income">
-        <td>{{ item.name }}</td>
-        <td *ngFor="let value of Object.values(item.moneyTurnover[activeGroupPeriod])">{{ value || 0 | number }} руб.</td>
+        <td style="min-width: 150px">{{ item.name }}</td>
+        <td *ngFor="let key of Object.keys(report.sums[activeGroupPeriod])" style="min-width: 120px">
+          {{ item.moneyTurnover[activeGroupPeriod][key] || 0 | number: '.0-0' }} руб.
+        </td>
       </tr>
       <tr>
         <td colspan="99" class="fw-bold">РАСХОДЫ</td>
       </tr>
       <tr *ngFor="let item of report.expenses">
-        <td>{{ item.name }}</td>
-        <td *ngFor="let value of Object.values(item.moneyTurnover[activeGroupPeriod])">{{ value || 0 | number }} руб.</td>
+        <td style="min-width: 150px">{{ item.name }}</td>
+        <td *ngFor="let key of Object.keys(report.sums[activeGroupPeriod])" style="min-width: 120px">
+          {{ item.moneyTurnover[activeGroupPeriod][key] || 0 | number: '.0-0' }} руб.
+        </td>
       </tr>
     </ng-template>
     <ng-template #footerTemplate>
       <tr>
-        <td colspan="99">
-          <p>ДОХОД: {{ report.sums.income || 0 | number }} руб.</p>
-          <p>РАСХОД: {{ report.sums.expenses || 0 | number }} руб.</p>
-          <p>РАЗНИЦА: <span [class.text-red]="(report.sums.income || 0) - (report.sums.expenses || 0) < 0">
-            {{ ((report.sums.income || 0) - (report.sums.expenses || 0)) | number }} руб.
+        <td>
+          <p>ДОХОД: {{ report?.sums?.income || 0 | number: '.0-0' }} руб.</p>
+        </td>
+        <td colspan="99"></td>
+      </tr>
+      <tr>
+        <td>
+          <p>РАСХОД: {{ report?.sums?.expenses || 0 | number: '.0-0' }} руб.</p>
+        </td>
+        <td colspan="99"></td>
+      </tr>
+      <tr>
+        <td>
+          <p>РАЗНИЦА: <span [class.text-red]="(report?.sums?.income || 0) - (report?.sums?.expenses || 0) < 0">
+            {{ ((report?.sums?.income || 0) - (report?.sums?.expenses || 0)) | number: '.0-0' }} руб.
           </span></p>
         </td>
+        <td colspan="99"></td>
       </tr>
     </ng-template>
   </crm-table>

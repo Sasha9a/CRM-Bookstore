@@ -43,7 +43,7 @@ export class WidgetMoneyTurnoverComponent implements OnInit, OnChanges {
 
   /** Столбцы таблицы */
   public itemColumns: CrmTableColumn[] = [
-    { label: 'Статьи' }
+    { label: 'Статьи', style: { 'min-width.px': 150 } }
   ];
 
   /** Директор ли смотрит виджет или нет */
@@ -125,23 +125,31 @@ export class WidgetMoneyTurnoverComponent implements OnInit, OnChanges {
       datasets: [
         {
           label: 'Доходы',
-          backgroundColor: 'rgba(70, 255, 63, 0.5)',
-          data: Object.values(this.report.sums[this.activeGroupPeriod]).map((value) => value['income'])
+          borderColor: 'rgb(70,255,63, 0.5)',
+          backgroundColor: 'rgba(70,255,0,0.2)',
+          borderWidth: 2,
+          fill: false,
+          tension: 0.4,
+          data: Object.values(this.report.sums[this.activeGroupPeriod]).map((value) => value['income'].toFixed(0))
         },
         {
           label: 'Расходы',
-          backgroundColor: 'rgba(255,72,72,0.5)',
-          data: Object.values(this.report.sums[this.activeGroupPeriod]).map((value) => value['expenses'])
+          borderColor: 'rgb(255,72,72, 0.5)',
+          backgroundColor: 'rgba(255,0,0,0.2)',
+          borderWidth: 2,
+          fill: false,
+          tension: 0.4,
+          data: Object.values(this.report.sums[this.activeGroupPeriod]).map((value) => value['expenses'].toFixed(0))
         }
       ]
     };
     this.chart?.refresh();
 
     this.itemColumns = [
-      { label: 'Статьи' }
+      { label: 'Статьи', style: { 'min-width.px': 150 } }
     ];
     this.itemColumns.push(
-      Object.keys(this.report.sums[this.activeGroupPeriod])
+      ...Object.keys(this.report.sums[this.activeGroupPeriod])
         .map((key) => {
           let date;
           if (this.activeGroupPeriod === ChartGroupPeriodEnum.days) {
@@ -170,6 +178,13 @@ export class WidgetMoneyTurnoverComponent implements OnInit, OnChanges {
   public setShopFilter() {
     this.filters.shop = this.selectedFilters.shop?._id;
     this.changeQueryParams.emit(this.filters);
+  }
+
+  /** Функция типизирует переменную
+   * @param num цифра
+   * @return Возвращает цифру*/
+  public toNumber(num: any): number {
+    return num as number;
   }
 
 }
