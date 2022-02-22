@@ -3,6 +3,8 @@ import { OrderDto } from "@crm/shared/dtos/order/order.dto";
 import { ReceiptDto } from "@crm/shared/dtos/receipt/receipt.dto";
 import { MoneyTurnoverDto } from "@crm/shared/dtos/report/money-turnover/money.turnover.dto";
 import { MoneyTurnoverQueryParamsDto } from "@crm/shared/dtos/report/money-turnover/money.turnover.query.params.dto";
+import { TurnoverAnalyticsDto } from "@crm/shared/dtos/report/turnover-analytics/turnover.analytics.dto";
+import { TurnoverAnalyticsQueryParamsDto } from "@crm/shared/dtos/report/turnover-analytics/turnover.analytics.query.params.dto";
 import { SalaryDto } from "@crm/shared/dtos/salary/salary.dto";
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
 import { TrafficReportDto } from "@crm/shared/dtos/traffic/report/traffic.report.dto";
@@ -40,6 +42,9 @@ export class DashboardComponent implements OnInit {
   /** Денежный оборот */
   public moneyTurnover: MoneyTurnoverDto;
 
+  /** Аналитика товарооборота */
+  public turnoverAnalytics: TurnoverAnalyticsDto;
+
   /** Магазины */
   public shops: ShopDto[];
 
@@ -57,6 +62,9 @@ export class DashboardComponent implements OnInit {
 
   /** Грузится ли Денежный оборот или нет */
   public moneyTurnoverLoading = true;
+
+  /** Грузится ли Аналитика товарооборота или нет */
+  public turnoverAnalyticsLoading = true;
 
   public get RoleEnum() {
     return RoleEnum;
@@ -96,6 +104,11 @@ export class DashboardComponent implements OnInit {
         shop: selectShop?._id || undefined
       });
       this.loadMoneyTurnover({
+        from: moment(datePeriod.from).format('YYYY-MM-DD') as unknown as Date,
+        to: moment(datePeriod.to).format('YYYY-MM-DD') as unknown as Date,
+        shop: selectShop?._id || undefined
+      });
+      this.loadTurnoverAnalytics({
         from: moment(datePeriod.from).format('YYYY-MM-DD') as unknown as Date,
         to: moment(datePeriod.to).format('YYYY-MM-DD') as unknown as Date,
         shop: selectShop?._id || undefined
@@ -203,6 +216,17 @@ export class DashboardComponent implements OnInit {
       this.moneyTurnover = data;
       this.moneyTurnoverLoading = false;
     }, () => this.moneyTurnoverLoading = false);
+  }
+
+  /** Функция загружает данные аналитики товарооборота
+   * @param queryParams параметры фильтрации */
+  public loadTurnoverAnalytics(queryParams: TurnoverAnalyticsQueryParamsDto) {
+    this.turnoverAnalyticsLoading = true;
+
+    this.reportStateService.turnoverAnalytics(queryParams).subscribe((data) => {
+      this.turnoverAnalytics = data;
+      this.turnoverAnalyticsLoading = false;
+    }, () => this.turnoverAnalyticsLoading = false);
   }
 
 }
