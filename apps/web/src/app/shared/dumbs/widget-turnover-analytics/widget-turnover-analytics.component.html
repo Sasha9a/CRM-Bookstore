@@ -37,8 +37,8 @@
         <td>{{ item.shop?.address }}</td>
         <td>{{ item.countReceipt || 0 | number }}</td>
         <td>{{ item.averageCheck || 0 | number: '.0-0' }} руб.</td>
-        <td>{{ item.popularProduct.name }}</td>
-        <td>{{ item.popularCategory.name }}</td>
+        <td>{{ item.popularProduct?.name }}</td>
+        <td>{{ item.popularCategory?.name }}</td>
       </tr>
     </ng-template>
     <ng-template #footerTemplate>
