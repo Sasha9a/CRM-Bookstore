@@ -35,7 +35,7 @@
       <td [ngStyle]="{ 'padding-left.px': 14 + level * 25 }">
         <div class="{{ level === 0 ? 'font-bold' : '' }}">
           <i *ngIf="category.children?.length"
-             class="pi{{ openedDirectionIds.includes(category._id) ? ' pi-minus' : ' pi-plus' }} pointer mr-3"
+             class="pi{{ openedDirectionIds.includes(category._id) ? ' pi-minus' : ' pi-plus' }} cursor-pointer mr-3"
              (click)="updateDirection(category._id)"></i>
           <a routerLink="/category/edit/{{ category._id }}">{{ category.name }}</a>
         </div>
