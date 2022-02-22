@@ -47,19 +47,20 @@ export class TrafficController {
 
     let receipts: ReceiptDto[];
     let traffics: TrafficDto[];
+    const filterDates = {
+      date: {
+        $gte: moment(queryParams.from, 'YYYY-MM-DD').toISOString(),
+        $lte: moment(queryParams.to, 'YYYY-MM-DD').toISOString()
+      }
+    };
+
     if (queryParams.shop !== 'undefined') {
       receipts = await this.receiptService.findAll({
-        date: {
-          $gte: moment(queryParams.from, 'YYYY-MM-DD').toISOString(),
-          $lte: moment(queryParams.to, 'YYYY-MM-DD').toISOString()
-        },
+        ...filterDates,
         'shop._id': queryParams.shop
       });
       traffics = await this.trafficService.findAll({
-        date: {
-          $gte: moment(queryParams.from, 'YYYY-MM-DD').toISOString(),
-          $lte: moment(queryParams.to, 'YYYY-MM-DD').toISOString()
-        },
+        ...filterDates,
         shops: {
           $elemMatch: {
             'shop._id': queryParams.shop
@@ -67,18 +68,8 @@ export class TrafficController {
         }
       });
     } else if (queryParams) {
-      receipts = await this.receiptService.findAll({
-        date: {
-          $gte: moment(queryParams.from, 'YYYY-MM-DD').toISOString(),
-          $lte: moment(queryParams.to, 'YYYY-MM-DD').toISOString()
-        }
-      });
-      traffics = await this.trafficService.findAll({
-        date: {
-          $gte: moment(queryParams.from, 'YYYY-MM-DD').toISOString(),
-          $lte: moment(queryParams.to, 'YYYY-MM-DD').toISOString()
-        }
-      });
+      receipts = await this.receiptService.findAll({ ...filterDates });
+      traffics = await this.trafficService.findAll({ ...filterDates });
     }
     for (const traffic of traffics) {
       if (queryParams.shop !== 'undefined') {

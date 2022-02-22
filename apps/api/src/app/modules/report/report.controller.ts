@@ -4,12 +4,19 @@ import { RoleGuard } from "@crm/api/core/guards/role.guard";
 import { OrderService } from "@crm/api/modules/order/order.service";
 import { ReceiptService } from "@crm/api/modules/receipt/receipt.service";
 import { SalaryService } from "@crm/api/modules/salary/salary.service";
+import { ShopService } from "@crm/api/modules/shop/shop.service";
+import { CategoryDto } from "@crm/shared/dtos/category/category.dto";
 import { OrderDto } from "@crm/shared/dtos/order/order.dto";
+import { ProductDto } from "@crm/shared/dtos/product/product.dto";
 import { ReceiptDto } from "@crm/shared/dtos/receipt/receipt.dto";
 import { MoneyTurnoverDto } from "@crm/shared/dtos/report/money-turnover/money.turnover.dto";
 import { MoneyTurnoverItemDto } from "@crm/shared/dtos/report/money-turnover/money.turnover.item.dto";
 import { MoneyTurnoverQueryParamsDto } from "@crm/shared/dtos/report/money-turnover/money.turnover.query.params.dto";
+import { TurnoverAnalyticsDto } from "@crm/shared/dtos/report/turnover-analytics/turnover.analytics.dto";
+import { TurnoverAnalyticsItemDto } from "@crm/shared/dtos/report/turnover-analytics/turnover.analytics.item.dto";
+import { TurnoverAnalyticsQueryParamsDto } from "@crm/shared/dtos/report/turnover-analytics/turnover.analytics.query.params.dto";
 import { SalaryDto } from "@crm/shared/dtos/salary/salary.dto";
+import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
 import { RoleEnum } from "@crm/shared/enums/role.enum";
 import { Controller, Get, HttpStatus, Query, Res, UseGuards } from "@nestjs/common";
 import { Response } from "express";
@@ -21,7 +28,8 @@ export class ReportController {
 
   public constructor(private readonly orderService: OrderService,
                      private readonly salaryService: SalaryService,
-                     private readonly receiptService: ReceiptService) {
+                     private readonly receiptService: ReceiptService,
+                     private readonly shopService: ShopService) {
   }
 
   /** Get-запрос на получение данных по обороту денег
@@ -231,6 +239,275 @@ export class ReportController {
     }
     for (const expenses of result.expenses) {
       result.sums.expenses += Object.values(expenses.moneyTurnover.months).reduce((sum, value) => sum + value, 0);
+    }
+
+    return res.status(HttpStatus.OK).json(result).end();
+  }
+
+  /** Get-запрос на получение данных по аналитике товарооборота
+   * @param res переменная отвечает за возврат данных клиенту
+   * @param queryParams параметры от клиента
+   * @return Возвращает данные по аналитике товарооборота */
+  @Roles(RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Get('turnover-analytics')
+  public async turnoverAnalytics(@Res() res: Response, @Query() queryParams: TurnoverAnalyticsQueryParamsDto) {
+    const result: TurnoverAnalyticsDto = {
+      items: [],
+      sums: {
+        averageCheck: {
+          days: {},
+          weeks: {},
+          months: {}
+        },
+        averageNumberOfChecks: {
+          days: {},
+          weeks: {},
+          months: {}
+        },
+        popularProduct: {
+          days: {},
+          weeks: {},
+          months: {}
+        },
+        popularCategory: {
+          days: {},
+          weeks: {},
+          months: {}
+        }
+      }
+    };
+
+    let receipts: ReceiptDto[];
+    const shops: ShopDto[] = await this.shopService.findAll();
+    const filterDates = {
+      date: {
+        $gte: moment(queryParams.from, 'YYYY-MM-DD').toISOString(),
+        $lte: moment(queryParams.to, 'YYYY-MM-DD').toISOString()
+      }
+    };
+
+    if (queryParams.shop !== 'undefined') {
+      receipts = await this.receiptService.findAll({
+        ...filterDates,
+        'shop._id': queryParams.shop
+      });
+    } else if (queryParams) {
+      receipts = await this.receiptService.findAll({ ...filterDates });
+    }
+
+    if (queryParams.shop !== 'undefined') {
+      receipts = receipts.filter((receipt) => receipt.shop?._id === queryParams.shop);
+    }
+
+    const dateToDay = moment(queryParams.to).clone().add(1, 'day');
+    const dateToWeek = moment(queryParams.to).clone().add(1, 'week');
+    const dateToMonth = moment(queryParams.to).clone().add(1, 'month');
+
+    for (const date = moment(queryParams.from); date.isBefore(dateToDay, 'day'); date.add(1, 'day')) {
+      for (const shop of shops) {
+        if (receipts.findIndex((item) =>
+          moment(item.date).format('YYYY-MM-DD') === date.format('YYYY-MM-DD')
+          && shop._id === item.shop?._id) !== -1) {
+          const items = receipts.filter((item) =>
+            moment(item.date).format('YYYY-MM-DD') === date.format('YYYY-MM-DD')
+            && shop._id === item.shop?._id
+          );
+
+          const popularProducts: { product: Partial<ProductDto>, count: number }[] = [];
+          items.forEach((item) => {
+            item.products.forEach((product) => {
+              if (popularProducts.findIndex((p) => product._id === p.product?._id) === -1) {
+                popularProducts.push({
+                  product: { _id: product._id, name: product.name },
+                  count: 1
+                });
+              } else {
+                popularProducts.forEach((p) => {
+                  if (product._id === p.product?._id) {
+                    p.count++;
+                  }
+                });
+              }
+            });
+          });
+          popularProducts.sort((a, b) => a.count < b.count ? -1 : 1);
+
+          const popularCategories: { category: Partial<CategoryDto>, count: number }[] = [];
+          items.forEach((item) => {
+            item.products.forEach((product) => {
+              if (product.category) {
+                if (popularCategories.findIndex((p) => product.category?._id === p.category?._id) === -1) {
+                  popularCategories.push({
+                    category: { _id: product.category?._id, name: product.category?.name },
+                    count: 1
+                  });
+                } else {
+                  popularCategories.forEach((p) => {
+                    if (product.category?._id === p.category?._id) {
+                      p.count++;
+                    }
+                  });
+                }
+              }
+            });
+          });
+          popularCategories.sort((a, b) => a.count < b.count ? -1 : 1);
+
+          const data: TurnoverAnalyticsItemDto = {
+            countReceipt: items.reduce((sum) => sum + 1, 0),
+            sumReceipt: items.reduce((sum, item) => sum + item.amountCash + item.amountCashless, 0),
+            averageCheck: items.reduce((sum, item) => sum + item.amountCash + item.amountCashless, 0) / items.reduce((sum) => sum + 1, 0),
+            popularProduct: popularProducts[0]?.product,
+            popularCategory: popularCategories[0]?.category,
+            date: date.toDate(),
+            shop: shop,
+
+          };
+          result.items.push(data);
+        }
+      }
+    }
+
+    for (const date = moment(queryParams.from); date.isBefore(dateToDay, 'day'); date.add(1, 'day')) {
+      if (result.items.findIndex((item) => moment(item.date).format('YYYY-MM-DD') === date.format('YYYY-MM-DD')) !== -1) {
+        const items = result.items.filter((item) => moment(item.date).format('YYYY-MM-DD') === date.format('YYYY-MM-DD'));
+
+        const popularProducts: { product: Partial<ProductDto>, count: number }[] = [];
+        items.forEach((item) => {
+          if (popularProducts.findIndex((p) => item.popularProduct?._id === p.product?._id) === -1) {
+            popularProducts.push({
+              product: { _id: item.popularProduct?._id, name: item.popularProduct?.name },
+              count: 1
+            });
+          } else {
+            popularProducts.forEach((p) => {
+              if (item.popularProduct?._id === p.product?._id) {
+                p.count++;
+              }
+            });
+          }
+        });
+        popularProducts.sort((a, b) => a.count < b.count ? -1 : 1);
+
+        const popularCategories: { category: Partial<CategoryDto>, count: number }[] = [];
+        items.forEach((item) => {
+          if (item.popularCategory) {
+            if (popularCategories.findIndex((p) => item.popularCategory?._id === p.category?._id) === -1) {
+              popularCategories.push({
+                category: { _id: item.popularCategory?._id, name: item.popularCategory?.name },
+                count: 1
+              });
+            } else {
+              popularCategories.forEach((p) => {
+                if (item.popularCategory?._id === p.category?._id) {
+                  p.count++;
+                }
+              });
+            }
+          }
+        });
+        popularCategories.sort((a, b) => a.count < b.count ? -1 : 1);
+
+        result.sums.averageCheck.days[date.format('YYYY-MM-DD')] = items.reduce((sum, item) => sum + item.averageCheck, 0) / items.length;
+        result.sums.averageNumberOfChecks.days[date.format('YYYY-MM-DD')] = items.reduce((sum, item) => sum + item.countReceipt, 0) / items.length;
+        result.sums.popularProduct.days[date.format('YYYY-MM-DD')] = popularProducts[0]?.product;
+        result.sums.popularCategory.days[date.format('YYYY-MM-DD')] = popularCategories[0]?.category;
+      }
+    }
+
+    for (const date = moment(queryParams.from); date.isBefore(dateToWeek, 'week'); date.add(1, 'week')) {
+      if (result.items.findIndex((item) => moment(item.date).format('YYYY-WW') === date.format('YYYY-WW')) !== -1) {
+        const items = result.items.filter((item) => moment(item.date).format('YYYY-WW') === date.format('YYYY-WW'));
+
+        const popularProducts: { product: Partial<ProductDto>, count: number }[] = [];
+        items.forEach((item) => {
+          if (popularProducts.findIndex((p) => item.popularProduct?._id === p.product?._id) === -1) {
+            popularProducts.push({
+              product: { _id: item.popularProduct?._id, name: item.popularProduct?.name },
+              count: 1
+            });
+          } else {
+            popularProducts.forEach((p) => {
+              if (item.popularProduct?._id === p.product?._id) {
+                p.count++;
+              }
+            });
+          }
+        });
+        popularProducts.sort((a, b) => a.count < b.count ? -1 : 1);
+
+        const popularCategories: { category: Partial<CategoryDto>, count: number }[] = [];
+        items.forEach((item) => {
+          if (item.popularCategory) {
+            if (popularCategories.findIndex((p) => item.popularCategory?._id === p.category?._id) === -1) {
+              popularCategories.push({
+                category: { _id: item.popularCategory?._id, name: item.popularCategory?.name },
+                count: 1
+              });
+            } else {
+              popularCategories.forEach((p) => {
+                if (item.popularCategory?._id === p.category?._id) {
+                  p.count++;
+                }
+              });
+            }
+          }
+        });
+        popularCategories.sort((a, b) => a.count < b.count ? -1 : 1);
+
+        result.sums.averageCheck.weeks[date.format('YYYY-WW')] = items.reduce((sum, item) => sum + item.averageCheck, 0) / items.length;
+        result.sums.averageNumberOfChecks.weeks[date.format('YYYY-WW')] = items.reduce((sum, item) => sum + item.countReceipt, 0) / items.length;
+        result.sums.popularProduct.weeks[date.format('YYYY-WW')] = popularProducts[0]?.product;
+        result.sums.popularCategory.weeks[date.format('YYYY-WW')] = popularCategories[0]?.category;
+      }
+    }
+
+    for (const date = moment(queryParams.from); date.isBefore(dateToMonth, 'month'); date.add(1, 'month')) {
+      if (result.items.findIndex((item) => moment(item.date).format('YYYY-MM') === date.format('YYYY-MM')) !== -1) {
+        const items = result.items.filter((item) => moment(item.date).format('YYYY-MM') === date.format('YYYY-MM'));
+
+        const popularProducts: { product: Partial<ProductDto>, count: number }[] = [];
+        items.forEach((item) => {
+          if (popularProducts.findIndex((p) => item.popularProduct?._id === p.product?._id) === -1) {
+            popularProducts.push({
+              product: { _id: item.popularProduct?._id, name: item.popularProduct?.name },
+              count: 1
+            });
+          } else {
+            popularProducts.forEach((p) => {
+              if (item.popularProduct?._id === p.product?._id) {
+                p.count++;
+              }
+            });
+          }
+        });
+        popularProducts.sort((a, b) => a.count < b.count ? -1 : 1);
+
+        const popularCategories: { category: Partial<CategoryDto>, count: number }[] = [];
+        items.forEach((item) => {
+          if (item.popularCategory) {
+            if (popularCategories.findIndex((p) => item.popularCategory?._id === p.category?._id) === -1) {
+              popularCategories.push({
+                category: { _id: item.popularCategory?._id, name: item.popularCategory?.name },
+                count: 1
+              });
+            } else {
+              popularCategories.forEach((p) => {
+                if (item.popularCategory?._id === p.category?._id) {
+                  p.count++;
+                }
+              });
+            }
+          }
+        });
+        popularCategories.sort((a, b) => a.count < b.count ? -1 : 1);
+
+        result.sums.averageCheck.months[date.format('YYYY-MM')] = items.reduce((sum, item) => sum + item.averageCheck, 0) / items.length;
+        result.sums.averageNumberOfChecks.months[date.format('YYYY-MM')] = items.reduce((sum, item) => sum + item.countReceipt, 0) / items.length;
+        result.sums.popularProduct.months[date.format('YYYY-MM')] = popularProducts[0]?.product;
+        result.sums.popularCategory.months[date.format('YYYY-MM')] = popularCategories[0]?.category;
+      }
     }
 
     return res.status(HttpStatus.OK).json(result).end();
