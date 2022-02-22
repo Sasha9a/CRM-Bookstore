@@ -290,10 +290,10 @@ export class ReportController {
       for (const shop of shops) {
         if (receipts.findIndex((item) =>
           moment(item.date).format('YYYY-MM-DD') === date.format('YYYY-MM-DD')
-          && shop._id === item.shop?._id) !== -1) {
+          && shop._id == item.shop?._id) !== -1) {
           const items = receipts.filter((item) =>
             moment(item.date).format('YYYY-MM-DD') === date.format('YYYY-MM-DD')
-            && shop._id === item.shop?._id
+            && shop._id == item.shop?._id
           );
 
           const popularProducts: { product: Partial<ProductDto>, count: number }[] = [];
@@ -313,7 +313,7 @@ export class ReportController {
               }
             });
           });
-          popularProducts.sort((a, b) => a.count < b.count ? -1 : 1);
+          popularProducts.sort((a, b) => a.count > b.count ? -1 : 1);
 
           const popularCategories: { category: Partial<CategoryDto>, count: number }[] = [];
           items.forEach((item) => {
@@ -334,7 +334,7 @@ export class ReportController {
               }
             });
           });
-          popularCategories.sort((a, b) => a.count < b.count ? -1 : 1);
+          popularCategories.sort((a, b) => a.count > b.count ? -1 : 1);
 
           const data: TurnoverAnalyticsItemDto = {
             countReceipt: items.reduce((sum) => sum + 1, 0),
@@ -366,7 +366,7 @@ export class ReportController {
         });
       }
     });
-    popularProducts.sort((a, b) => a.count < b.count ? -1 : 1);
+    popularProducts.sort((a, b) => a.count > b.count ? -1 : 1);
 
     const popularCategories: { category: Partial<CategoryDto>, count: number }[] = [];
     result.items.forEach((item) => {
@@ -385,7 +385,7 @@ export class ReportController {
         }
       }
     });
-    popularCategories.sort((a, b) => a.count < b.count ? -1 : 1);
+    popularCategories.sort((a, b) => a.count > b.count ? -1 : 1);
 
     result.sums.averageCheck = result.items.reduce((sum, item) => sum + item.averageCheck, 0) / result.items.length;
     result.sums.averageNumberOfChecks = result.items.reduce((sum, item) => sum + item.countReceipt, 0) / result.items.length;
