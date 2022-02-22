@@ -1,0 +1,72 @@
+<p-card styleClass="h-full">
+
+  <div class="flex justify-content-between align-items-center">
+    <h3 class="fw-bold mt-1 mb-2">Аналитика товарооборота</h3>
+  </div>
+
+  <div class="grid mt-2">
+    <div class="col-12 md:col-6">
+      <crm-daterangepicker [value]="[filters.from, filters.to]"
+                           (changeValue)="setDateFilter($event)"
+                           placeholder="Период">
+      </crm-daterangepicker>
+    </div>
+
+    <div class="col-12 md:col-6">
+      <crm-shop-single-select [shops]="shops"
+                              [(selectedShop)]="selectedFilters.shop"
+                              [disabled]="isDirector"
+                              (selectedShopChange)="setShopFilter()"
+                              placeholder="Магазин">
+      </crm-shop-single-select>
+    </div>
+  </div>
+
+  <crm-table name="dashboard.turnover-analytics"
+             styleClass="mt-3"
+             scrollHeight="450px"
+             [columns]="itemColumns"
+             [loading]="loading"
+             [autoLayout]="true"
+             [values]="report?.items">
+    <ng-template #rowTemplate let-item="item">
+      <tr *ngIf="toData(item) as item">
+        <td nowrap>
+          <p>{{ item.date | date: 'dd.MM.YYYY, EEEEEE' }}</p>
+        </td>
+        <td>{{ item.shop?.address }}</td>
+        <td>{{ item.countReceipt || 0 | number }}</td>
+        <td>{{ item.averageCheck || 0 | number: '.0-0' }} руб.</td>
+        <td>{{ item.popularProduct.name }}</td>
+        <td>{{ item.popularCategory.name }}</td>
+      </tr>
+    </ng-template>
+    <ng-template #footerTemplate>
+      <tr>
+        <td>
+          <p>СРЕДНИЙ ЧЕК: {{ report?.sums?.averageCheck || 0 | number: '.0-0' }} руб.</p>
+        </td>
+        <td colspan="99"></td>
+      </tr>
+      <tr>
+        <td>
+          <p>СРЕДНЕЕ КОЛ-ВО ЧЕКОВ: {{ report?.sums?.averageNumberOfChecks || 0 | number: '.0-0' }}</p>
+        </td>
+        <td colspan="99"></td>
+      </tr>
+      <tr>
+        <td>
+          <p>ПОПУЛЯРНЫЙ ТОВАР: {{ report?.sums?.popularProduct?.name || 'Нет' }}</p>
+        </td>
+        <td colspan="99"></td>
+      </tr>
+      <tr>
+        <td>
+          <p>ПОПУЛЯРНАЯ КАТЕГОРИЯ: {{ report?.sums?.popularCategory?.name || 'Нет' }}</p>
+        </td>
+        <td colspan="99"></td>
+      </tr>
+    </ng-template>
+  </crm-table>
+
+</p-card>

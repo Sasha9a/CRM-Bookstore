@@ -8,34 +8,18 @@ export class TurnoverAnalyticsSumsDto {
 
   /** Средний чек */
   @Expose()
-  public averageCheck: {
-    days: Record<string, number>,
-    weeks: Record<string, number>,
-    months: Record<string, number>
-  }
+  public averageCheck: number;
 
   /** Среднее кол-во чеков */
   @Expose()
-  public averageNumberOfChecks: {
-    days: Record<string, number>,
-    weeks: Record<string, number>,
-    months: Record<string, number>
-  };
+  public averageNumberOfChecks: number;
 
   /** Популярный товар */
   @Expose()
-  public popularProduct: {
-    days: Record<string, Partial<ProductDto>>,
-    weeks: Record<string, Partial<ProductDto>>,
-    months: Record<string, Partial<ProductDto>>
-  };
+  public popularProduct: Partial<ProductDto>;
 
   /** Популярная категория */
   @Expose()
-  public popularCategory: {
-    days: Record<string, Partial<CategoryDto>>,
-    weeks: Record<string, Partial<CategoryDto>>,
-    months: Record<string, Partial<CategoryDto>>
-  };
+  public popularCategory: Partial<CategoryDto>;
 
 }

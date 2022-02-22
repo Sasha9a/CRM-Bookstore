@@ -15,6 +15,14 @@
     </crm-widget-traffic>
   </div>
 
+  <div *ngIf="authService.checkRoles([RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR])" class="col-12">
+    <crm-widget-turnover-analytics [report]="turnoverAnalytics"
+                                   [shops]="shops"
+                                   [loading]="turnoverAnalyticsLoading"
+                                   (changeQueryParams)="loadTurnoverAnalytics($event)">
+    </crm-widget-turnover-analytics>
+  </div>
+
   <div *ngIf="authService.checkRoles([RoleEnum.GENERAL_MANAGER])" class="col-12 xl:col-6">
     <crm-widget-salary [payslip]="payslip"
                        [loading]="payslipLoading"

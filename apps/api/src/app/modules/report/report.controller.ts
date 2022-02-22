@@ -255,26 +255,10 @@ export class ReportController {
     const result: TurnoverAnalyticsDto = {
       items: [],
       sums: {
-        averageCheck: {
-          days: {},
-          weeks: {},
-          months: {}
-        },
-        averageNumberOfChecks: {
-          days: {},
-          weeks: {},
-          months: {}
-        },
-        popularProduct: {
-          days: {},
-          weeks: {},
-          months: {}
-        },
-        popularCategory: {
-          days: {},
-          weeks: {},
-          months: {}
-        }
+        averageCheck: 0,
+        averageNumberOfChecks: 0,
+        popularProduct: undefined,
+        popularCategory: undefined
       }
     };
 
@@ -301,8 +285,6 @@ export class ReportController {
     }
 
     const dateToDay = moment(queryParams.to).clone().add(1, 'day');
-    const dateToWeek = moment(queryParams.to).clone().add(1, 'week');
-    const dateToMonth = moment(queryParams.to).clone().add(1, 'month');
 
     for (const date = moment(queryParams.from); date.isBefore(dateToDay, 'day'); date.add(1, 'day')) {
       for (const shop of shops) {
@@ -369,146 +351,46 @@ export class ReportController {
       }
     }
 
-    for (const date = moment(queryParams.from); date.isBefore(dateToDay, 'day'); date.add(1, 'day')) {
-      if (result.items.findIndex((item) => moment(item.date).format('YYYY-MM-DD') === date.format('YYYY-MM-DD')) !== -1) {
-        const items = result.items.filter((item) => moment(item.date).format('YYYY-MM-DD') === date.format('YYYY-MM-DD'));
-
-        const popularProducts: { product: Partial<ProductDto>, count: number }[] = [];
-        items.forEach((item) => {
-          if (popularProducts.findIndex((p) => item.popularProduct?._id === p.product?._id) === -1) {
-            popularProducts.push({
-              product: { _id: item.popularProduct?._id, name: item.popularProduct?.name },
-              count: 1
-            });
-          } else {
-            popularProducts.forEach((p) => {
-              if (item.popularProduct?._id === p.product?._id) {
-                p.count++;
-              }
-            });
+    const popularProducts: { product: Partial<ProductDto>, count: number }[] = [];
+    result.items.forEach((item) => {
+      if (popularProducts.findIndex((p) => item.popularProduct?._id === p.product?._id) === -1) {
+        popularProducts.push({
+          product: { _id: item.popularProduct?._id, name: item.popularProduct?.name },
+          count: 1
+        });
+      } else {
+        popularProducts.forEach((p) => {
+          if (item.popularProduct?._id === p.product?._id) {
+            p.count++;
           }
         });
-        popularProducts.sort((a, b) => a.count < b.count ? -1 : 1);
-
-        const popularCategories: { category: Partial<CategoryDto>, count: number }[] = [];
-        items.forEach((item) => {
-          if (item.popularCategory) {
-            if (popularCategories.findIndex((p) => item.popularCategory?._id === p.category?._id) === -1) {
-              popularCategories.push({
-                category: { _id: item.popularCategory?._id, name: item.popularCategory?.name },
-                count: 1
-              });
-            } else {
-              popularCategories.forEach((p) => {
-                if (item.popularCategory?._id === p.category?._id) {
-                  p.count++;
-                }
-              });
-            }
-          }
-        });
-        popularCategories.sort((a, b) => a.count < b.count ? -1 : 1);
-
-        result.sums.averageCheck.days[date.format('YYYY-MM-DD')] = items.reduce((sum, item) => sum + item.averageCheck, 0) / items.length;
-        result.sums.averageNumberOfChecks.days[date.format('YYYY-MM-DD')] = items.reduce((sum, item) => sum + item.countReceipt, 0) / items.length;
-        result.sums.popularProduct.days[date.format('YYYY-MM-DD')] = popularProducts[0]?.product;
-        result.sums.popularCategory.days[date.format('YYYY-MM-DD')] = popularCategories[0]?.category;
       }
-    }
+    });
+    popularProducts.sort((a, b) => a.count < b.count ? -1 : 1);
 
-    for (const date = moment(queryParams.from); date.isBefore(dateToWeek, 'week'); date.add(1, 'week')) {
-      if (result.items.findIndex((item) => moment(item.date).format('YYYY-WW') === date.format('YYYY-WW')) !== -1) {
-        const items = result.items.filter((item) => moment(item.date).format('YYYY-WW') === date.format('YYYY-WW'));
-
-        const popularProducts: { product: Partial<ProductDto>, count: number }[] = [];
-        items.forEach((item) => {
-          if (popularProducts.findIndex((p) => item.popularProduct?._id === p.product?._id) === -1) {
-            popularProducts.push({
-              product: { _id: item.popularProduct?._id, name: item.popularProduct?.name },
-              count: 1
-            });
-          } else {
-            popularProducts.forEach((p) => {
-              if (item.popularProduct?._id === p.product?._id) {
-                p.count++;
-              }
-            });
-          }
-        });
-        popularProducts.sort((a, b) => a.count < b.count ? -1 : 1);
-
-        const popularCategories: { category: Partial<CategoryDto>, count: number }[] = [];
-        items.forEach((item) => {
-          if (item.popularCategory) {
-            if (popularCategories.findIndex((p) => item.popularCategory?._id === p.category?._id) === -1) {
-              popularCategories.push({
-                category: { _id: item.popularCategory?._id, name: item.popularCategory?.name },
-                count: 1
-              });
-            } else {
-              popularCategories.forEach((p) => {
-                if (item.popularCategory?._id === p.category?._id) {
-                  p.count++;
-                }
-              });
+    const popularCategories: { category: Partial<CategoryDto>, count: number }[] = [];
+    result.items.forEach((item) => {
+      if (item.popularCategory) {
+        if (popularCategories.findIndex((p) => item.popularCategory?._id === p.category?._id) === -1) {
+          popularCategories.push({
+            category: { _id: item.popularCategory?._id, name: item.popularCategory?.name },
+            count: 1
+          });
+        } else {
+          popularCategories.forEach((p) => {
+            if (item.popularCategory?._id === p.category?._id) {
+              p.count++;
             }
-          }
-        });
-        popularCategories.sort((a, b) => a.count < b.count ? -1 : 1);
-
-        result.sums.averageCheck.weeks[date.format('YYYY-WW')] = items.reduce((sum, item) => sum + item.averageCheck, 0) / items.length;
-        result.sums.averageNumberOfChecks.weeks[date.format('YYYY-WW')] = items.reduce((sum, item) => sum + item.countReceipt, 0) / items.length;
-        result.sums.popularProduct.weeks[date.format('YYYY-WW')] = popularProducts[0]?.product;
-        result.sums.popularCategory.weeks[date.format('YYYY-WW')] = popularCategories[0]?.category;
+          });
+        }
       }
-    }
+    });
+    popularCategories.sort((a, b) => a.count < b.count ? -1 : 1);
 
-    for (const date = moment(queryParams.from); date.isBefore(dateToMonth, 'month'); date.add(1, 'month')) {
-      if (result.items.findIndex((item) => moment(item.date).format('YYYY-MM') === date.format('YYYY-MM')) !== -1) {
-        const items = result.items.filter((item) => moment(item.date).format('YYYY-MM') === date.format('YYYY-MM'));
-
-        const popularProducts: { product: Partial<ProductDto>, count: number }[] = [];
-        items.forEach((item) => {
-          if (popularProducts.findIndex((p) => item.popularProduct?._id === p.product?._id) === -1) {
-            popularProducts.push({
-              product: { _id: item.popularProduct?._id, name: item.popularProduct?.name },
-              count: 1
-            });
-          } else {
-            popularProducts.forEach((p) => {
-              if (item.popularProduct?._id === p.product?._id) {
-                p.count++;
-              }
-            });
-          }
-        });
-        popularProducts.sort((a, b) => a.count < b.count ? -1 : 1);
-
-        const popularCategories: { category: Partial<CategoryDto>, count: number }[] = [];
-        items.forEach((item) => {
-          if (item.popularCategory) {
-            if (popularCategories.findIndex((p) => item.popularCategory?._id === p.category?._id) === -1) {
-              popularCategories.push({
-                category: { _id: item.popularCategory?._id, name: item.popularCategory?.name },
-                count: 1
-              });
-            } else {
-              popularCategories.forEach((p) => {
-                if (item.popularCategory?._id === p.category?._id) {
-                  p.count++;
-                }
-              });
-            }
-          }
-        });
-        popularCategories.sort((a, b) => a.count < b.count ? -1 : 1);
-
-        result.sums.averageCheck.months[date.format('YYYY-MM')] = items.reduce((sum, item) => sum + item.averageCheck, 0) / items.length;
-        result.sums.averageNumberOfChecks.months[date.format('YYYY-MM')] = items.reduce((sum, item) => sum + item.countReceipt, 0) / items.length;
-        result.sums.popularProduct.months[date.format('YYYY-MM')] = popularProducts[0]?.product;
-        result.sums.popularCategory.months[date.format('YYYY-MM')] = popularCategories[0]?.category;
-      }
-    }
+    result.sums.averageCheck = result.items.reduce((sum, item) => sum + item.averageCheck, 0) / result.items.length;
+    result.sums.averageNumberOfChecks = result.items.reduce((sum, item) => sum + item.countReceipt, 0) / result.items.length;
+    result.sums.popularProduct = popularProducts[0]?.product;
+    result.sums.popularCategory = popularCategories[0]?.category;
 
     return res.status(HttpStatus.OK).json(result).end();
   }
