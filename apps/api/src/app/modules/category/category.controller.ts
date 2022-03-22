@@ -24,7 +24,7 @@ export class CategoryController {
   @Get()
   public async getAll(@Res() res: Response) {
     let entities = await this.categoryService.findAll();
-    entities = entities.filter((entity) => !entity.parent);
+    entities = entities.filter((entity) => !entity.parentId);
     return res.status(HttpStatus.OK).json(entities).end();
   }
 
@@ -48,8 +48,8 @@ export class CategoryController {
   @Post()
   public async create(@Res() res: Response, @Body() body: CategoryFormDto) {
     const entity = await this.categoryService.create(body);
-    if (entity.parent) {
-      const parent = await this.categoryService.findById(entity.parent._id);
+    if (entity.parentId) {
+      const parent = await this.categoryService.findById(entity.parentId);
       parent.children.push(entity);
       await parent.save();
     }
@@ -83,14 +83,14 @@ export class CategoryController {
     if (!entity) {
       throw new NotFoundException("Нет такого объекта!");
     }
-    const isParent = !!entity.parent;
+    const isParent = !!entity.parentId;
     if (isParent) {
-      const parent = await this.categoryService.findById(entity.parent._id);
+      const parent = await this.categoryService.findById(entity.parentId);
       await this.categoryService.update(parent._id, { children: parent.children });
     }
     const products = await this.productService.findAll({ category: entity._id });
     for (const product of products) {
-      await this.productService.update(product._id, { category: isParent ? entity.parent._id : null });
+      await this.productService.update(product._id, { category: isParent ? entity.parentId : null });
     }
     return res.status(HttpStatus.OK).end();
   }

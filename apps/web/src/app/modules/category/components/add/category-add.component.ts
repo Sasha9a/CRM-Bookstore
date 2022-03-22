@@ -29,7 +29,7 @@ export class CategoryAddComponent implements OnInit {
 
     if (parentId) {
       this.categoryStateService.findById<CategoryDto>(parentId).subscribe((category) => {
-        this.category.parent = category;
+        this.category.parentId = category._id;
       });
     }
   }

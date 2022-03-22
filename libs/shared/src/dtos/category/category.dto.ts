@@ -12,8 +12,7 @@ export class CategoryDto extends BaseDto {
 
   /** Родительская категория */
   @Expose()
-  @Type(() => CategoryDto)
-  public parent: CategoryDto;
+  public parentId: string;
 
   /** Подкатегории */
   @Expose()

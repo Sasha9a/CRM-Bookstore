@@ -12,8 +12,8 @@ export class Category extends Document {
   public name: string;
 
   /** Родительская категория */
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Category.name, autopopulate: true })
-  public parent: Category;
+  @Prop()
+  public parentId: string;
 
   /** Подкатегории */
   @Prop({ type: [mongoose.Schema.Types.ObjectId], ref: Category.name, autopopulate: true })

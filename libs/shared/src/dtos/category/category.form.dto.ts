@@ -1,4 +1,3 @@
-import { CategoryDto } from "@crm/shared/dtos/category/category.dto";
 import { CharacteristicFormDto } from "@crm/shared/dtos/category/characteristic.form.dto";
 import { Expose, Type } from "class-transformer";
 import { IsOptional, IsString, ValidateNested } from "class-validator";
@@ -15,8 +14,7 @@ export class CategoryFormDto {
   /** Родительская категория */
   @Expose()
   @IsOptional()
-  @Type(() => CategoryDto)
-  public parent?: CategoryDto;
+  public parentId?: string;
 
   /** Список характеристик */
   @Expose()
