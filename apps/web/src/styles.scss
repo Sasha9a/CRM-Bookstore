@@ -394,6 +394,11 @@ a:hover {
   }
 }
 
+.p-datatable .p-datatable-tbody > tr > td {
+  border: 1px solid #b3b6b9 !important;
+  border-width: 0 0 1px 0 !important;
+}
+
 .p-datatable.basic-table {
   th, td {
     padding: 11px !important;
