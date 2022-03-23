@@ -86,8 +86,17 @@ export class CategoryController {
     const isParent = !!entity.parentId;
     if (isParent) {
       const parent = await this.categoryService.findById(entity.parentId);
-      await this.categoryService.update(parent._id, { children: parent.children });
+      if (parent?.children) {
+        parent.children.push(...entity.children);
+        await parent.save();
+      }
     }
+
+    const children = await this.categoryService.findAll({ parentId: entity.id });
+    for (const child of children) {
+      await this.categoryService.update(child._id, { parentId: isParent ? entity.parentId : null });
+    }
+
     const products = await this.productService.findAll({ category: entity._id });
     for (const product of products) {
       await this.productService.update(product._id, { category: isParent ? entity.parentId : null });

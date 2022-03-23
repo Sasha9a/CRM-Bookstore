@@ -1,7 +1,7 @@
 import { JwtAuthGuard } from "@crm/api/core/guards/jwt-auth.guard";
 import { FileService } from "@crm/api/modules/file/file.service";
 import { FileDto } from "@crm/shared/dtos/file.dto";
-import { Controller, Delete, Get, HttpStatus, NotFoundException, Param, Post, Res, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Controller, Delete, Get, HttpStatus, Param, Post, Res, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { Express, Response } from 'express';
 import { diskStorage } from "multer";
@@ -24,7 +24,11 @@ export class FileController {
    * */
   @Get(':path')
   public async getFile(@Res() res: Response, @Param('path') path: string) {
-    return res.sendFile(path, { root: './public' });
+    if (fs.existsSync('./public/' + path)) {
+      return res.sendFile(path, { root: './public' });
+    } else {
+      return res.status(HttpStatus.NO_CONTENT).end();
+    }
   }
 
   /** Post-запрос на добавление файла
@@ -60,11 +64,10 @@ export class FileController {
   @UseGuards(JwtAuthGuard)
   @Delete(':path')
   public async deleteFile(@Res() res: Response, @Param('path') path: string) {
-    const deletedFile = await this.fileService.deleteFile(path);
-    if (!deletedFile) {
-      throw new NotFoundException("Нет такого файла!");
+    await this.fileService.deleteFile(path);
+    if (fs.existsSync('./public/' + path)) {
+      fs.unlinkSync('./public/' + path);
     }
-    fs.unlinkSync('./public/' + path);
     return res.status(HttpStatus.OK).end();
   }
 }
