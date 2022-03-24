@@ -38,7 +38,7 @@ export class UserDto extends BaseDto {
   @Expose()
   public telephone: string;
 
-  /** Адрес жительства */
+  /** Адрес проживания */
   @Expose()
   public address: string;
 

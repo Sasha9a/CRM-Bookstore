@@ -9,6 +9,10 @@
           <td class="fw-semibold">{{ order.date | date: 'dd MMMM YYYY' }}</td>
         </tr>
         <tr>
+          <td class="fw-bold">Поставщик</td>
+          <td class="fw-semibold">{{ order.supplier }}</td>
+        </tr>
+        <tr>
           <td class="fw-bold">Магазин</td>
           <td class="fw-semibold">{{ order.shop?.address }}</td>
         </tr>

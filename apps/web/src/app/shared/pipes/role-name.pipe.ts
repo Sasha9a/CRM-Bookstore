@@ -5,7 +5,7 @@ const roleName = {
   [RoleEnum.GENERAL_MANAGER]: 'Управляющий сетью',
   [RoleEnum.STORE_DIRECTOR]: 'Директор магазина',
   [RoleEnum.MANAGER]: 'Менеджер магазина',
-  [RoleEnum.SELLER]: 'Продавец'
+  [RoleEnum.SELLER]: 'Продавец-кассир/Продавец-консультант'
 };
 
 /** Пайп конвертирует enum в человеческое название роли */

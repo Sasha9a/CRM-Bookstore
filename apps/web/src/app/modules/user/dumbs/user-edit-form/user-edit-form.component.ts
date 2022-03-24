@@ -1,12 +1,14 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
 import { UserEditFormDto } from "@crm/shared/dtos/user/user.edit.form.dto";
 import { RoleEnum } from "@crm/shared/enums/role.enum";
 import { ScheduleEnum } from "@crm/shared/enums/schedule.enum";
 import { ErrorService } from "@crm/web/core/services/error.service";
+import { FileService } from "@crm/web/core/services/file.service";
 import { BaseFormComponent } from "@crm/web/shared/dumbs/base-form/base-form.component";
 import { RoleNamePipe } from "@crm/web/shared/pipes/role-name.pipe";
 import { ScheduleNamePipe } from "@crm/web/shared/pipes/schedule-name.pipe";
+import { FileUpload } from "primeng/fileupload";
 
 /** Компонент ввода данных пользователя при редактировании */
 @Component({
@@ -44,9 +46,16 @@ export class UserEditFormComponent extends BaseFormComponent<UserEditFormDto> im
   /** URL на который возвращать при отмене */
   @Input() public route: string;
 
+  /** Загружается ли фото или нет */
+  public uploadingFiles = false;
+
+  /** Кнопка смены аватара */
+  @ViewChild('fileUpload') public fileUpload: FileUpload;
+
   public constructor(public override readonly errorService: ErrorService,
                      private readonly roleNamePipe: RoleNamePipe,
-                     private readonly scheduleNamePipe: ScheduleNamePipe) {
+                     private readonly scheduleNamePipe: ScheduleNamePipe,
+                     private readonly fileService: FileService) {
     super(errorService);
 
     Object.keys(RoleEnum).forEach((role) => {
@@ -91,6 +100,23 @@ export class UserEditFormComponent extends BaseFormComponent<UserEditFormDto> im
    * @param roles Роли */
   public setRole(roles: any) {
     this.user.roles = roles.map((role) => role.role);
+  }
+
+  /** Добавляет или изменяет аватар пользователя
+   * @param data файлы */
+  public addImage(data: { files: FileList }) {
+    this.uploadingFiles = true;
+    this.fileService.upload(data.files).subscribe((files) => {
+      if (this.user.avatar) {
+        this.fileService.deleteFile(this.user.avatar.path).subscribe(() => {
+          this.user.avatar = files[0];
+        });
+      } else {
+        this.user.avatar = files[0];
+      }
+      this.fileUpload.clear();
+      this.uploadingFiles = false;
+    }, () => this.uploadingFiles = false);
   }
 
 }

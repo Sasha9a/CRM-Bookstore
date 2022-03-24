@@ -24,7 +24,7 @@
                 <p *ngIf="characteristicEdit !== characteristic" class="fw-bold ml-2">
                   <span class="hover:text-blue-400 cursor-pointer"
                         (click)="characteristicEdit = characteristic">
-                    {{ characteristic.name ?? '...' }}
+                    {{ characteristic.name || '...' }}
                   </span>
                 </p>
                 <div *ngIf="characteristicEdit === characteristic" class="p-inputgroup">

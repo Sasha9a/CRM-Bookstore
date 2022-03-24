@@ -12,6 +12,10 @@ export class OrderDto extends BaseDto {
   @Expose()
   public date: Date;
 
+  /** Поставщик */
+  @Expose()
+  public supplier: string;
+
   /** Магазин, где совершен заказ */
   @Expose()
   @Type(() => ShopDto)

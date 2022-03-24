@@ -13,6 +13,10 @@ export class Order extends Document {
   @Prop({ required: true })
   public date: Date;
 
+  /** Поставщик */
+  @Prop({ required: true })
+  public supplier: string;
+
   /** Магазин, где совершен заказ */
   @Prop({ type: mongoose.Schema.Types.Mixed, required: true })
   public shop: ShopDto;

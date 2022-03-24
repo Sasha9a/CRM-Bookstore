@@ -33,7 +33,7 @@
           </tr>
           <tr>
             <td class="fw-bold">Категория</td>
-            <td class="fw-semibold">{{ product.category?.name ?? 'Отсутствует' }}</td>
+            <td class="fw-semibold">{{ product.category ? (product.category | pathCategory: categories) : 'Отсутствует' }}</td>
           </tr>
           <tr>
             <td class="fw-bold">Статус</td>

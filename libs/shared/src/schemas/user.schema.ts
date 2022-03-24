@@ -38,7 +38,7 @@ export class User extends Document {
   @Prop()
   public telephone: string;
 
-  /** Адрес жительства */
+  /** Адрес проживания */
   @Prop()
   public address: string;
 

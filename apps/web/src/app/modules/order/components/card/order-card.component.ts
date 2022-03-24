@@ -29,7 +29,7 @@ export class OrderCardComponent implements OnInit {
     { label: 'Артикул', name: 'code', sort: 'code:string' },
     { label: 'Категория', name: 'category', sort: 'category.name:string' },
     { label: 'Цена за шт. на сайте', name: 'price', sort: 'price:number' },
-    { label: 'Цена за шт. от произв.', name: 'priceManufacture', sort: 'priceManufacture:number' },
+    { label: 'Цена за шт. от поставщика', name: 'priceManufacture', sort: 'priceManufacture:number' },
     { label: 'Кол-во', name: 'count', sort: 'count:number' },
     { label: 'Общая цена', name: 'totalPrice', sort: 'totalPrice:number' },
     { label: 'Наценка', name: 'markup', sort: 'markup:number' },

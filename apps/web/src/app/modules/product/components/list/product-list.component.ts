@@ -97,7 +97,7 @@ export class ProductListComponent implements OnInit {
       this.loadProducts();
     });
 
-    if (!this.authService.checkRoles([RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR])) {
+    if (!this.authService.checkRoles([RoleEnum.GENERAL_MANAGER])) {
       this.shopStateService.findById<ShopDto>(this.authService.currentUser.shop?._id).subscribe((shop) => {
         this.filters.shops = [shop];
         if (this.authService.currentUser.shop) {

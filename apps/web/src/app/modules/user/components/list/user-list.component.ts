@@ -30,7 +30,7 @@ export class UserListComponent implements OnInit {
     { label: 'Дата начала работы', name: 'startDate', sort: 'startDate:date' },
     { label: 'Магазин', name: 'shop', sort: 'shop.address:string' },
     { label: 'Телефон', name: 'telephone', sort: 'telephone:string' },
-    { label: 'Адрес жительства', name: 'address', sort: 'address:string' },
+    { label: 'Адрес проживания', name: 'address', sort: 'address:string' },
     { label: 'Должность', name: 'position', sort: 'position:string' }
   ];
 

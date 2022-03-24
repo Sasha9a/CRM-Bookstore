@@ -37,7 +37,7 @@ export class UserEditFormDto {
   @IsOptional()
   public telephone?: string;
 
-  /** Адрес жительства */
+  /** Адрес проживания */
   @Expose()
   @IsOptional()
   public address?: string;
@@ -49,7 +49,7 @@ export class UserEditFormDto {
 
   /** Роли пользователя */
   @Expose()
-  @IsDefined({ message: "Выберите роли" })
+  @IsDefined({ message: "Выберите роль(и)" })
   public roles: RoleEnum[];
 
   /** График работы */
@@ -67,4 +67,5 @@ export class UserEditFormDto {
   @IsOptional()
   @Type(() => FileDto)
   public avatar?: FileDto;
+
 }

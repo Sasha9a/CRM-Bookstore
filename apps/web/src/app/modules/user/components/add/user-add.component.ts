@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
+import { UserCreateFormDto } from "@crm/shared/dtos/user/user.create.form.dto";
 import { UserDto } from "@crm/shared/dtos/user/user.dto";
-import { UserEditFormDto } from "@crm/shared/dtos/user/user.edit.form.dto";
 import { RoleEnum } from "@crm/shared/enums/role.enum";
 import { ErrorService } from "@crm/web/core/services/error.service";
 import { ShopStateService } from "@crm/web/core/services/shop/shop-state.service";
@@ -16,6 +16,9 @@ import { UserStateService } from "@crm/web/core/services/user/user-state.service
   styleUrls: []
 })
 export class UserAddComponent implements OnInit {
+
+  /** Пользователь */
+  public user: UserCreateFormDto = new UserCreateFormDto();
 
   /** Грузится ли или нет */
   public loading = true;
@@ -49,10 +52,11 @@ export class UserAddComponent implements OnInit {
 
   /** Функция создает пользователя
    * @param body данные пользователя */
-  public create(body: UserEditFormDto) {
+  public create(body: UserCreateFormDto) {
     this.loading = true;
+    this.user = body;
 
-    this.userStateService.create<UserEditFormDto, UserDto>(body).subscribe(() => {
+    this.userStateService.create<UserCreateFormDto, UserDto>(body).subscribe(() => {
       this.loading = false;
       this.errorService.addSuccessMessage("Пользователь успешно создан");
       this.router.navigate(['/user']).catch(console.error);

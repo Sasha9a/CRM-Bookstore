@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from "@angular/platform-browser";
 import { ActivatedRoute } from "@angular/router";
+import { CategoryDto } from "@crm/shared/dtos/category/category.dto";
 import { OrderDto } from "@crm/shared/dtos/order/order.dto";
 import { ProductDto } from "@crm/shared/dtos/product/product.dto";
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
 import { RoleEnum } from "@crm/shared/enums/role.enum";
 import { CrmTableColumn } from "@crm/web/core/models/crm-table-column";
+import { CategoryStateService } from "@crm/web/core/services/category/category-state.service";
 import { ConfirmDialogService } from "@crm/web/core/services/confirm-dialog.service";
 import { ErrorService } from "@crm/web/core/services/error.service";
 import { OrderStateService } from "@crm/web/core/services/order/order-state.service";
@@ -30,6 +32,9 @@ export class ProductCardComponent implements OnInit {
   /** Список заказов */
   public orders: OrderDto[];
 
+  /** Категории */
+  public categories: CategoryDto[];
+
   /** Идет загрузка или нет */
   public loading = true;
 
@@ -42,7 +47,7 @@ export class ProductCardComponent implements OnInit {
     { label: 'Магазин' },
     { label: 'Кто заказал' },
     { label: 'Цена за шт. на сайте' },
-    { label: 'Цена за шт. от произв.' },
+    { label: 'Цена за шт. от поставщика' },
     { label: 'Кол-во заказано' },
     { label: 'Общая цена' },
     { label: 'Наценка' }
@@ -51,6 +56,7 @@ export class ProductCardComponent implements OnInit {
   public constructor(private readonly productStateService: ProductStateService,
                      private readonly orderStateService: OrderStateService,
                      private readonly shopStateService: ShopStateService,
+                     private readonly categoryStateService: CategoryStateService,
                      public readonly authService: AuthService,
                      private readonly route: ActivatedRoute,
                      private readonly confirmDialogService: ConfirmDialogService,
@@ -90,6 +96,8 @@ export class ProductCardComponent implements OnInit {
     if (this.authService.checkRoles([RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR])) {
       this.orderStateService.getAllByProduct(productId).subscribe((orders) => this.orders = orders);
     }
+
+    this.categoryStateService.find<CategoryDto>().subscribe((categories) => this.categories = categories);
   }
 
   /** Функция отправляет в архив товар */

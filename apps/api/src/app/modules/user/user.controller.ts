@@ -70,6 +70,10 @@ export class UserController {
   @Post()
   public async addUser(@Res() res: Response, @Body() body: UserCreateFormDto, @Req() req: Request) {
     const user: UserDto = req.user as UserDto;
+    const userFromLogin = await this.userService.findByLogin(body.login);
+    if (userFromLogin) {
+      throw new NotFoundException("Такой логин уже занят");
+    }
     if (user?.roles?.includes(RoleEnum.STORE_DIRECTOR)
       && !user?.roles?.includes(RoleEnum.GENERAL_MANAGER)
       && body?.roles?.includes(RoleEnum.GENERAL_MANAGER)) {

@@ -1,3 +1,4 @@
+import { FileDto } from "@crm/shared/dtos/file.dto";
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
 import { RoleEnum } from "@crm/shared/enums/role.enum";
 import { ScheduleEnum } from "@crm/shared/enums/schedule.enum";
@@ -17,6 +18,12 @@ export class UserCreateFormDto {
   @Expose()
   @IsString({ message: "Введите пароль" })
   public password: string;
+
+  /** Фото пользователя */
+  @Expose()
+  @IsOptional()
+  @Type(() => FileDto)
+  public avatar?: FileDto;
 
   /** ФИО */
   @Expose()
@@ -46,7 +53,7 @@ export class UserCreateFormDto {
   @IsOptional()
   public telephone?: string;
 
-  /** Адрес жительства */
+  /** Адрес проживания */
   @Expose()
   @IsOptional()
   public address?: string;
@@ -58,7 +65,7 @@ export class UserCreateFormDto {
 
   /** Роли пользователя */
   @Expose()
-  @IsDefined({ message: "Выберите роли" })
+  @IsDefined({ message: "Выберите роль(и)" })
   public roles: RoleEnum[];
 
   /** График работы */

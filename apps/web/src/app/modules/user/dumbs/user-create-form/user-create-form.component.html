@@ -4,6 +4,23 @@
   <div class="col-12 md:col-6 xl:col-4">
     <div class="p-fluid">
       <div class="field">
+        <label class="fw-bold">Фото</label>
+        <div *ngIf="user.avatar" class="flex mb-2">
+          <crm-file [file]="user.avatar" class="mr-2"></crm-file>
+        </div>
+        <p-fileUpload #fileUpload
+                      mode="basic"
+                      accept="image/*"
+                      [customUpload]="true"
+                      (uploadHandler)="addImage($event)"
+                      [auto]="true"
+                      [disabled]="uploadingFiles"
+                      chooseIcon="pi-paperclip"
+                      [chooseLabel]="user.avatar ? 'Обновить фото' : 'Загрузить фото'">
+        </p-fileUpload>
+      </div>
+
+      <div class="field">
         <label class="fw-bold required-field">Логин</label>
         <input type="text" pInputText [ngClass]="{ 'ng-invalid ng-dirty': errors?.login }" [(ngModel)]="user.login">
         <small *ngIf="errors?.login" class="p-error">{{ errors.login | join }}</small>
@@ -28,13 +45,13 @@
 
       <div class="field">
         <label class="fw-bold required-field">Дата рождения</label>
-        <crm-datepicker [(value)]="user.dateOfBirth" [class]="errors?.dateOfBirth ? 'ng-invalid ng-dirty' : ''"></crm-datepicker>
+        <crm-datepicker [(value)]="user.dateOfBirth" [class]="errors?.dateOfBirth ? 'ng-invalid ng-dirty' : ''" [maxDate]="user.startDate"></crm-datepicker>
         <small *ngIf="errors?.dateOfBirth" class="p-error">{{ errors.dateOfBirth | join }}</small>
       </div>
 
       <div class="field">
         <label class="fw-bold required-field">Дата начала работы</label>
-        <crm-datepicker [(value)]="user.startDate" [class]="errors?.startDate ? 'ng-invalid ng-dirty' : ''"></crm-datepicker>
+        <crm-datepicker [(value)]="user.startDate" [class]="errors?.startDate ? 'ng-invalid ng-dirty' : ''" [minDate]="user.dateOfBirth"></crm-datepicker>
         <small *ngIf="errors?.startDate" class="p-error">{{ errors.startDate | join }}</small>
       </div>
 
@@ -59,7 +76,7 @@
       </div>
 
       <div class="field">
-        <label class="fw-bold">Адрес жительства</label>
+        <label class="fw-bold">Адрес проживания</label>
         <input type="text" pInputText [ngClass]="{ 'ng-invalid ng-dirty': errors?.address }" [(ngModel)]="user.address">
         <small *ngIf="errors?.address" class="p-error">{{ errors.address | join }}</small>
       </div>
@@ -72,7 +89,8 @@
 
       <div class="field">
         <label class="fw-bold required-field">Роль(и)</label>
-        <crm-multi-select (selectedItemsChange)="setRole($event)"
+        <crm-multi-select [(selectedItems)]="selectedRoles"
+                          (selectedItemsChange)="setRole($event)"
                           [options]="roles"
                           [class]="errors?.roles ? 'ng-invalid ng-dirty' : ''"
                           dataKey="role">
@@ -82,7 +100,8 @@
 
       <div class="field">
         <label class="fw-bold required-field">График работы</label>
-        <crm-single-select (selectedItemChange)="user.schedule = $event.schedule"
+        <crm-single-select [(selectedItem)]="selectSchedule"
+                           (selectedItemChange)="user.schedule = $event.schedule"
                            [options]="schedules"
                            [class]="errors?.schedule ? 'ng-invalid ng-dirty' : ''"
                            dataKey="schedule"

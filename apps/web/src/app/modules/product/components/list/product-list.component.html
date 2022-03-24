@@ -74,7 +74,10 @@
       <td>{{ product.code }}</td>
       <td>{{ product.category?.name }}</td>
       <td>{{ product.price | number }} руб.</td>
-      <td>{{ product['countShop'] || 0 }} шт.</td>
+      <td>
+        <p *ngIf="selectedFilters.shop; else noSelectShop">{{ product['countShop'] || 0 }} шт.</p>
+        <ng-template #noSelectShop>Не выбран магазин</ng-template>
+      </td>
       <td>
         <p-tag *ngIf="!product.deleted" styleClass="text-sm" severity="success" value="Активен"></p-tag>
         <p-tag *ngIf="product.deleted" styleClass="text-sm" severity="danger" value="В архиве"></p-tag>
