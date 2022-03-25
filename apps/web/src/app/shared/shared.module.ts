@@ -122,6 +122,7 @@ import { ChartGroupMenuComponent } from './dumbs/chart-group-menu/chart-group-me
 import { WidgetMoneyTurnoverComponent } from './dumbs/widget-money-turnover/widget-money-turnover.component';
 import { WidgetTurnoverAnalyticsComponent } from './dumbs/widget-turnover-analytics/widget-turnover-analytics.component';
 import { PathCategoryPipe } from './pipes/path-category.pipe';
+import { SupplierSingleSelectComponent } from './dumbs/dropdowns/supplier-single-select/supplier-single-select.component';
 
 
 
@@ -158,7 +159,8 @@ import { PathCategoryPipe } from './pipes/path-category.pipe';
     ChartGroupMenuComponent,
     WidgetMoneyTurnoverComponent,
     WidgetTurnoverAnalyticsComponent,
-    PathCategoryPipe
+    PathCategoryPipe,
+    SupplierSingleSelectComponent
   ],
   imports: [
     CommonModule,
@@ -371,7 +373,8 @@ import { PathCategoryPipe } from './pipes/path-category.pipe';
 		WidgetMoneyTurnoverComponent,
 		WidgetTurnoverAnalyticsComponent,
 		FileComponent,
-		PathCategoryPipe
+		PathCategoryPipe,
+		SupplierSingleSelectComponent
 	],
   providers: [RoleNamePipe, ScheduleNamePipe, DecimalPipe]
 })

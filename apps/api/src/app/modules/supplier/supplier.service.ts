@@ -15,7 +15,7 @@ export class SupplierService extends BaseService<Supplier> {
 
   public async deleteOverdue() {
     const now = moment().startOf('day').toISOString();
-    await this.supplierModel.deleteMany({ endDate: { $gt: now } });
+    await this.supplierModel.deleteMany({ dateTo: { $lt: now } });
   }
 
 }

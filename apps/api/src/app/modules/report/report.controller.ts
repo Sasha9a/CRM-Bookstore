@@ -5,6 +5,7 @@ import { OrderService } from "@crm/api/modules/order/order.service";
 import { ReceiptService } from "@crm/api/modules/receipt/receipt.service";
 import { SalaryService } from "@crm/api/modules/salary/salary.service";
 import { ShopService } from "@crm/api/modules/shop/shop.service";
+import { SupplierService } from "@crm/api/modules/supplier/supplier.service";
 import { CategoryDto } from "@crm/shared/dtos/category/category.dto";
 import { OrderDto } from "@crm/shared/dtos/order/order.dto";
 import { ProductDto } from "@crm/shared/dtos/product/product.dto";
@@ -17,6 +18,7 @@ import { TurnoverAnalyticsItemDto } from "@crm/shared/dtos/report/turnover-analy
 import { TurnoverAnalyticsQueryParamsDto } from "@crm/shared/dtos/report/turnover-analytics/turnover.analytics.query.params.dto";
 import { SalaryDto } from "@crm/shared/dtos/salary/salary.dto";
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
+import { SupplierDto } from "@crm/shared/dtos/supplier/supplier.dto";
 import { RoleEnum } from "@crm/shared/enums/role.enum";
 import { Controller, Get, HttpStatus, Query, Res, UseGuards } from "@nestjs/common";
 import { Response } from "express";
@@ -29,6 +31,7 @@ export class ReportController {
   public constructor(private readonly orderService: OrderService,
                      private readonly salaryService: SalaryService,
                      private readonly receiptService: ReceiptService,
+                     private readonly supplierService: SupplierService,
                      private readonly shopService: ShopService) {
   }
 
@@ -79,6 +82,12 @@ export class ReportController {
       salaries = await this.salaryService.findAll({ ...filterDates });
       orders = await this.orderService.findAll({ ...filterDates });
     }
+    const suppliers: SupplierDto[] = await this.supplierService.findAll({
+      dateFrom: {
+        $gte: moment(queryParams.from, 'YYYY-MM-DD').toISOString(),
+        $lte: moment(queryParams.to, 'YYYY-MM-DD').toISOString()
+      }
+    });
 
     let budgetItem: MoneyTurnoverItemDto = {
       name: 'Продажа товаров',
@@ -169,6 +178,36 @@ export class ReportController {
     for (const date = moment(queryParams.from); date.isBefore(dateToMonth, 'month'); date.add(1, 'month')) {
       if (orders.findIndex((item) => moment(item.date).format('YYYY-MM') === date.format('YYYY-MM')) !== -1) {
         const items = orders.filter((item) => moment(item.date).format('YYYY-MM') === date.format('YYYY-MM'));
+        budgetItem.moneyTurnover.months[date.format('YYYY-MM')] = items.reduce((sum, item) => sum + item.sum, 0);
+      }
+    }
+    result.expenses.push(budgetItem);
+
+    budgetItem = {
+      name: 'Оформление договоров',
+      moneyTurnover: {
+        days: {},
+        weeks: {},
+        months: {}
+      }
+    }
+    for (const date = moment(queryParams.from); date.isBefore(dateToDay, 'day'); date.add(1, 'day')) {
+      if (suppliers.findIndex((item) => moment(item.dateFrom).format('YYYY-MM-DD') === date.format('YYYY-MM-DD')) !== -1) {
+        const items = suppliers.filter((item) => moment(item.dateFrom).format('YYYY-MM-DD') === date.format('YYYY-MM-DD'));
+        budgetItem.moneyTurnover.days[date.format('YYYY-MM-DD')] = items.reduce((sum, item) => sum + item.sum, 0);
+      }
+    }
+
+    for (const date = moment(queryParams.from); date.isBefore(dateToWeek, 'week'); date.add(1, 'week')) {
+      if (suppliers.findIndex((item) => moment(item.dateFrom).format('YYYY-WW') === date.format('YYYY-WW')) !== -1) {
+        const items = suppliers.filter((item) => moment(item.dateFrom).format('YYYY-WW') === date.format('YYYY-WW'));
+        budgetItem.moneyTurnover.weeks[date.format('YYYY-WW')] = items.reduce((sum, item) => sum + item.sum, 0);
+      }
+    }
+
+    for (const date = moment(queryParams.from); date.isBefore(dateToMonth, 'month'); date.add(1, 'month')) {
+      if (suppliers.findIndex((item) => moment(item.dateFrom).format('YYYY-MM') === date.format('YYYY-MM')) !== -1) {
+        const items = suppliers.filter((item) => moment(item.dateFrom).format('YYYY-MM') === date.format('YYYY-MM'));
         budgetItem.moneyTurnover.months[date.format('YYYY-MM')] = items.reduce((sum, item) => sum + item.sum, 0);
       }
     }

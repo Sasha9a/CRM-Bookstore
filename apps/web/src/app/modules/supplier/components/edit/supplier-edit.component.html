@@ -1,0 +1,9 @@
+<crm-supplier-form *ngIf="!saving && supplier"
+                   [supplier]="supplier"
+                   [canDelete]="true"
+                   (save)="edit($event)"
+                   (delete)="delete()"
+                   [route]="'/supplier'">
+</crm-supplier-form>
+
+<crm-spinner *ngIf="saving || !supplier"></crm-spinner>

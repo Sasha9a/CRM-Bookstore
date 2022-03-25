@@ -1,5 +1,6 @@
 import { ProductOrderDto } from "@crm/shared/dtos/product/product.order.dto";
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
+import { SupplierDto } from "@crm/shared/dtos/supplier/supplier.dto";
 import { UserDto } from "@crm/shared/dtos/user/user.dto";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import * as mongoose from "mongoose";
@@ -14,8 +15,8 @@ export class Order extends Document {
   public date: Date;
 
   /** Поставщик */
-  @Prop({ required: true })
-  public supplier: string;
+  @Prop({ type: mongoose.Schema.Types.Mixed, required: true })
+  public supplier: SupplierDto;
 
   /** Магазин, где совершен заказ */
   @Prop({ type: mongoose.Schema.Types.Mixed, required: true })

@@ -11,11 +11,11 @@ export class SupplierDto extends BaseDto {
 
   /** Дата начала действия договора */
   @Expose()
-  public startDate: Date;
+  public dateFrom: Date;
 
   /** Дата окончания действия договора */
   @Expose()
-  public endDate: Date;
+  public dateTo: Date;
 
   /** Сумма договора */
   @Expose()

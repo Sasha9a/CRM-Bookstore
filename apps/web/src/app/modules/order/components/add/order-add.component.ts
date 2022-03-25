@@ -5,11 +5,13 @@ import { OrderFormDto } from "@crm/shared/dtos/order/order.form.dto";
 import { ProductDto } from "@crm/shared/dtos/product/product.dto";
 import { ProductOrderDto } from "@crm/shared/dtos/product/product.order.dto";
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
+import { SupplierDto } from "@crm/shared/dtos/supplier/supplier.dto";
 import { RoleEnum } from "@crm/shared/enums/role.enum";
 import { ErrorService } from "@crm/web/core/services/error.service";
 import { OrderStateService } from "@crm/web/core/services/order/order-state.service";
 import { ProductStateService } from "@crm/web/core/services/product/product-state.service";
 import { ShopStateService } from "@crm/web/core/services/shop/shop-state.service";
+import { SupplierStateService } from "@crm/web/core/services/supplier/supplier-state.service";
 import { AuthService } from "@crm/web/core/services/user/auth.service";
 import { validate } from "@crm/web/core/services/validation/validate.service";
 import * as moment from "moment-timezone";
@@ -34,6 +36,9 @@ export class OrderAddComponent implements OnInit {
   /** Все магазины */
   public shops: ShopDto[] = [];
 
+  /** Все поставщики */
+  public suppliers: SupplierDto[] = [];
+
   /** Все товары */
   public products: ProductOrderDto[] = [];
 
@@ -43,6 +48,7 @@ export class OrderAddComponent implements OnInit {
   public constructor(private readonly shopStateService: ShopStateService,
                      private readonly orderStateService: OrderStateService,
                      private readonly productStateService: ProductStateService,
+                     private readonly supplierStateService: SupplierStateService,
                      public readonly authService: AuthService,
                      private readonly errorService: ErrorService,
                      private readonly router: Router) { }
@@ -67,6 +73,8 @@ export class OrderAddComponent implements OnInit {
         this.loading = false;
       }, () => this.loading = false);
     }
+
+    this.supplierStateService.find<SupplierDto>().subscribe((suppliers) => this.suppliers = suppliers);
 
     this.order.date = moment().startOf('day').toDate();
 

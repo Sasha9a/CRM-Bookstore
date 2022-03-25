@@ -14,13 +14,13 @@ export class SupplierFormDto {
   @Expose()
   @Transform(({ value }) => value ? new Date(value) : undefined)
   @IsDate({ message: "Выберите дату начала договора" })
-  public startDate: Date;
+  public dateFrom: Date;
 
   /** Дата окончания действия договора */
   @Expose()
   @Transform(({ value }) => value ? new Date(value) : undefined)
   @IsDate({ message: "Выберите дату окончания договора" })
-  public endDate: Date;
+  public dateTo: Date;
 
   /** Сумма договора */
   @Expose()

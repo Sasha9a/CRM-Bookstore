@@ -1,0 +1,44 @@
+<h3 class="dividing-header">Поставщик</h3>
+
+<div class="grid">
+  <div class="col-12 md:col-6 xl:col-4">
+    <div class="p-fluid">
+      <div class="field">
+        <label class="fw-bold required-field">Название</label>
+        <input type="text" pInputText [ngClass]="{ 'ng-invalid ng-dirty': errors?.name }" [(ngModel)]="supplier.name">
+        <small *ngIf="errors?.name" class="p-error">{{ errors.name | join }}</small>
+      </div>
+
+      <div class="field">
+        <label class="fw-bold required-field">Период действия договора</label>
+        <crm-daterangepicker [value]="[supplier.dateFrom, supplier.dateTo]"
+                             [calendarClass]="errors?.dateFrom || errors?.dateTo ? 'ng-invalid ng-dirty' : ''"
+                             [minDate]="nowDate"
+                             [showButtons]="false"
+                             (changeValue)="setDateRange($event)">
+        </crm-daterangepicker>
+        <small *ngIf="errors?.dateFrom && !errors?.dateTo" class="p-error">{{ errors.dateFrom | join }}</small>
+        <small *ngIf="errors?.dateTo && !errors?.dateFrom" class="p-error">{{ errors.dateTo | join }}</small>
+        <small *ngIf="errors?.dateTo && errors?.dateFrom" class="p-error">{{ errors.dateFrom | join }}, {{ errors.dateTo | join }}</small>
+      </div>
+
+      <div class="field">
+        <label class="fw-bold required-field">Сумма договора</label>
+        <div class="p-inputgroup">
+          <p-inputNumber [(ngModel)]="supplier.sum"
+                         [ngClass]="{ 'ng-invalid ng-dirty': errors?.sum }">
+          </p-inputNumber>
+          <span class="p-inputgroup-addon">руб.</span>
+        </div>
+        <small *ngIf="errors?.sum" class="p-error">{{ errors.sum | join }}</small>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="col-12 mt-4">
+    <button pButton [label]="saveButtonLabel" icon="pi pi-check" class="p-button-success mr-2" (click)="onSave(supplier)"></button>
+    <button *ngIf="canDelete" pButton [label]="'Удалить'" class="p-button-danger mr-2" (click)="delete.emit(supplier)"></button>
+    <crm-go-back-button [route]="route"></crm-go-back-button>
+  </div>
+</div>

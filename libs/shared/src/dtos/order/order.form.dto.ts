@@ -1,8 +1,9 @@
 import { ProductOrderDto } from "@crm/shared/dtos/product/product.order.dto";
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
+import { SupplierDto } from "@crm/shared/dtos/supplier/supplier.dto";
 import { UserDto } from "@crm/shared/dtos/user/user.dto";
 import { Expose, Transform, Type } from "class-transformer";
-import { ArrayMinSize, IsDate, IsDefined, IsString } from "class-validator";
+import { ArrayMinSize, IsDate, IsDefined } from "class-validator";
 
 /** DTO создания заказов */
 @Expose()
@@ -16,8 +17,9 @@ export class OrderFormDto {
 
   /** Поставщик */
   @Expose()
-  @IsString({ message: "Введите поставщика" })
-  public supplier: string;
+  @IsDefined({ message: "Выберите поставщика" })
+  @Type(() => SupplierDto)
+  public supplier: SupplierDto;
 
   /** Магазин, где совершен заказ */
   @Expose()

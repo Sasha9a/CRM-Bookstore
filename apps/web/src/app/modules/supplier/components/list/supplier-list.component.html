@@ -1,0 +1,24 @@
+<div class="flex justify-content-between align-items-center">
+  <h1>Поставщики</h1>
+  <div>
+    <button pButton [label]="'Добавить'"
+            class="p-button-success"
+            routerLink="/supplier/add">
+    </button>
+  </div>
+</div>
+
+<crm-table name="supplier"
+           [loading]="loading"
+           [values]="suppliers"
+           [columns]="itemColumns">
+  <ng-template #rowTemplate let-supplier="item">
+    <tr *ngIf="toSupplier(supplier) as supplier">
+      <td><a routerLink="/supplier/edit/{{ supplier._id }}">{{ supplier.name }}</a></td>
+      <td>{{ supplier.dateFrom | date: 'dd MMMM YYYY' }}</td>
+      <td>{{ supplier.dateTo | date: 'dd MMMM YYYY' }}</td>
+      <td>{{ supplier.sum | number }} руб.</td>
+      <td>{{ (supplier.daysToEnd || 0) | number }} дн.</td>
+    </tr>
+  </ng-template>
+</crm-table>

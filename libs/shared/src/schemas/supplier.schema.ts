@@ -11,11 +11,11 @@ export class Supplier extends Document {
 
   /** Дата начала действия договора */
   @Prop({ required: true })
-  public startDate: Date;
+  public dateFrom: Date;
 
   /** Дата окончания действия договора */
   @Prop({ required: true })
-  public endDate: Date;
+  public dateTo: Date;
 
   /** Сумма договора */
   @Prop({ requires: true })

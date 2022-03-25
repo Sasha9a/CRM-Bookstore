@@ -15,7 +15,10 @@
 
         <div class="field">
           <label class="fw-bold required-field">Поставщик</label>
-          <input type="text" pInputText [ngClass]="{ 'ng-invalid ng-dirty': errors?.supplier }" [(ngModel)]="order.supplier">
+          <crm-supplier-single-select [suppliers]="suppliers"
+                                      [(selectedSupplier)]="order.supplier"
+                                      [class]="errors?.supplier ? 'ng-invalid ng-dirty' : ''">
+          </crm-supplier-single-select>
           <small *ngIf="errors?.supplier" class="p-error">{{ errors.supplier | join }}</small>
         </div>
 
