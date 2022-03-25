@@ -49,7 +49,7 @@ export class SalaryAddComponent implements OnInit {
     { label: 'Больничный', name: 'sickPay', sort: 'sickPay:number' },
     { label: 'Отпускные', name: 'vacationPay', sort: 'vacationPay:number' },
     { label: 'Зарплата', name: 'sumEmployee', sort: 'sumEmployee:number' },
-    { label: 'Зарплата с налогами', name: 'sumTaxes', sort: 'sumTaxes:number' },
+    { label: 'Налоги работодателя', name: 'sumTaxes', sort: 'sumTaxes:number' },
     { label: 'Премия' },
     { label: 'Штраф' },
     { label: 'Болезнь (дней)' },

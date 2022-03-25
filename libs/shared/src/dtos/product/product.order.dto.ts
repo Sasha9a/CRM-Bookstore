@@ -45,8 +45,4 @@ export class ProductOrderDto extends BaseDto {
   @Expose()
   public markup: number;
 
-  /** Наценка в процентах */
-  @Expose()
-  public markupPercent: number;
-
 }

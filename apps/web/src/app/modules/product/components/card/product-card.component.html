@@ -10,8 +10,12 @@
             (click)="toArchiveProduct()">
     </button>
     <button *ngIf="product.deleted" pButton [label]="'Из Архива'"
-            icon="pi pi-lock-open" class="p-button-info"
+            icon="pi pi-lock-open" class="p-button-info mr-2"
             (click)="toActiveProduct()">
+    </button>
+    <button pButton [label]="'Удалить'"
+            icon="pi pi-trash" class="p-button-danger"
+            (click)="deleteProduct()">
     </button>
   </div>
 
@@ -45,9 +49,10 @@
           <tr>
             <td class="fw-bold">Кол-во в магазинах</td>
             <td class="fw-semibold">
-              <ng-container *ngFor="let shop of shops">
-                <p *ngIf="product.count[shop._id]" class="greytext">{{ shop.address }}:
-                  <span class="text-black">{{ product.count[shop._id] }} шт.</span>
+              <ng-container *ngFor="let shop of countProductToShops | orderBy: 'count:number'">
+                <p class="greytext">{{ shop.name }}:
+                  <span [class.text-red]="shop.count < 5"
+                        [class.text-black]="shop.count >= 5">{{ shop.count }} шт.</span>
                 </p>
               </ng-container>
             </td>
@@ -92,10 +97,7 @@
             <td nowrap>{{ order.products[0]?.priceManufacture || 0 | number: '.0-2' }} руб.</td>
             <td nowrap>{{ order.products[0]?.count || 0 | number }} шт.</td>
             <td nowrap>{{ order.products[0]?.totalPrice || 0 | number: '.0-2' }} руб.</td>
-            <td nowrap [class.text-red]="order.products[0]?.markup < 0">
-              <p>{{ order.products[0]?.markup || 0 | number: '.0-2' }} руб.</p>
-              <small>{{ order.products[0]?.markupPercent || 0 | number: '.0-2' }}%</small>
-            </td>
+            <td nowrap [class.text-red]="order.products[0]?.markup < 0">{{ order.products[0]?.markup || 0 | number: '.0-2' }} руб.</td>
           </tr>
         </ng-template>
       </crm-table>

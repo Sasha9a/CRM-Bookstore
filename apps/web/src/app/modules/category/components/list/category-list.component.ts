@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CategoryDto } from "@crm/shared/dtos/category/category.dto";
 import { CategoryStateService } from "@crm/web/core/services/category/category-state.service";
+import { UtilsService } from "@crm/web/core/services/utils.service";
 
 /** Компонент показывает список категорий */
 @Component({
@@ -19,7 +20,8 @@ export class CategoryListComponent implements OnInit {
   /** Массив ID категорий которые раскрыты */
   public openedDirectionIds: string[] = [];
 
-  public constructor(private readonly categoryStateService: CategoryStateService) { }
+  public constructor(private readonly categoryStateService: CategoryStateService,
+                     private readonly utilsService: UtilsService) { }
 
   public ngOnInit(): void {
     this.loadCategories();
@@ -31,6 +33,9 @@ export class CategoryListComponent implements OnInit {
 
     this.categoryStateService.find<CategoryDto>().subscribe((data) => {
       this.categories = data;
+      this.openedDirectionIds = this.utilsService.flattenCategory<CategoryDto>(this.categories)
+        .filter((category) => category.children)
+        .map((category) => category._id);
       this.loading = false;
     }, () => this.loading = false);
   }

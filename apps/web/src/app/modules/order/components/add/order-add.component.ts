@@ -78,7 +78,6 @@ export class OrderAddComponent implements OnInit {
     this.order.sum = this.order.products.reduce((sum, product) => {
       product.totalPrice = product.priceManufacture * product.count;
       product.markup = product.price - product.priceManufacture;
-      product.markupPercent = product.markup / product.priceManufacture * 100;
       return sum + product.totalPrice;
     }, 0);
   }
@@ -99,7 +98,6 @@ export class OrderAddComponent implements OnInit {
           count: 0,
           totalPrice: 0,
           markup: 0,
-          markupPercent: 0,
           priceManufacture: 0
         };
       });

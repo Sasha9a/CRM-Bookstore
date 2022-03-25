@@ -75,7 +75,8 @@
       <td>{{ product.category?.name }}</td>
       <td>{{ product.price | number }} руб.</td>
       <td>
-        <p *ngIf="selectedFilters.shop; else noSelectShop">{{ product['countShop'] || 0 }} шт.</p>
+        <p *ngIf="selectedFilters.shop; else noSelectShop"
+           [class.text-red]="(product['countShop'] || 0) < 5">{{ product['countShop'] || 0 }} шт.</p>
         <ng-template #noSelectShop>Не выбран магазин</ng-template>
       </td>
       <td>

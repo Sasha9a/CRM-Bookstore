@@ -79,7 +79,7 @@ export class ProductController {
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   public async delete(@Res() res: Response, @Param('id', new ValidateObjectId()) id: string) {
-    const entity = await this.productService.update(id, { deleted: true });
+    const entity = await this.productService.delete(id);
     if (!entity) {
       throw new NotFoundException("Нет такого объекта!");
     }

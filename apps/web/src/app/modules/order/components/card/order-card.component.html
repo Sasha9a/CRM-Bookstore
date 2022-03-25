@@ -56,10 +56,7 @@
           <td>{{ product.priceManufacture || 0 | number: '.0-2' }} руб.</td>
           <td>{{ product.count || 0 | number }} шт.</td>
           <td>{{ product.totalPrice || 0 | number: '.0-2' }} руб.</td>
-          <td [class.text-red]="product.markup < 0">
-            <p>{{ product.markup || 0 | number: '.0-2' }} руб.</p>
-            <small>{{ product.markupPercent || 0 | number: '.0-2' }}%</small>
-          </td>
+          <td [class.text-red]="product.markup < 0">{{ product.markup || 0 | number: '.0-2' }} руб.</td>
         </tr>
       </ng-template>
     </crm-table>
