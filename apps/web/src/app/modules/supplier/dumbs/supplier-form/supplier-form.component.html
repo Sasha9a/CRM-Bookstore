@@ -13,7 +13,6 @@
         <label class="fw-bold required-field">Период действия договора</label>
         <crm-daterangepicker [value]="[supplier.dateFrom, supplier.dateTo]"
                              [calendarClass]="errors?.dateFrom || errors?.dateTo ? 'ng-invalid ng-dirty' : ''"
-                             [minDate]="nowDate"
                              [showButtons]="false"
                              (changeValue)="setDateRange($event)">
         </crm-daterangepicker>

@@ -2,7 +2,6 @@ import { Component, Input } from '@angular/core';
 import { SupplierFormDto } from "@crm/shared/dtos/supplier/supplier.form.dto";
 import { ErrorService } from "@crm/web/core/services/error.service";
 import { BaseFormComponent } from "@crm/web/shared/dumbs/base-form/base-form.component";
-import * as moment from "moment-timezone";
 
 /** Компонент ввода данных поставщика */
 @Component({
@@ -18,9 +17,6 @@ export class SupplierFormComponent extends BaseFormComponent<SupplierFormDto> {
 
   /** URL на который возвращать при отмене */
   @Input() public route: string;
-
-  /** Сегодняшняя дата, для ограничения */
-  public nowDate = moment().startOf('day').toDate();
 
   public constructor(public override readonly errorService: ErrorService) {
     super(errorService);
