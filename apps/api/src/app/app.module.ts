@@ -7,6 +7,7 @@ import { ReceiptModule } from "@crm/api/modules/receipt/receipt.module";
 import { ReportModule } from "@crm/api/modules/report/report.module";
 import { SalaryModule } from "@crm/api/modules/salary/salary.module";
 import { ShopModule } from "@crm/api/modules/shop/shop.module";
+import { SupplierModule } from "@crm/api/modules/supplier/supplier.module";
 import { TrafficModule } from "@crm/api/modules/traffic/traffic.module";
 import { UserModule } from "@crm/api/modules/user/user.module";
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
@@ -34,7 +35,8 @@ moment.locale('ru');
     ReceiptModule,
     OrderModule,
     TrafficModule,
-    ReportModule
+    ReportModule,
+    SupplierModule
   ],
   controllers: [],
   providers: []
