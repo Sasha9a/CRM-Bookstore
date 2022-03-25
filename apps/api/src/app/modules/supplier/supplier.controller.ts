@@ -22,6 +22,7 @@ export class SupplierController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Get()
   public async getAll(@Res() res: Response) {
+    await this.supplierService.deleteOverdue();
     const entities = await this.supplierService.findAll();
     return res.status(HttpStatus.OK).json(entities).end();
   }
@@ -34,6 +35,7 @@ export class SupplierController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Get(':id')
   public async getById(@Res() res: Response, @Param('id', new ValidateObjectId()) id: string) {
+    await this.supplierService.deleteOverdue();
     const entity = await this.supplierService.findById(id);
     return res.status(HttpStatus.OK).json(entity).end();
   }
@@ -46,6 +48,7 @@ export class SupplierController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Post()
   public async create(@Res() res: Response, @Body() body: ShopFormDto) {
+    await this.supplierService.deleteOverdue();
     const entity = await this.supplierService.create(body);
     return res.status(HttpStatus.CREATED).json(entity).end();
   }
@@ -59,6 +62,7 @@ export class SupplierController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Put(':id')
   public async update(@Res() res: Response, @Param('id', new ValidateObjectId()) id: string, @Body() body: ShopFormDto) {
+    await this.supplierService.deleteOverdue();
     const entity = await this.supplierService.update(id, body);
     if (!entity) {
       throw new NotFoundException("Нет такого объекта!");
@@ -73,6 +77,7 @@ export class SupplierController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Delete(':id')
   public async delete(@Res() res: Response, @Param('id', new ValidateObjectId()) id: string) {
+    await this.supplierService.deleteOverdue();
     const entity = await this.supplierService.delete(id);
     if (!entity) {
       throw new NotFoundException("Нет такого объекта!");
