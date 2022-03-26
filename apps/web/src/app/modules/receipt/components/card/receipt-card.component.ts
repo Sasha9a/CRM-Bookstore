@@ -26,7 +26,7 @@ export class ReceiptCardComponent implements OnInit {
   public itemColumns: CrmTableColumn[] = [
     { style: { 'width.px': '80' } },
     { label: 'Название', name: 'name', sort: 'name:string' },
-    { label: 'Артикул', name: 'code', sort: 'code:string' },
+    { label: 'ID товара', name: 'code', sort: 'code:string' },
     { label: 'Категория', name: 'category', sort: 'category.name:string' },
     { label: 'Цена за шт.', name: 'price', sort: 'price:number' },
     { label: 'Кол-во', name: 'count', sort: 'count:number' },

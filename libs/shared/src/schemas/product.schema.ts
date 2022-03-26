@@ -12,7 +12,7 @@ export class Product extends Document {
   @Prop({ required: true })
   public name: string;
 
-  /** Артикул */
+  /** ID товара */
   @Prop({ required: true })
   public code: string;
 

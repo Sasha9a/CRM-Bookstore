@@ -24,7 +24,7 @@
       </div>
 
       <div *ngIf="product.code" class="field">
-        <label class="fw-bold required-field">Артикул</label>
+        <label class="fw-bold required-field">ID товара</label>
         <input type="text" pInputText
                [ngClass]="{ 'ng-invalid ng-dirty': errors?.code }"
                [disabled]="true"

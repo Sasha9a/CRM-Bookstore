@@ -11,7 +11,7 @@ export class ProductReceiptDto extends BaseDto {
   @Expose()
   public name: string;
 
-  /** Артикул */
+  /** ID товара */
   @Expose()
   public code: string;
 

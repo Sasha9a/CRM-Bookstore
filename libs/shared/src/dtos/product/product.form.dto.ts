@@ -12,7 +12,7 @@ export class ProductFormDto {
   @IsString({ message: "Введите название" })
   public name: string;
 
-  /** Артикул */
+  /** ID товара */
   @Expose()
   @IsOptional()
   public code?: string;
