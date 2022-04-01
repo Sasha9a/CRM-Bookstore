@@ -70,7 +70,7 @@ export class CommonLayoutComponent implements OnInit {
         visible: this.authService.checkRoles([RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR, RoleEnum.MANAGER])
       },
       {
-        label: 'Пользователи',
+        label: 'Сотрудники',
         icon: PrimeIcons.USERS,
         routerLink: '/user',
         routerLinkActiveOptions: { exact: false },

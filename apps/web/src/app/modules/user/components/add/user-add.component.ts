@@ -58,7 +58,7 @@ export class UserAddComponent implements OnInit {
 
     this.userStateService.create<UserCreateFormDto, UserDto>(body).subscribe(() => {
       this.loading = false;
-      this.errorService.addSuccessMessage("Пользователь успешно создан");
+      this.errorService.addSuccessMessage("Сотрудник успешно создан");
       this.router.navigate(['/user']).catch(console.error);
     }, () => this.loading = false);
   }

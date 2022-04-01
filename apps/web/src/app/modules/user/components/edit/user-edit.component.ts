@@ -80,7 +80,7 @@ export class UserEditComponent implements OnInit {
 
     this.userStateService.update<UserEditFormDto, UserDto>(this.userId, body).subscribe(() => {
       this.loading = false;
-      this.errorService.addSuccessMessage("Пользователь изменен");
+      this.errorService.addSuccessMessage("Сотрудник изменен");
       this.router.navigate(['/user/card', this.userId]).catch(console.error);
     }, () => this.loading = false);
   }

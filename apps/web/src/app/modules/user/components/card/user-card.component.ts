@@ -87,13 +87,13 @@ export class UserCardComponent implements OnInit {
   /** Функция удаляет пользователя */
   public delete() {
     this.confirmDialogService.confirm({
-      message: `Вы действительно хотите удалить пользователя "${this.user.name}"?`,
+      message: `Вы действительно хотите удалить сотрудника "${this.user.name}"?`,
       accept: () => {
         this.loading = true;
 
         this.userStateService.deleteById(this.user._id).subscribe(() => {
           this.loading = false;
-          this.errorService.addSuccessMessage(`Успешно`, `Пользователь "${this.user.name}" удален`);
+          this.errorService.addSuccessMessage(`Успешно`, `Сотрудник "${this.user.name}" удален`);
           this.router.navigate(['/user']).catch(console.error);
         });
       }
