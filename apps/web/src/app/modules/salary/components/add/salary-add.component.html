@@ -96,6 +96,9 @@
               <p-inputNumber [(ngModel)]="info.vacationDays" inputStyleClass="w-full" (ngModelChange)="updateAnalyticUser(info)"></p-inputNumber>
             </td>
             <td>
+              <p-inputNumber [(ngModel)]="info.vacationDaysNoExpense" inputStyleClass="w-full" (ngModelChange)="updateAnalyticUser(info)"></p-inputNumber>
+            </td>
+            <td>
               <textarea pInputTextarea [(ngModel)]="info.description" [autoResize]="true"></textarea>
             </td>
           </tr>

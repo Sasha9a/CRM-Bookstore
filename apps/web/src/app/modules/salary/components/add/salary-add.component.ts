@@ -54,6 +54,7 @@ export class SalaryAddComponent implements OnInit {
     { label: 'Штраф' },
     { label: 'Болезнь (дней)' },
     { label: 'Отпуск (дней)' },
+    { label: 'Отпуск за свой счет (дней)' },
     { label: 'Описание' }
   ];
 
@@ -181,7 +182,7 @@ export class SalaryAddComponent implements OnInit {
       }
     }
 
-    info.daysWorked = info.daysWorkedAll - (info.sickDays || 0) - (info.vacationDays || 0);
+    info.daysWorked = info.daysWorkedAll - (info.sickDays || 0) - (info.vacationDays || 0) - (info.vacationDaysNoExpense || 0);
     if (info.daysWorked < 0) {
       info.daysWorked = 0;
     }

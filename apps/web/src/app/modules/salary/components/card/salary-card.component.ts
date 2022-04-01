@@ -36,6 +36,7 @@ export class SalaryCardComponent implements OnInit {
     { label: 'Штраф' },
     { label: 'Болезнь (дней)' },
     { label: 'Отпуск (дней)' },
+    { label: 'Отпуск за свой счет (дней)' },
     { label: 'Описание' }
   ];
 
