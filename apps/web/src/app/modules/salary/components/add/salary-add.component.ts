@@ -188,11 +188,12 @@ export class SalaryAddComponent implements OnInit {
     }
 
     const salaryWithoutTaxes = (info.user?.salary || 0) / (this.maxWorkDaysToMonth[info.user?.schedule] || 0) * info.daysWorked;
-    info.sumEmployee = salaryWithoutTaxes * 0.87 + (info.premium || 0) - (info.fine || 0);
-    info.sumTaxes = salaryWithoutTaxes + (salaryWithoutTaxes * 0.22) + (salaryWithoutTaxes * 0.051)
-      + (salaryWithoutTaxes * 0.029) + (salaryWithoutTaxes * 0.002) + (info.premium || 0) - (info.fine || 0);
     info.sickPay = (info.user?.salary || 0) * 0.87 / (this.maxWorkDaysToMonth[info.user?.schedule] || 0) * (info.sickDays || 0) * 0.4;
     info.vacationPay = (info.user?.salary || 0) * 0.87 / (this.maxWorkDaysToMonth[info.user?.schedule] || 0) * (info.vacationDays || 0) * 0.7;
+    info.sumEmployee = salaryWithoutTaxes * 0.87 + (info.premium || 0) - (info.fine || 0) + (info.sickPay || 0) + (info.vacationPay || 0);
+    info.sumTaxes = salaryWithoutTaxes + (salaryWithoutTaxes * 0.22) + (salaryWithoutTaxes * 0.051)
+      + (salaryWithoutTaxes * 0.029) + (salaryWithoutTaxes * 0.002) + (info.premium || 0) - (info.fine || 0)
+      + (info.sickPay || 0) + (info.vacationPay || 0);
 
     this.updateSum();
   }
