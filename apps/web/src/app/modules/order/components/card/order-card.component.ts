@@ -26,7 +26,7 @@ export class OrderCardComponent implements OnInit {
   public itemColumns: CrmTableColumn[] = [
     { style: { 'width.px': '80' } },
     { label: 'Название', name: 'name', sort: 'name:string' },
-    { label: 'Артикул', name: 'code', sort: 'code:string' },
+    { label: 'ID товара', name: 'code', sort: 'code:string' },
     { label: 'Категория', name: 'category', sort: 'category.name:string' },
     { label: 'Цена за шт. в магазине', name: 'price', sort: 'price:number' },
     { label: 'Цена за шт. от поставщика', name: 'priceManufacture', sort: 'priceManufacture:number' },
