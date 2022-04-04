@@ -4,6 +4,6 @@ export enum PaymentTypeEnum {
   CASH = 'CASH',
   /** Безналичные */
   CASHLESS = 'CASHLESS',
-  /** И так и так */
-  SO_SO = 'SO_SO'
+  /** Смежная */
+  ADJACENT = 'ADJACENT'
 }

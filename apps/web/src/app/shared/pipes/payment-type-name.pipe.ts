@@ -4,7 +4,7 @@ import { PaymentTypeEnum } from "@crm/shared/enums/payment.type.enum";
 const paymentTypeName = {
   [PaymentTypeEnum.CASH]: 'Наличными',
   [PaymentTypeEnum.CASHLESS]: 'Безналичными',
-  [PaymentTypeEnum.SO_SO]: 'И так и так'
+  [PaymentTypeEnum.ADJACENT]: 'Смежная оплата'
 };
 
 /** Пайп конвертирует enum в человеческое название способа оплаты */

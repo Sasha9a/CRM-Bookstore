@@ -42,10 +42,10 @@ export class ReceiptAddComponent implements OnInit {
   public paymentTypes = [
     { label: 'Наличными', value: PaymentTypeEnum.CASH },
     { label: 'Безналичными', value: PaymentTypeEnum.CASHLESS },
-    { label: 'И то и то', value: PaymentTypeEnum.SO_SO }
+    { label: 'Смежная оплата', value: PaymentTypeEnum.ADJACENT }
   ];
 
-  /** Выбор ввести либо наличные, либо безналичные при оплате "И то и то" */
+  /** Выбор ввести либо наличные, либо безналичные при смежной оплате */
   public isCashless = false;
 
   /** Максимальное кол-во товара в магазине */
