@@ -7,8 +7,6 @@ import { TurnoverAnalyticsDto } from "@crm/shared/dtos/report/turnover-analytics
 import { TurnoverAnalyticsQueryParamsDto } from "@crm/shared/dtos/report/turnover-analytics/turnover.analytics.query.params.dto";
 import { SalaryDto } from "@crm/shared/dtos/salary/salary.dto";
 import { ShopDto } from "@crm/shared/dtos/shop/shop.dto";
-import { TrafficReportDto } from "@crm/shared/dtos/traffic/report/traffic.report.dto";
-import { TrafficReportQueryParamsDto } from "@crm/shared/dtos/traffic/report/traffic.report.query.params.dto";
 import { RoleEnum } from "@crm/shared/enums/role.enum";
 import { OrderStateService } from "@crm/web/core/services/order/order-state.service";
 import { ReceiptStateService } from "@crm/web/core/services/receipt/receipt-state.service";
@@ -36,8 +34,8 @@ export class DashboardComponent implements OnInit {
   /** Заказы */
   public orders: OrderDto[];
 
-  /** Трафик */
-  public traffics: TrafficReportDto;
+  // /** Трафик */
+  // public traffics: TrafficReportDto;
 
   /** Денежный оборот */
   public moneyTurnover: MoneyTurnoverDto;
@@ -98,11 +96,11 @@ export class DashboardComponent implements OnInit {
       }
       this.loadReceipts({ ...datePeriod, ...{ shop: selectShop } });
       this.loadOrders({ ...datePeriod, ...{ shop: selectShop } });
-      this.loadTraffic({
-        from: moment(datePeriod.from).format('YYYY-MM-DD') as unknown as Date,
-        to: moment(datePeriod.to).format('YYYY-MM-DD') as unknown as Date,
-        shop: selectShop?._id || undefined
-      });
+      // this.loadTraffic({
+      //   from: moment(datePeriod.from).format('YYYY-MM-DD') as unknown as Date,
+      //   to: moment(datePeriod.to).format('YYYY-MM-DD') as unknown as Date,
+      //   shop: selectShop?._id || undefined
+      // });
       this.loadMoneyTurnover({
         from: moment(datePeriod.from).format('YYYY-MM-DD') as unknown as Date,
         to: moment(datePeriod.to).format('YYYY-MM-DD') as unknown as Date,
@@ -196,16 +194,16 @@ export class DashboardComponent implements OnInit {
     }, () => this.ordersLoading = false);
   }
 
-  /** Функция загружает данные о трафике
-   * @param queryParams параметры фильтрации */
-  public loadTraffic(queryParams: TrafficReportQueryParamsDto) {
-    this.trafficsLoading = true;
-
-    this.trafficStateService.report(queryParams).subscribe((data) => {
-      this.traffics = data;
-      this.trafficsLoading = false;
-    }, () => this.trafficsLoading = false);
-  }
+  // /** Функция загружает данные о трафике
+  //  * @param queryParams параметры фильтрации */
+  // public loadTraffic(queryParams: TrafficReportQueryParamsDto) {
+  //   this.trafficsLoading = true;
+  //
+  //   this.trafficStateService.report(queryParams).subscribe((data) => {
+  //     this.traffics = data;
+  //     this.trafficsLoading = false;
+  //   }, () => this.trafficsLoading = false);
+  // }
 
   /** Функция загружает данные о денежном обороте
    * @param queryParams параметры фильтрации */
