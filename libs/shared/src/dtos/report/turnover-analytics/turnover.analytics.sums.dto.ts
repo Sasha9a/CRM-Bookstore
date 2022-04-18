@@ -14,6 +14,10 @@ export class TurnoverAnalyticsSumsDto {
   @Expose()
   public averageNumberOfChecks: number;
 
+  /** Кол-во чеков всего */
+  @Expose()
+  public allChecks: number;
+
   /** Популярный товар */
   @Expose()
   public popularProduct: Partial<ProductDto>;

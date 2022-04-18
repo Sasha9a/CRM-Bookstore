@@ -296,6 +296,7 @@ export class ReportController {
       sums: {
         averageCheck: 0,
         averageNumberOfChecks: 0,
+        allChecks: 0,
         popularProduct: undefined,
         popularCategory: undefined
       }
@@ -428,6 +429,7 @@ export class ReportController {
 
     result.sums.averageCheck = result.items.reduce((sum, item) => sum + item.averageCheck, 0) / result.items.length;
     result.sums.averageNumberOfChecks = result.items.reduce((sum, item) => sum + item.countReceipt, 0) / result.items.length;
+    result.sums.allChecks = result.items.length;
     result.sums.popularProduct = popularProducts[0]?.product;
     result.sums.popularCategory = popularCategories[0]?.category;
 

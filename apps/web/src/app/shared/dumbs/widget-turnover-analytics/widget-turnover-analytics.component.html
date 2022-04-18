@@ -56,6 +56,12 @@
       </tr>
       <tr>
         <td>
+          <p>ВСЕГО ЧЕКОВ: {{ report?.sums?.allChecks || 0 | number: '.0-0' }}</p>
+        </td>
+        <td colspan="99"></td>
+      </tr>
+      <tr>
+        <td>
           <p>ПОПУЛЯРНЫЙ ТОВАР: {{ report?.sums?.popularProduct?.name || 'Нет' }}</p>
         </td>
         <td colspan="99"></td>
