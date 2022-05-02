@@ -1,22 +1,29 @@
-<div class="flex justify-content-between align-items-center">
+<div class="flex justify-content-between align-items-center flex-wrap">
   <h1>Товары</h1>
   <div>
-    <button pButton [label]="'Добавить'"
-            icon="pi pi-plus"
-            class="p-button-success"
-            routerLink="/product/add">
-    </button>
-    <button pButton [label]="'Добавить чек'"
-            icon="pi pi-wallet"
-            class="p-button-secondary ml-2"
-            routerLink="/receipt/add">
-    </button>
-    <button *ngIf="!authService.checkRoles([RoleEnum.SELLER])"
-            pButton [label]="'Создать заказ'"
-            icon="pi pi-download"
-            class="p-button-warning ml-2"
-            routerLink="/order/add">
-    </button>
+    <div class="flex flex-wrap">
+      <div class="pb-2 pr-2">
+        <button pButton [label]="'Добавить'"
+                icon="pi pi-plus"
+                class="p-button-success"
+                routerLink="/product/add">
+        </button>
+      </div>
+      <div class="pb-2 pr-2">
+        <button pButton [label]="'Добавить чек'"
+                icon="pi pi-wallet"
+                class="p-button-secondary"
+                routerLink="/receipt/add">
+        </button>
+      </div>
+      <div *ngIf="!authService.checkRoles([RoleEnum.SELLER])" class="pb-2">
+        <button pButton [label]="'Создать заказ'"
+                icon="pi pi-download"
+                class="p-button-warning"
+                routerLink="/order/add">
+        </button>
+      </div>
+    </div>
   </div>
 </div>
 
