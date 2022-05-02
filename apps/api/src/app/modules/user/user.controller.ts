@@ -137,7 +137,7 @@ export class UserController {
     const user: UserDto = req.user as UserDto;
     const userEdited = await this.userService.findById(id, { shop: 1 });
     let entity = {};
-    if (user?._id === userEdited?._id) {
+    if (user?._id === userEdited?.id) {
       entity = await this.userService.update(id, body);
       if (!entity) {
         throw new NotFoundException("Нет такого объекта!");
