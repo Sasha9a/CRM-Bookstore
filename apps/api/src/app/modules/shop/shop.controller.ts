@@ -20,7 +20,7 @@ export class ShopController {
   /** Get-запрос на получение списка всех магазинов
    * @param res переменная отвечает за возврат данных клиенту
    * @return Возвращает массив магазинов */
-  @Roles(RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR)
+  @Roles(RoleEnum.GENERAL_MANAGER, RoleEnum.STORE_DIRECTOR, RoleEnum.MANAGER)
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Get()
   public async getAll(@Res() res: Response) {
