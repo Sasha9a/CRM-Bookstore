@@ -162,22 +162,22 @@ export class ReportController {
       }
     }
     for (const date = moment(queryParams.from); date.isBefore(dateToDay, 'day'); date.add(1, 'day')) {
-      if (orders.findIndex((item) => moment(item.date).format('YYYY-MM-DD') === date.format('YYYY-MM-DD')) !== -1) {
-        const items = orders.filter((item) => moment(item.date).format('YYYY-MM-DD') === date.format('YYYY-MM-DD'));
+      if (orders.findIndex((item) => moment(item.date).utcOffset('+03:00').format('YYYY-MM-DD') === date.format('YYYY-MM-DD')) !== -1) {
+        const items = orders.filter((item) => moment(item.date).utcOffset('+03:00').format('YYYY-MM-DD') === date.format('YYYY-MM-DD'));
         budgetItem.moneyTurnover.days[date.format('YYYY-MM-DD')] = items.reduce((sum, item) => sum + item.sum, 0);
       }
     }
 
     for (const date = moment(queryParams.from); date.isBefore(dateToWeek, 'week'); date.add(1, 'week')) {
-      if (orders.findIndex((item) => moment(item.date).format('YYYY-WW') === date.format('YYYY-WW')) !== -1) {
-        const items = orders.filter((item) => moment(item.date).format('YYYY-WW') === date.format('YYYY-WW'));
+      if (orders.findIndex((item) => moment(item.date).utcOffset('+03:00').format('YYYY-WW') === date.format('YYYY-WW')) !== -1) {
+        const items = orders.filter((item) => moment(item.date).utcOffset('+03:00').format('YYYY-WW') === date.format('YYYY-WW'));
         budgetItem.moneyTurnover.weeks[date.format('YYYY-WW')] = items.reduce((sum, item) => sum + item.sum, 0);
       }
     }
 
     for (const date = moment(queryParams.from); date.isBefore(dateToMonth, 'month'); date.add(1, 'month')) {
-      if (orders.findIndex((item) => moment(item.date).format('YYYY-MM') === date.format('YYYY-MM')) !== -1) {
-        const items = orders.filter((item) => moment(item.date).format('YYYY-MM') === date.format('YYYY-MM'));
+      if (orders.findIndex((item) => moment(item.date).utcOffset('+03:00').format('YYYY-MM') === date.format('YYYY-MM')) !== -1) {
+        const items = orders.filter((item) => moment(item.date).utcOffset('+03:00').format('YYYY-MM') === date.format('YYYY-MM'));
         budgetItem.moneyTurnover.months[date.format('YYYY-MM')] = items.reduce((sum, item) => sum + item.sum, 0);
       }
     }
