@@ -64,6 +64,7 @@ export class ReportController {
         $lte: moment(queryParams.to, 'YYYY-MM-DD').toISOString()
       }
     };
+    console.log(filterDates.date);
     if (queryParams.shop !== 'undefined') {
       receipts = await this.receiptService.findAll({
         ...filterDates,
@@ -82,6 +83,7 @@ export class ReportController {
       salaries = await this.salaryService.findAll({ ...filterDates });
       orders = await this.orderService.findAll({ ...filterDates });
     }
+    console.log(orders.length);
     const suppliers: SupplierDto[] = await this.supplierService.findAll({
       dateFrom: {
         $gte: moment(queryParams.from, 'YYYY-MM-DD').toISOString(),
@@ -164,7 +166,6 @@ export class ReportController {
     for (const date = moment(queryParams.from); date.isBefore(dateToDay, 'day'); date.add(1, 'day')) {
       if (orders.findIndex((item) => moment(item.date).utcOffset('+03:00').format('YYYY-MM-DD') === date.format('YYYY-MM-DD')) !== -1) {
         const items = orders.filter((item) => moment(item.date).utcOffset('+03:00').format('YYYY-MM-DD') === date.format('YYYY-MM-DD'));
-        console.log(date.format('YYYY-MM-DD'), items);
         budgetItem.moneyTurnover.days[date.format('YYYY-MM-DD')] = items.reduce((sum, item) => sum + item.sum, 0);
       }
     }
