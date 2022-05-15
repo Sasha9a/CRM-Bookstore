@@ -60,8 +60,8 @@ export class ReportController {
     let salaries: SalaryDto[];
     const filterDates = {
       date: {
-        $gte: moment(queryParams.from, 'YYYY-MM-DD').toISOString(true),
-        $lte: moment(queryParams.to, 'YYYY-MM-DD').toISOString()
+        $gte: moment(queryParams.from).utcOffset('-03:00'),
+        $lte: moment(queryParams.to)
       }
     };
     console.log(filterDates.date);
