@@ -64,7 +64,6 @@ export class ReportController {
         $lte: moment(queryParams.to, 'YYYY-MM-DD').toISOString()
       }
     };
-    console.log(filterDates.date);
     if (queryParams.shop !== 'undefined') {
       receipts = await this.receiptService.findAll({
         ...filterDates,
@@ -83,7 +82,6 @@ export class ReportController {
       salaries = await this.salaryService.findAll({ ...filterDates });
       orders = await this.orderService.findAll({ ...filterDates });
     }
-    console.log(orders.length);
     const suppliers: SupplierDto[] = await this.supplierService.findAll({
       dateFrom: {
         $gte: moment(queryParams.from, 'YYYY-MM-DD').subtract(3, 'hour').toISOString(),
@@ -104,22 +102,22 @@ export class ReportController {
     const dateToMonth = moment(queryParams.to).clone().add(1, 'month');
 
     for (const date = moment(queryParams.from); date.isBefore(dateToDay, 'day'); date.add(1, 'day')) {
-      if (receipts.findIndex((item) => moment(item.date).format('YYYY-MM-DD') === date.format('YYYY-MM-DD')) !== -1) {
-        const items = receipts.filter((item) => moment(item.date).format('YYYY-MM-DD') === date.format('YYYY-MM-DD'));
+      if (receipts.findIndex((item) => moment(item.date).utcOffset('+03:00').format('YYYY-MM-DD') === date.format('YYYY-MM-DD')) !== -1) {
+        const items = receipts.filter((item) => moment(item.date).utcOffset('+03:00').format('YYYY-MM-DD') === date.format('YYYY-MM-DD'));
         budgetItem.moneyTurnover.days[date.format('YYYY-MM-DD')] = items.reduce((sum, item) => sum + item.amountCash + item.amountCashless, 0);
       }
     }
 
     for (const date = moment(queryParams.from); date.isBefore(dateToWeek, 'week'); date.add(1, 'week')) {
-      if (receipts.findIndex((item) => moment(item.date).format('YYYY-WW') === date.format('YYYY-WW')) !== -1) {
-        const items = receipts.filter((item) => moment(item.date).format('YYYY-WW') === date.format('YYYY-WW'));
+      if (receipts.findIndex((item) => moment(item.date).utcOffset('+03:00').format('YYYY-WW') === date.format('YYYY-WW')) !== -1) {
+        const items = receipts.filter((item) => moment(item.date).utcOffset('+03:00').format('YYYY-WW') === date.format('YYYY-WW'));
         budgetItem.moneyTurnover.weeks[date.format('YYYY-WW')] = items.reduce((sum, item) => sum + item.amountCash + item.amountCashless, 0);
       }
     }
 
     for (const date = moment(queryParams.from); date.isBefore(dateToMonth, 'month'); date.add(1, 'month')) {
-      if (receipts.findIndex((item) => moment(item.date).format('YYYY-MM') === date.format('YYYY-MM')) !== -1) {
-        const items = receipts.filter((item) => moment(item.date).format('YYYY-MM') === date.format('YYYY-MM'));
+      if (receipts.findIndex((item) => moment(item.date).utcOffset('+03:00').format('YYYY-MM') === date.format('YYYY-MM')) !== -1) {
+        const items = receipts.filter((item) => moment(item.date).utcOffset('+03:00').format('YYYY-MM') === date.format('YYYY-MM'));
         budgetItem.moneyTurnover.months[date.format('YYYY-MM')] = items.reduce((sum, item) => sum + item.amountCash + item.amountCashless, 0);
       }
     }
@@ -134,22 +132,22 @@ export class ReportController {
       }
     }
     for (const date = moment(queryParams.from); date.isBefore(dateToDay, 'day'); date.add(1, 'day')) {
-      if (salaries.findIndex((item) => moment(item.date).format('YYYY-MM-DD') === date.format('YYYY-MM-DD')) !== -1) {
-        const items = salaries.filter((item) => moment(item.date).format('YYYY-MM-DD') === date.format('YYYY-MM-DD'));
+      if (salaries.findIndex((item) => moment(item.date).utcOffset('+03:00').format('YYYY-MM-DD') === date.format('YYYY-MM-DD')) !== -1) {
+        const items = salaries.filter((item) => moment(item.date).utcOffset('+03:00').format('YYYY-MM-DD') === date.format('YYYY-MM-DD'));
         budgetItem.moneyTurnover.days[date.format('YYYY-MM-DD')] = items.reduce((sum, item) => sum + item.sum, 0);
       }
     }
 
     for (const date = moment(queryParams.from); date.isBefore(dateToWeek, 'week'); date.add(1, 'week')) {
-      if (salaries.findIndex((item) => moment(item.date).format('YYYY-WW') === date.format('YYYY-WW')) !== -1) {
-        const items = salaries.filter((item) => moment(item.date).format('YYYY-WW') === date.format('YYYY-WW'));
+      if (salaries.findIndex((item) => moment(item.date).utcOffset('+03:00').format('YYYY-WW') === date.format('YYYY-WW')) !== -1) {
+        const items = salaries.filter((item) => moment(item.date).utcOffset('+03:00').format('YYYY-WW') === date.format('YYYY-WW'));
         budgetItem.moneyTurnover.weeks[date.format('YYYY-WW')] = items.reduce((sum, item) => sum + item.sum, 0);
       }
     }
 
     for (const date = moment(queryParams.from); date.isBefore(dateToMonth, 'month'); date.add(1, 'month')) {
-      if (salaries.findIndex((item) => moment(item.date).format('YYYY-MM') === date.format('YYYY-MM')) !== -1) {
-        const items = salaries.filter((item) => moment(item.date).format('YYYY-MM') === date.format('YYYY-MM'));
+      if (salaries.findIndex((item) => moment(item.date).utcOffset('+03:00').format('YYYY-MM') === date.format('YYYY-MM')) !== -1) {
+        const items = salaries.filter((item) => moment(item.date).utcOffset('+03:00').format('YYYY-MM') === date.format('YYYY-MM'));
         budgetItem.moneyTurnover.months[date.format('YYYY-MM')] = items.reduce((sum, item) => sum + item.sum, 0);
       }
     }
@@ -164,22 +162,22 @@ export class ReportController {
       }
     }
     for (const date = moment(queryParams.from); date.isBefore(dateToDay, 'day'); date.add(1, 'day')) {
-      if (orders.findIndex((item) => moment(item.date).format('YYYY-MM-DD') === date.format('YYYY-MM-DD')) !== -1) {
-        const items = orders.filter((item) => moment(item.date).format('YYYY-MM-DD') === date.format('YYYY-MM-DD'));
+      if (orders.findIndex((item) => moment(item.date).utcOffset('+03:00').format('YYYY-MM-DD') === date.format('YYYY-MM-DD')) !== -1) {
+        const items = orders.filter((item) => moment(item.date).utcOffset('+03:00').format('YYYY-MM-DD') === date.format('YYYY-MM-DD'));
         budgetItem.moneyTurnover.days[date.format('YYYY-MM-DD')] = items.reduce((sum, item) => sum + item.sum, 0);
       }
     }
 
     for (const date = moment(queryParams.from); date.isBefore(dateToWeek, 'week'); date.add(1, 'week')) {
-      if (orders.findIndex((item) => moment(item.date).format('YYYY-WW') === date.format('YYYY-WW')) !== -1) {
-        const items = orders.filter((item) => moment(item.date).format('YYYY-WW') === date.format('YYYY-WW'));
+      if (orders.findIndex((item) => moment(item.date).utcOffset('+03:00').format('YYYY-WW') === date.format('YYYY-WW')) !== -1) {
+        const items = orders.filter((item) => moment(item.date).utcOffset('+03:00').format('YYYY-WW') === date.format('YYYY-WW'));
         budgetItem.moneyTurnover.weeks[date.format('YYYY-WW')] = items.reduce((sum, item) => sum + item.sum, 0);
       }
     }
 
     for (const date = moment(queryParams.from); date.isBefore(dateToMonth, 'month'); date.add(1, 'month')) {
-      if (orders.findIndex((item) => moment(item.date).format('YYYY-MM') === date.format('YYYY-MM')) !== -1) {
-        const items = orders.filter((item) => moment(item.date).format('YYYY-MM') === date.format('YYYY-MM'));
+      if (orders.findIndex((item) => moment(item.date).utcOffset('+03:00').format('YYYY-MM') === date.format('YYYY-MM')) !== -1) {
+        const items = orders.filter((item) => moment(item.date).utcOffset('+03:00').format('YYYY-MM') === date.format('YYYY-MM'));
         budgetItem.moneyTurnover.months[date.format('YYYY-MM')] = items.reduce((sum, item) => sum + item.sum, 0);
       }
     }
@@ -194,22 +192,22 @@ export class ReportController {
       }
     }
     for (const date = moment(queryParams.from); date.isBefore(dateToDay, 'day'); date.add(1, 'day')) {
-      if (suppliers.findIndex((item) => moment(item.dateFrom).format('YYYY-MM-DD') === date.format('YYYY-MM-DD')) !== -1) {
-        const items = suppliers.filter((item) => moment(item.dateFrom).format('YYYY-MM-DD') === date.format('YYYY-MM-DD'));
+      if (suppliers.findIndex((item) => moment(item.dateFrom).utcOffset('+03:00').format('YYYY-MM-DD') === date.format('YYYY-MM-DD')) !== -1) {
+        const items = suppliers.filter((item) => moment(item.dateFrom).utcOffset('+03:00').format('YYYY-MM-DD') === date.format('YYYY-MM-DD'));
         budgetItem.moneyTurnover.days[date.format('YYYY-MM-DD')] = items.reduce((sum, item) => sum + item.sum, 0);
       }
     }
 
     for (const date = moment(queryParams.from); date.isBefore(dateToWeek, 'week'); date.add(1, 'week')) {
-      if (suppliers.findIndex((item) => moment(item.dateFrom).format('YYYY-WW') === date.format('YYYY-WW')) !== -1) {
-        const items = suppliers.filter((item) => moment(item.dateFrom).format('YYYY-WW') === date.format('YYYY-WW'));
+      if (suppliers.findIndex((item) => moment(item.dateFrom).utcOffset('+03:00').format('YYYY-WW') === date.format('YYYY-WW')) !== -1) {
+        const items = suppliers.filter((item) => moment(item.dateFrom).utcOffset('+03:00').format('YYYY-WW') === date.format('YYYY-WW'));
         budgetItem.moneyTurnover.weeks[date.format('YYYY-WW')] = items.reduce((sum, item) => sum + item.sum, 0);
       }
     }
 
     for (const date = moment(queryParams.from); date.isBefore(dateToMonth, 'month'); date.add(1, 'month')) {
-      if (suppliers.findIndex((item) => moment(item.dateFrom).format('YYYY-MM') === date.format('YYYY-MM')) !== -1) {
-        const items = suppliers.filter((item) => moment(item.dateFrom).format('YYYY-MM') === date.format('YYYY-MM'));
+      if (suppliers.findIndex((item) => moment(item.dateFrom).utcOffset('+03:00').format('YYYY-MM') === date.format('YYYY-MM')) !== -1) {
+        const items = suppliers.filter((item) => moment(item.dateFrom).utcOffset('+03:00').format('YYYY-MM') === date.format('YYYY-MM'));
         budgetItem.moneyTurnover.months[date.format('YYYY-MM')] = items.reduce((sum, item) => sum + item.sum, 0);
       }
     }
@@ -331,10 +329,10 @@ export class ReportController {
     for (const date = moment(queryParams.from); date.isBefore(dateToDay, 'day'); date.add(1, 'day')) {
       for (const shop of shops) {
         if (receipts.findIndex((item) =>
-          moment(item.date).format('YYYY-MM-DD') === date.format('YYYY-MM-DD')
+          moment(item.date).utcOffset('+03:00').format('YYYY-MM-DD') === date.format('YYYY-MM-DD')
           && shop._id == item.shop?._id) !== -1) {
           const items = receipts.filter((item) =>
-            moment(item.date).format('YYYY-MM-DD') === date.format('YYYY-MM-DD')
+            moment(item.date).utcOffset('+03:00').format('YYYY-MM-DD') === date.format('YYYY-MM-DD')
             && shop._id == item.shop?._id
           );
 
