@@ -34,6 +34,7 @@ sudo /sbin/swapon /var/swap.1
 sudo ufw allow 'Nginx Full'
 sudo ufw delete allow 'Nginx HTTP'
 sudo ufw enable
+ufw allow ssh
 git clone https://github.com/Sasha9a/CRM-Bookstore.git
 cd CRM-Bookstore
 sudo npm install
